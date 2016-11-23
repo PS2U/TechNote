@@ -1,6 +1,6 @@
 [《C专家编程》](https://book.douban.com/subject/2377310/)读书笔记。
 
-![](img/cover/cover.jpg)
+![](img/cover.jpg)
 
 # 目录
 
