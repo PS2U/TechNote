@@ -1,6 +1,6 @@
 [《Linux程序设计》](https://book.douban.com/subject/4831448/) 读书笔记。
 
-![](img/cover/cover.jpg)
+![](img/cover.jpg)
 
 # 目录
 

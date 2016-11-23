@@ -1,6 +1,6 @@
 [《Linux内核设计与实现》](https://book.douban.com/subject/6097773/)的读书笔记，原书作者：Robert Love。
 
-![](img/cover/cover.jpg)
+![](img/cover.jpg)
 
 # 目录
 

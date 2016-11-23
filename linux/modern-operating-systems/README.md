@@ -1,6 +1,6 @@
 [《现代操作系统》](https://book.douban.com/subject/1390650/)笔记
 
-![](img/cover/cover.jpg)
+![](img/cover.jpg)
 
 # 目录
 

@@ -1,6 +1,6 @@
 [《C++ Primer》](https://book.douban.com/subject/1767741/)读书笔记
 
-![](img/cover/cover.jpg)
+![](img/cover.jpg)
 
 # 目录
 

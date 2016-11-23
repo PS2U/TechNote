@@ -14,6 +14,8 @@
 
 [《C++语言99个常见编程错误》](cpp/cpp-gotchas/README.md)
 
+[《C陷阱与缺陷》](cpp/c-traps-and-pitfalls/README.md)]
+
 ## Linux
 
 [《现代操作系统》](linux/modern-operating-systems/README.md)
