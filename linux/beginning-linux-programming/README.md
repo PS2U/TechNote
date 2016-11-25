@@ -13,3 +13,5 @@
 [4. Linux环境](4. Linux环境.md)
 
 [5. 终端](5. 终端.md)
+
+[6. curses函数库](6. curses函数库.md)
