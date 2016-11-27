@@ -36,5 +36,9 @@
 
 [《Redis设计与实现》](sql/redis/README.md)
 
+## Vim 
+
+[学习vi和Vim编辑器](tool/learning-the-vi-and-vim-editors/README.md)
+
 ## iOS
 
