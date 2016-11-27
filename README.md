@@ -38,7 +38,7 @@
 
 ## Vim 
 
-[学习vi和Vim编辑器](tool/learning-the-vi-and-vim-editors/README.md)
+[《学习vi和Vim编辑器》](tool/learning-the-vi-and-vim-editors/README.md)
 
 ## iOS
 

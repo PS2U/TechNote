@@ -1,4 +1,4 @@
-[学习vi和Vim编辑器](https://book.douban.com/subject/6126937/)
+[《学习vi和Vim编辑器》](https://book.douban.com/subject/6126937/)
 
 ![](img/cover.jpg)
 
