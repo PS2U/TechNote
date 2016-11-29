@@ -17,3 +17,5 @@
 [6. curses函数库](6. curses函数库.md)
 
 [7. 数据管理](7. 数据管理.md)
+
+[8. MySQL](8. MySQL.md)
