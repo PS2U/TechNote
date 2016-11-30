@@ -40,5 +40,7 @@
 
 [《学习vi和Vim编辑器》](tool/learning-the-vi-and-vim-editors/README.md)
 
-## iOS
+## Java
+
+[《Java编程思想》](java/thinking-in-java/README.md)
 
