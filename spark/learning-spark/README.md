@@ -21,3 +21,6 @@
 [8. Spark调优与调试](8. Spark调优与调试.md)
 
 [9. Spark SQL](9. Spark SQL.md)
+
+[10. Spark Stream](10. Spark Stream.md)
+
