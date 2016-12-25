@@ -22,5 +22,5 @@
 
 [9. Spark SQL](9. Spark SQL.md)
 
-[10. Spark Stream](10. Spark Stream.md)
+[10. Spark Streaming](10. Spark Streaming.md)
 
