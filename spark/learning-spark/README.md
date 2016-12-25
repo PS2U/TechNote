@@ -19,3 +19,5 @@
 [7. 在集群上运行Spark](7. 在集群上运行Spark.md)
 
 [8. Spark调优与调试](8. Spark调优与调试.md)
+
+[9. Spark SQL](9. Spark SQL.md)
