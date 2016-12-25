@@ -17,3 +17,5 @@
 [6. Spark编程进阶](6. Spark编程进阶.md)
 
 [7. 在集群上运行Spark](7. 在集群上运行Spark.md)
+
+[8. Spark调优与调试](8. Spark调优与调试.md)
