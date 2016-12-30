@@ -51,3 +51,5 @@
 ## Spark
 
 [《Spark快速大数据分析》](spark/learning-spark/README.md)
+
+[《Spark技术内幕》](spark/spark-internals/README.md)
