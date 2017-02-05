@@ -36,6 +36,8 @@
 
 [《Redis设计与实现》](sql/redis/README.md)
 
+[《HBase权威指南》](sql/hbase/the-definitive-guide/README.md)
+
 ## Vim 
 
 [《学习vi和Vim编辑器》](tool/learning-the-vi-and-vim-editors/README.md)
@@ -54,6 +56,3 @@
 
 [《Spark技术内幕》](spark/spark-internals/README.md)
 
-## HBase
-
-[《HBase权威指南》](hbase/the-definitive-guide/README.md)
