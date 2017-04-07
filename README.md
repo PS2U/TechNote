@@ -50,6 +50,8 @@
 
 [《深入理解Elasticsearch》](es/mastering-es/README.md)
 
+[《Elasticsearch权威指南》](es/the-definitive-guide/README.md)
+
 ## Spark
 
 [《Spark快速大数据分析》](spark/learning-spark/README.md)
