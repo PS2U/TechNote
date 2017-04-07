@@ -1,4 +1,4 @@
-[《Elasticsearch权威指南](https://book.douban.com/subject/25868239/)读书笔记
+[《Elasticsearch权威指南》](https://book.douban.com/subject/25868239/)读书笔记
 
 ![](img/cover.jpg)
 
