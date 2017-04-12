@@ -120,6 +120,6 @@ int getrusage (int who, struct ruage *r_usage);
 
 [目录](README.md)
 
-上一章：[3. 文件操作](3. 文件操作.md)
+上一章：[3. 文件操作](文件操作.md)
 
-下一章：[5. 终端](5. 终端.md)
+下一章：[5. 终端](终端.md)

@@ -156,7 +156,7 @@ MYSQL_FIELD *mysql_fetch_field (MYSQL_RES *result);
 
 [目录](README.md)
 
-上一章：[7. 数据管理](7. 数据管理.md)
+上一章：[7. 数据管理](数据管理.md)
 
-下一章：[9. 开发工具](9. 开发工具.md)
+下一章：[9. 开发工具](开发工具.md)
 

@@ -172,6 +172,6 @@ int prefresh(WINDOW *pad, int pad_row, int pad_col, int screen_row_min, int scre
 
 [目录](README.md)
 
-上一章：[5. 终端](5. 终端.md)
+上一章：[5. 终端](终端.md)
 
-下一章：[7. 数据管理](7. 数据管理.md)
+下一章：[7. 数据管理](数据管理.md)
