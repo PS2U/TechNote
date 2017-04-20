@@ -12,14 +12,14 @@ Redis从2.6版本开始引入对Lua脚本的支持，通过在服务器中嵌入
 
 Redis服务器创建并修改Lua环境的整个过程有以下步骤：
 
-1. 创建一个基础的Lua环境
-2. 载入多个函数库到Lua环境
-3. 创建全局表格`redis`，表格包含了对Redis进行操作的函数，如`redis.call`
-4. 使用Redis自制的随机函数来替换Lua原有的带有副作用的随机函数
-5. 创建排序辅助函数
-6. 创建`redis.pcall`函数的错误报告辅助函数，这个函数可以提供更详细的出错信息
-7. 对Lua环境中的全局变量进行保护，防止用户在执行Lua脚本时添加额外的全局变量
-8. 将完成修改的Lua环境保存到服务器状态的`lua`属性中，等待服务器传来的Lua脚本
+1、创建一个基础的Lua环境
+2、载入多个函数库到Lua环境
+3、创建全局表格`redis`，表格包含了对Redis进行操作的函数，如`redis.call`
+4、使用Redis自制的随机函数来替换Lua原有的带有副作用的随机函数
+5、创建排序辅助函数
+6、创建`redis.pcall`函数的错误报告辅助函数，这个函数可以提供更详细的出错信息
+7、对Lua环境中的全局变量进行保护，防止用户在执行Lua脚本时添加额外的全局变量
+8、将完成修改的Lua环境保存到服务器状态的`lua`属性中，等待服务器传来的Lua脚本
 
 ## 创建Lua环境
 
@@ -108,9 +108,9 @@ Redis服务器会将所有被`EVAL`执行过的Lua脚本，和所有被`SCRIPT L
 
 `EVAL`命令执行过程分为三分步骤：
 
-1. 根据客户端给定的Lua脚本，在Lua环境中定义一个Lua函数。
-2. 将客户端给定的脚本保存到`lua_scripts`字典中。
-3. 执行刚刚在Lua环境中定义的函数。
+1、根据客户端给定的Lua脚本，在Lua环境中定义一个Lua函数。
+2、将客户端给定的脚本保存到`lua_scripts`字典中。
+3、执行刚刚在Lua环境中定义的函数。
 
 ## 定义脚本函数
 
@@ -128,12 +128,12 @@ Redis服务器会将所有被`EVAL`执行过的Lua脚本，和所有被`SCRIPT L
 
 `lua_scripts`字典中保存脚本之后，服务器还需要一些准备工作，才能开始执行脚本：
 
-1. 将`EVAL`命令传入的键名参数和脚本参数分别保存到`KEYS`数组和`ARGV`数组，然后将这两个数组作为全局变量传入Lua环境。
-2. 为Lua环境装载超时处理钩子（hook），在脚本出现超时后，hook可以让客户端执行`SCRIPT SKILL`函数停止脚本，或`SHUTDOWN`命令关闭服务器。
-3. 执行脚本函数。
-4. 移除之前装载的超时钩子。
-5. 将执行脚本函数的结果保存到客户端状态的输入缓冲区。
-6. 对Lua环境执行垃圾回收操作。
+1、将`EVAL`命令传入的键名参数和脚本参数分别保存到`KEYS`数组和`ARGV`数组，然后将这两个数组作为全局变量传入Lua环境。
+2、为Lua环境装载超时处理钩子（hook），在脚本出现超时后，hook可以让客户端执行`SCRIPT SKILL`函数停止脚本，或`SHUTDOWN`命令关闭服务器。
+3、执行脚本函数。
+4、移除之前装载的超时钩子。
+5、将执行脚本函数的结果保存到客户端状态的输入缓冲区。
+6、对Lua环境执行垃圾回收操作。
 
 # 20.4 `EVALSHA`命令的实现
 
@@ -190,7 +190,7 @@ Redis复制`EVAL`、`SCRIPT FLUSH`、`SCRIPT LOAD`的方法和其他普通命令
 
 Redis要求master在传播`EVALSHA`命令的时候，必须确保`EVALSHA`要执行的脚本已经在slave中载入过。如果不能保证，那么master会将`EVALSHA`替换为等价的`EVAL`命令传播给slave。
 
-### 1. 判断`EVALSHA`命令是否安全
+### 1、判断`EVALSHA`命令是否安全
 
 master使用服务器状态的`repl_scriptcache_dict`字典记录自己已经将哪些脚本传播给了所有slave。
 
@@ -204,15 +204,15 @@ struct redisServer {
 
 如果一个脚本的SHA1出现在`lua_scripts`字典，却没有出现在`repl_scriptcache_dict`字典，说明对应的的Lua脚本已被master载入，却没有传播给所有slave。
 
-### 2. 清空`repl_scriptcache_dict`字典
+### 2、清空`repl_scriptcache_dict`字典
 
 每当master添加一个新的slave时，都会清空自己的`repl_scriptcache_dict`字典。
 
-### 3. `EVALSHA`命令换成`EVAL`
+### 3、`EVALSHA`命令换成`EVAL`
 
 通过`EVALSHA`指定的SHA1校验和，以及`lua_scripts`字典保存的Lua脚本，服务器总可以将 `EVALSHA`命令换成`EVAL`命令。
 
-### 4. 传播`EVALSHA`命令
+### 4、传播`EVALSHA`命令
 
 当master在本机执行完一个`EVALSHA`命令后，根据其SHA1校验和是否存在于`repl_scriptcache_dict`字典，决定是向所有slave传播`EVALSHA`还是`EVAL`命令。
 
@@ -220,6 +220,6 @@ struct redisServer {
 
 [目录](README.md)
 
-上一章：[19. 事务](19. 事务.md)
+上一章：[19、事务](19、事务.md)
 
-下一章：[21. 排序](21. 排序.md)
+下一章：[21、排序](21、排序.md)
