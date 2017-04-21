@@ -70,6 +70,10 @@ Elasticsearch 是一个分布式、可扩展、实时的搜索与数据分析引
 
 [32、近似聚合](32、近似聚合.md)
 
+[33、通过聚合发现异常指标](33、通过聚合发现异常指标.md)
+
+[34、Doc Values and Fielddata](34、Doc Values and Fielddata.md)
+
 
 ## Part.V 地理位置
 
