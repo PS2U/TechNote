@@ -4,8 +4,10 @@
 
 # 目录
 
-[Elasticsearch简介](Elasticsearch简介.md)
+[1、Elasticsearch简介](1、Elasticsearch简介.md)
 
-[查询DSL进阶](查询DSL进阶.md)
+[2、查询DSL进阶](3、查询DSL进阶.md)
 
-[底层索引控制](底层索引控制.md)
+[3、底层索引控制](3、底层索引控制.md)
+
+[4、分布式索引架构](4、分布式索引架构.md)
