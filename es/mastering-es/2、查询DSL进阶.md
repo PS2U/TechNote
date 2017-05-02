@@ -97,6 +97,30 @@ curl -XGET 'localhost:9200/clients/_search?pretty' -d '{
 
 # 2.4 批量操作
 
+# 2.4.1 批量取
+
+批量取（MultiGet）通过`_mget`操作，它允许一个请求多个文档。
+
+```
+GET /website/blog/_mget
+{
+   "ids" : [ "2", "1" ]
+}
+```
+
+## 2.4.2 批量查询
+
+```
+GET twitter/_msearch
+{}
+{"query" : {"match_all" : {}}, "from" : 0, "size" : 10}
+{}
+{"query" : {"match_all" : {}}}
+{"index" : "twitter2"}
+{"query" : {"match_all" : {}}}
+```
+
+
 
 # 导航
 
