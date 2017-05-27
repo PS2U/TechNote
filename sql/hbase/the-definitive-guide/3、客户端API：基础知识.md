@@ -124,7 +124,7 @@ boolean containsColumn(byte[] family, bytep[] qualifier)
 ```java
 NavigableMap<byte[], NavigableMap<byte[], NavigableMap<Long, byte[]>>> getMap()
 NavigableMap<byte[], NavigableMap<byte[], NavigableMap<Long, byte[]>>> getNoVersionMap()
-  NavigableMap<byte[], NavigableMap<byte[], NavigableMap<Long, byte[]>>> getFamilyMap(byte[] family)
+NavigableMap<byte[], NavigableMap<byte[], NavigableMap<Long, byte[]>>> getFamilyMap(byte[] family)
 ```
 
 它们把所有`get()`请求的返回结果装入一个Java的`Map`类实例中。
@@ -311,7 +311,7 @@ RPC请求的次数 = (行数 x 每行的列数) / Min(每行的列数，批量�
 
 `Bytes`类提供了类型转换的方法：
 
-- `toString()
+- `toString()`
 - `toLong()`
 - ...
 
