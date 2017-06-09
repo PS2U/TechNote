@@ -16,6 +16,14 @@
 
 [《C陷阱与缺陷》](cpp/c-traps-and-pitfalls/README.md)
 
+## Python
+
+[《Python参考手册》](python/essential-reference/README.md)
+
+## Java
+
+[《Java编程思想》](java/thinking-in-java/README.md)
+
 ## Linux
 
 [《现代操作系统》](linux/modern-operating-systems/README.md)
@@ -38,15 +46,11 @@
 
 [《HBase权威指南》](sql/hbase/the-definitive-guide/README.md)
 
-## Vim 
+## Vim
 
 [《学习vi和Vim编辑器》](tool/learning-the-vi-and-vim-editors/README.md)
 
-## Java
-
-[《Java编程思想》](java/thinking-in-java/README.md)
-
-## Elasticsearch 
+## Elasticsearch
 
 [《深入理解Elasticsearch》](es/mastering-es/README.md)
 
