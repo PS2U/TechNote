@@ -155,3 +155,27 @@ format(x, "0.5f") # '3.4000'
 
 # 1.6 列表
 
+列表是人以对象的组成的序列，把值放入方括号中就可以创建列表。
+
+```python
+names = ["Dave", "Mark", "Ann", "Phil"]
+a = names[2]
+names[0] = "Jeff"
+
+names.append("Paula")
+
+names.insert(2, "Thomas")
+
+names[0:2] # ["Jeff", "Mark"]
+names[2:] # ["Thomas", "Ann", "Phil", "Paula"]
+names[0:2] = ["Dave", "Mark", "Jeff"] # 将列表的头两项替换为邮编的列表
+
+# 使用 + 连接链表
+a = [1, 2, 3] + [4, 5]
+
+# 列表可以包含任意类型的对象，嵌套列表需要多次索引操作来访问
+[1, "Dave", 314, ["Mark", 7, 9], 10]
+```
+
+
+
