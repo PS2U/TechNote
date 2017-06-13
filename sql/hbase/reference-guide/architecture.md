@@ -332,4 +332,50 @@ Master 运行着几个后台线程：
 
 # 69. RegionServer
 
+`HRegionServer`是 RegionServer 的实现，它负责服务和管理 region。在分布式集群中，RegionServer 运行在 DataNode 上。
+
+## 69.1 接口
+
+`HRegionRegionInterface`暴露的方法包括了面向数据和 region维护的方法：
+
+- 数据（get/put/delete/next...)
+- Region（splitRegion, compactRegion）
+     例如当`Admin`执行在一个表上执行`majorCompact`，客户端实际上在迭代请求所有的 region 压缩。
+
+## 69.2 进程
+
+RegionServer 后台运行几种线程:
+
+### CompactSplitThread
+检查分割并处理最小紧缩。
+
+### MajorCompactionChecker
+检查主紧缩。
+
+### MemStoreFlusher
+周期将写到内存存储的内容刷到文件存储。
+
+### LogRoller
+周期检查RegionServer 的 HLog.
+
+
+## 69.3 协处理器
+
+协处理器在0.92版添加。 有一个详细帖子 [Blog Overview of CoProcessors](https://blogs.apache.org/hbase/entry/coprocessor_introduction) 供参考。
+
+## 69.4 块缓存
+
+HBase 提供了两种不同的块缓存实现：
+
+- 堆上的`LruBlockCache`，默认
+- `BucketCache`，通常在堆外
+
+### 缓存选择
+
+`LruBlockCache`是原始的实现，完全使用 Java 堆空间。`BucketCache`主要为堆外空间设计，尽管它也能将数据保存在堆上。
+
+`BucketCache`从 0.98.6 后引入 HBase。
+
+
+
 
