@@ -75,4 +75,40 @@ API 在 HBase 1.0 之后有所改变。
 
 ### 66.1.1 HBase 1.0.0 API
 
+HBase 1.0 的客户端返回的是`Interface`，而不是特定的数据类型。在 HBase 1.0中，
+
+1. 使用`ConnectionFactory`获得`Connection`实例。
+2. 根据需要，从`Connection`实例获得`Table`、`Admin`和`RegionLocator`。
+3. 关闭 `Table`、`Admin`和`RegionLocator`。
+4. 关闭`Connection`实例。
+
+`Connection`是重量级的对象，但是线程安全的，建议在程序中共享一个`Connection`实例。`Table`等实例是轻量级的，可以人以创建、关闭。
+
+### 66.1.2 HBase 1.0.0之前的 API
+
+HBase 1.0.0 之前使用`HTable`实例与 HBase 集群通信。
+
+`HTable`不是线程安全的，任意时刻，一个`HTable`实例只能被只一个线程使用。建议使用同一个`HBaseConfiguration`实例来创建`HTable`实例。这样可以共享ZooKeeper和socket实例。例如，最好这样做：
+
+```java
+HBaseConfiguration conf = HBaseConfiguration.create();
+HTable table1 = new HTable(conf, "myTable");
+HTable table2 = new HTable(conf, "myTable");
+```
+
+#### 连接池
+
+对需要高端多线程访问的应用，可以预先建立`Connection`，
+
+```java
+// Create a connection to the cluster.
+Configuration conf = HBaseConfiguration.create();
+try (Connection connection = ConnectionFactory.createConnection(conf);
+     Table table = connection.getTable(TableName.valueOf(tablename))) {
+  // use table as needed, the table returned is lightweight
+}
+```
+
+> `HTablePool`已经在 0.94 和 0.95、0.96 废弃。0.98.1将之移除。`HConnection`从1.0后废弃。
+
 
