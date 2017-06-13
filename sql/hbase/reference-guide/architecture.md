@@ -73,7 +73,7 @@ HBase客户端的负责寻找相应的 RegionServers 来处理行。他是先查
 
 API 在 HBase 1.0 之后有所改变。
 
-### 66.1.1 HBase 1.0.0 API
+### HBase 1.0.0 API
 
 HBase 1.0 的客户端返回的是`Interface`，而不是特定的数据类型。在 HBase 1.0中，
 
@@ -84,7 +84,7 @@ HBase 1.0 的客户端返回的是`Interface`，而不是特定的数据类型�
 
 `Connection`是重量级的对象，但是线程安全的，建议在程序中共享一个`Connection`实例。`Table`等实例是轻量级的，可以人以创建、关闭。
 
-### 66.1.2 HBase 1.0.0之前的 API
+### HBase 1.0.0之前的 API
 
 HBase 1.0.0 之前使用`HTable`实例与 HBase 集群通信。
 
@@ -111,4 +111,188 @@ try (Connection connection = ConnectionFactory.createConnection(conf);
 
 > `HTablePool`已经在 0.94 和 0.95、0.96 废弃。0.98.1将之移除。`HConnection`从1.0后废弃。
 
+## 66.2 WriterBuffer 和 批量方法
 
+`Table`不会自动刷新。要想 Buffer 写，使用`BufferedMutator`类。
+
+在`Table`实例销毁之前，调用`close`或`flushCommits()`，它携带的`Put`请求会被发送到服务器端。
+
+要批量 Put 或 Delete，使用`Table`的批量方法。
+
+
+## 66.3 外部客户端
+
+非 Java 的客户端请看这里[Apache HBase External APIs](http://hbase.apache.org/book.html#external_apis)
+
+
+# 67. 客户端请求过滤器
+
+Get 和 Scan 实例可以用 filters 配置，以应用于 RegionServer.
+
+## 67.1 结构过滤器
+
+结构过滤器包含其他过滤器
+
+### FilterList
+
+FilterList 代表一个过滤器列表，过滤器间具有 `FilterList.Operator.MUST_PASS_ALL` 或 `FilterList.Operator.MUST_PASS_ONE` 关系。
+
+```java
+FilterList list = new FilterList(FilterList.Operator.MUST_PASS_ONE);
+SingleColumnValueFilter filter1 = new SingleColumnValueFilter(
+  cf,
+  column,
+  CompareOp.EQUAL,
+  Bytes.toBytes("my value")
+  );
+list.add(filter1);
+SingleColumnValueFilter filter2 = new SingleColumnValueFilter(
+  cf,
+  column,
+  CompareOp.EQUAL,
+  Bytes.toBytes("my other value")
+  );
+list.add(filter2);
+scan.setFilter(list);
+```
+
+## 67.2 列值
+
+### SingleColumnValueFilter
+SingleColumnValueFilter 用于测试列值相等 (CompareOp.EQUAL ), 不等 (CompareOp.NOT_EQUAL),或范围 (e.g., CompareOp.GREATER). 下面示例检查列值和字符串'my value' 相等...
+
+```java
+SingleColumnValueFilter filter = new SingleColumnValueFilter(
+	cf,
+	column,
+	CompareOp.EQUAL,
+	Bytes.toBytes("my value")
+	);
+scan.setFilter(filter);
+```
+
+## 67.3 列值比较器
+
+过滤器包内有好几种比较器类。这些比较器和其他过滤器一起使用, 如，
+
+### RegexStringComparator
+RegexStringComparator 支持值比较的正则表达式 。
+
+```java
+RegexStringComparator comp = new RegexStringComparator("my.");   // any value that starts with 'my'
+SingleColumnValueFilter filter = new SingleColumnValueFilter(
+	cf,
+	column,
+	CompareOp.EQUAL,
+	comp
+	);
+scan.setFilter(filter);
+```
+
+### SubstringComparator
+SubstringComparator 用于检测一个子串是否存在于值中。大小写不敏感。
+
+```java
+SubstringComparator comp = new SubstringComparator("y val");   // looking for 'my value'
+SingleColumnValueFilter filter = new SingleColumnValueFilter(
+	cf,
+	column,
+	CompareOp.EQUAL,
+	comp
+	);
+scan.setFilter(filter);
+```
+
+其他过滤器注入`BinaryPrefixComparator`、`BinaryComparator`等。
+
+## 67.4 KeyValue 元数据
+
+由于HBase 采用键值对保存内部数据，键值元数据过滤器评估一行的键是否存在(如 ColumnFamily:Column qualifiers) 。
+
+### FamilyFilter
+FamilyFilter 用于过滤列族。 通常，在Scan中选择ColumnFamilie优于在过滤器中做。
+
+### QualifierFilter
+QualifierFilter 用于基于列名(即 Qualifier)过滤.
+
+### ColumnPrefixFilter
+ColumnPrefixFilter 可基于列名(即Qualifier)前缀过滤。
+
+```java
+Table t = ...;
+byte[] row = ...;
+byte[] family = ...;
+byte[] prefix = Bytes.toBytes("abc");
+Scan scan = new Scan(row, row); // (optional) limit to one row
+scan.addFamily(family); // (optional) limit to one family
+Filter f = new ColumnPrefixFilter(prefix);
+scan.setFilter(f);
+scan.setBatch(10); // set this if there could be many columns returned
+ResultScanner rs = t.getScanner(scan);
+for (Result r = rs.next(); r != null; r = rs.next()) {
+  for (KeyValue kv : r.raw()) {
+    // each kv represents a column
+  }
+}
+rs.close();
+```
+
+### MultipleColumnPrefixFilter
+MultipleColumnPrefixFilter 和 ColumnPrefixFilter 行为差不多，但可以指定多个前缀。
+
+```java
+Table t = ...;
+byte[] row = ...;
+byte[] family = ...;
+byte[][] prefixes = new byte[][] {Bytes.toBytes("abc"), Bytes.toBytes("xyz")};
+Scan scan = new Scan(row, row); // (optional) limit to one row
+scan.addFamily(family); // (optional) limit to one family
+Filter f = new MultipleColumnPrefixFilter(prefixes);
+scan.setFilter(f);
+scan.setBatch(10); // set this if there could be many columns returned
+ResultScanner rs = t.getScanner(scan);
+for (Result r = rs.next(); r != null; r = rs.next()) {
+  for (KeyValue kv : r.raw()) {
+    // each kv represents a column
+  }
+}
+rs.close();
+```
+
+### ColumnRangeFilter
+ColumnRangeFilter 可以进行高效内部扫描。
+
+```java
+HTableInterface t = ...;
+byte[] row = ...;
+byte[] family = ...;
+byte[] startColumn = Bytes.toBytes("bbbb");
+byte[] endColumn = Bytes.toBytes("bbdd");
+Scan scan = new Scan(row, row); // (optional) limit to one row
+scan.addFamily(family); // (optional) limit to one family
+Filter f = new ColumnRangeFilter(startColumn, true, endColumn, true);
+scan.setFilter(f);
+scan.setBatch(10); // set this if there could be many columns returned
+ResultScanner rs = t.getScanner(scan);
+for (Result r = rs.next(); r != null; r = rs.next()) {
+  for (KeyValue kv : r.raw()) {
+    // each kv represents a column
+  }
+}
+rs.close();
+```
+
+## 67.5 RowKey
+
+### RowFilter
+
+通常认为行选择时Scan采用 `startRow/stopRow` 方法比较好。然而 `RowFilter` 也可以用。
+
+## 67.6 Utility
+
+### FirstKeyOnlyFilter
+
+This is primarily used for rowcount jobs. 参考 [FirstKeyOnlyFilter](http://hbase.apache.org/apidocs/org/apache/hadoop/hbase/filter/FirstKeyOnlyFilter.html).
+
+
+# 68. Master
