@@ -296,3 +296,40 @@ This is primarily used for rowcount jobs. 参考 [FirstKeyOnlyFilter](http://hba
 
 
 # 68. Master
+
+`HMaster`是 Master Server 的实现。Master 负责监控所有 RegionServer 实例，也是元数据改变的接口。在分布式集群中，Master 运行在 NameNode 上。详细阅读[HBase HMaster Architecture ](http://blog.zahoor.in/2012/08/hbase-hmaster-architecture/)
+
+## 68.1 启动行为
+
+如果一个集群中有多个 Master，它们会出现竞争集群的控制权。如果活跃的 Master 在 ZooKeeper 的租约到期或者宕机，剩下的 Master 会争相接管 Master 的角色。
+
+## 68.2 运行时影响
+
+Master 挂掉之后会发生什么呢？因为 HBase 的客户端直接与 RegionServer 通信，整个集群看上去运转良好。另外，`hbase:meta`表也不存在 Master。
+
+但是，Master 负责维护 RegionServer 的灾难恢复、region 拆分，所以集群无 Master 状态下在运行一段时间后就会出错。
+
+## 68.3 接口
+
+`HMasterInterface`暴露的方法，都是面向元数据的：
+
+- Table (`createTable`, `modifyTable`, `removeTable`, `enable`, `disable`)
+- ColumnFamily (`addColumn`, `modifyColumn`, `removeColumn`)
+- Region (`move`, `assign`, `unassign`)
+
+## 68.4 进程
+
+Master 运行着几个后台线程：
+
+### LoadBalancer
+
+没有 region 转换的时候，负载均衡器就会间歇性地运行、移动 region 来达到集群的均衡。
+
+### CatalogJanitor
+
+间歇性地，检查和清理`hbase:meta`表。
+
+
+# 69. RegionServer
+
+
