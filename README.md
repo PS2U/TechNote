@@ -44,6 +44,8 @@
 
 [《Redis设计与实现》](sql/redis/README.md)
 
+[《Apache HBase ™ Reference Guide》](sql/hbase/reference-guide/README.md)
+
 [《HBase权威指南》](sql/hbase/the-definitive-guide/README.md)
 
 ## Vim
