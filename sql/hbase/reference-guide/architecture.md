@@ -48,6 +48,31 @@ HBase 内部将数据放到索引好的 "存储文件(StoreFiles)" ，以便高�
 
 ## 65.2 `hbase:meta`
 
+`hbase:meta` 表保存系统中所有region列表。现在保存在 ZooKeeper 中。`hbase:meta`表结构如下:
 
+- Key:
+    1. Region key 格式 ([table],[region start key],[region id])
+- Values:
+    1. info:regioninfo (序列化的 HRegionInfo 实例 )
+    2. info:server ( 保存RegionServer的server:port)
+    3. info:serverstartcode ( 保存RegionServer进程的启动时间)
+
+表在拆分的过程中，会生成两列：`info:splitA`和`info:splitB`，代表拆分后的两个 region。两列的值也是序列化后的`HRegionInfo`实例。拆分完成后，这一行就被删除。
+
+## 65.3 启动顺序
+
+1. 在 ZooKeeper 中找到`hbase:meta`表的位置。
+2. `hbase:meta`表会更新 server 和 startcode 的值.
+
+
+# 66. Client
+
+HBase客户端的负责寻找相应的 RegionServers 来处理行。他是先查询`hbase:meta`目录表。然后再确定region的位置。定位到所需要的区域后，客户端会直接 去访问相应的region(不经过master)，发起读写请求。这些信息会缓存在客户端，这样就不用每发起一个请求就去查一下。如果一个region已经废弃(原因可能是master load balance或者RegionServer死了)，客户端就会重新进行这个步骤，决定要去访问的新的地址。
+
+## 66.1 集群连接
+
+API 在 HBase 1.0 之后有所改变。
+
+### 66.1.1 HBase 1.0.0 API
 
 
