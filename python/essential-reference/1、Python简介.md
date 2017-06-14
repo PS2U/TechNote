@@ -214,7 +214,7 @@ name, shares, price = stock
 # 1.8 集合
 
  集合用于包含一组无序的对象。要创建集合，可使用`set()`这函数：
- 
+
  ```python
  s = set([3, 4, 5, 8])
  t = set("Hello")`
@@ -227,7 +227,7 @@ name, shares, price = stock
  ```
 
  集合支持并集、交集、对称差集的操作：
- 
+
  ```python
  a = t | s # 并集
  b = t & s # 交集
@@ -239,4 +239,125 @@ name, shares, price = stock
 
 
 # 1.9 字典
+
+字典就是一个关联数组或散列表，使用花括号`{}`放入值即可创建字典：
+
+```python
+stock = {
+  'name': "GOOG",
+  'shares': 100,
+  'price': 490.10  
+}
+```
+
+访问字典成员，使用键索引运算符：
+
+```python
+name = stock['name']
+stock['shares'] = 75
+```
+
+使用`in`运算符可以检查某个内容项是不是字典成员：
+
+```python
+prices = {}
+if 'SOX' in prices:
+    p = prices['SOX']
+else:
+	p = 0.0
+```
+
+上述语句等同于：
+
+```python
+p = prices.get('SOX', 0.0)
+```
+
+获得一个字典关键字的列表：
+
+```python
+syms = list(prices)
+```
+
+删除字典的元素：
+
+```python
+del prices['MSFT']
+```
+
+# 1.10 迭代与循环
+
+```python
+for n in [1, 2, 3, 4]:
+    print "2 to the %d power is %d" % (n, 2**n)
+```
+
+快捷写法：
+
+```python
+for n in range(1, 5):
+    print "2 to the %d power is %d" % (n, 2**n)
+```
+
+`range(i, j, step)`创建一个 `i` 到 `j-1`之间的整数范围。
+
+`xrange()`函数创建的对象会在收到查询请求时根据需要计算它所表示的值，避免像`range()`那样耗掉内存。
+
+`for`语句不仅限于整数序列，还用于迭代多种对象，如字符串、列表、字典、文件：
+
+```python
+a = "Hello"
+for c in a:
+    print c
+    
+b = ["Dave", "Mark", "Ann", "Phil"]
+for name in b:
+    print name
+    
+c = {'GOOG': 490.10, 'IBM': 91.50}
+for key in c:
+    print key, c[key]
+    
+d = open("foo.txt")
+for lin in f:
+    print lin
+```
+
+# 1.11 函数
+
+```python
+def remainder(a, b):
+    a = a //b
+    r = a - q*b
+    return r
+
+result = remaindar(37, 15)
+```
+
+如果要返回多个值，使用元组。
+
+要给函数参数提供一个默认值：
+
+```python
+def connect(host, port, timeout=300):
+    # body
+connect('www.python.org', 80)
+```
+
+还可以使用关键字参数调用函数，此时可以按照任意顺序提供参数：
+
+```python
+connect(port=80, host='www.python.org')
+```
+
+函数内部创建的变量，作用域是局部的。要在函数内部修改某个全局变量的值，使用`global`：
+
+```python
+count = 0
+def foo():
+    global count
+    count += 1
+```
+
+# 1.12 生成器
 
