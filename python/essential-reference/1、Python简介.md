@@ -361,3 +361,147 @@ def foo():
 
 # 1.12 生成器
 
+使用`yield`语句，可以让函数生成一个结果序列，而不仅仅是一个值：
+
+```python
+def countdown(n):
+    print "Counting down"
+    while n > 0:
+        yield n
+        n -= 1
+```
+
+任何使用`yield`的函数成为生成器，调用生产器将创建一个对象，该对象通过连续`next()`调用产生一系列的结果：
+
+```python
+c = countdown(5)
+c.next() 
+# Counting down 
+# 5
+c. next() # 4
+```
+
+`next()`调用使函数一直运行，到下一个`yield`语句为止。此时`next()`将返回传递给`yield`的值，然后函数终止执行。下次调用`next()`时，函数将继续执行`yield`之后的语句。此过程持续到函数返回位置。
+
+```python
+for i in countdown(5):
+    print i
+```
+
+生产器是编写 基于处理管道、流、或数据流程序的强大方式：
+
+```python
+def tail(f):
+   f.seek(0, 2)
+   while True:
+        line = f.readline()
+        if not line:
+            time.sleep(0.1)
+            continue
+            
+        yield line    
+```
+
+# 1.13 协程
+
+协程通过将`yield`语句作为表达式(`yield`)的形式创建的：
+
+```python
+def print_matches(matchtext):
+    print "Looking for", matchtext
+    while True:
+        line = (yield)
+        if matchtext in line:
+            print line
+```
+
+要使用这个函数，首先要调用它，向前执行到第一条`(yield)`语句，然后用`send()`向它发送数据。
+
+使用`send()`给协程发送某个值之前，协程会暂时中止。发送值后，携程中的`(yield)`将返回这个值，接下来的语句就是处理它。处理直到遇到下一个`(yield)`表达式才会结束，这是函数将暂时中止。
+
+# 1.14 对象与类
+
+程序中使用的所有值都是对象。对象由内部数据和各种方法组成。
+
+`dir()`函数可以列出对象上的可用方法。
+
+`class`关键字定义新的对象类型：
+
+```python
+class Stack(object):
+    def __init__(self):
+        self.stack = []
+        
+    def push(self, object):
+        self.stack.append(object)
+```
+
+1. 圆括号`(object)`表明继承方式
+2. 成员方法的第一个参数是必须是对象本身
+3. 涉及到对象属性的所有操作必须显式引用`self`变量。
+4. 以双下划线开始和结束的方法是特殊的方法
+
+# 1.15 异常
+
+```python
+try:
+    f = open("file.txt", r)
+except IOError as e:
+    print e
+```
+
+`raise`会手动引发异常：
+
+```python
+raise RuntimeError("NO!!")
+```
+
+`with`语句执行时会自动获取lock对象。当离开`with`代码块时，锁被自动释放。
+
+# 1.16 模块
+
+Python 允许把定义放入一个文件中，然后在其他程序或脚本中作为模块导入。
+
+要创建模块，可将相关的语句和定义放入与模块同名的文件中：
+
+```python
+# div.py
+def divide(a, b):
+    # do something
+```
+
+要在其他程序中使用该模块，`import`：
+
+```python
+import div
+a, b = div.divide(121, 45)
+```
+
+`import`创建了一个新的命名空间，并在该命名空间中执行与`.py`文件相关的所有语句。
+
+如果使用不同的名称导入模块，使用`as`：
+
+```python
+import div as foo
+a, b = foo.divide(121, 45)
+```
+
+ 将具体的定义导入到当前命名空间，使用`from`：
+
+```python
+from div import divide
+a, b = divide(121, 45)
+```
+
+要把模块的所有内容导入到当前的命名空间：
+
+```python
+from div import *
+```
+
+# 1.17 获得帮助
+
+1. 交互模式运行 Python 时，使用`help()`命令
+2. 大多数的 Python 函数都有描述该函数用途的文档字符串，打印`__doc__`属性即可。
+3. pydoc 命令。
+
