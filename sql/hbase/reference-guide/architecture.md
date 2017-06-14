@@ -376,6 +376,55 @@ HBase 提供了两种不同的块缓存实现：
 
 `BucketCache`从 0.98.6 后引入 HBase。
 
+从`BucketCache`中取数据，比从`LruBlockCache`中慢得多，但要更稳定一些。因为`BucketCache`较少 GC。如果使用 off-heap 模式，`BucketCache`压根不用 GC。
 
+当你打开`BucketCache`，你也就开启了双层缓存系统。L1缓存由`LruBlockCache`实例实现，off-heap 的 L2缓存由`BucketCache`实现。
 
+双层缓存系统由`CombinedBlockCache`管理，它将数据块放在 L2 `BucketCache`，元数据块（INDEX 和 BLOOM）放在on-heap 的 L1 `LruBlockCache`。
 
+### 通用缓存配置
+
+[http://hbase.apache.org/devapidocs/org/apache/hadoop/hbase/io/hfile/CacheConfig.html](http://hbase.apache.org/devapidocs/org/apache/hadoop/hbase/io/hfile/CacheConfig.html)
+
+设置这项选项后，需要重启集群才能生效。
+
+### `LruBlockCache`设计
+
+`LruBlockCache`缓存是一个 LRU 的缓存，它包括三种优先级块：
+
+1. Single：如果一个Block第一次被访问，则放在这一优先级队列中；
+2. Multi：如果一个Block被多次访问，则从Single队列移到Multi队列中；
+3. In-memory：如果一个Block的 family 是inMemory的，则放到这个队列中
+
+Block 换出的时候，会优先考虑 Single 队列，其次是 Multi，最后才是 In-memory。
+
+将一个 Column Family 标记为 in-memory 的方法：
+
+```java
+HColumnDescriptor.setInMemory(true);
+```
+
+创建一个 in-memory 的表：
+
+```
+hbase> create 't', {Name => 'f', IN_MEMORY => 'true'}
+```
+
+### `LruBlockCache`使用
+
+Block 缓存默认为所有用户表打开。
+
+计算 HBase 所需缓存空间的公式：
+
+```
+number of region servers * heap size * hfile.block.cache.size * 0.99
+```
+
+block 缓存的默认值是0.25，意思是使用可用堆的25%空间。0.99 表示 LRU 缓存的负载因子。
+
+其他需要考虑的因素：
+
+- 目录表。`-ROOT-`和`hbase:meta`表默认缓存，且是 in-memory 级别。前者只占用几百字节，后者顶多及 MB。
+- HFile 索引。HFile 有多层索引，索引的大小和块大小、key 的大小、存储数据的数量有关。单个 region server 的 HFile 索引有 GB 级也是正常的。
+- Keys。The values that are stored are only half the picture, since each value is stored along with its keys.
+- Bloom Filters。和 HFile 索引一样，也被存在 LRU 中。
