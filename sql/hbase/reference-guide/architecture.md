@@ -12,7 +12,7 @@ HBase 支持线性化和模块化扩充，如果集群从10个扩充到20个Regi
 - Hadoop/HDFS 集成: HBase 支持本机外HDFS 作为它的分布式文件系统。
 - MapReduce: HBase 通过MapReduce支持大并发处理， HBase 可以同时做源和目标.
 - Java 客户端 API: HBase 支持易于使用的 Java API 进行编程访问.
-- Thrift/REST API: HBase 也支持Thrift 和 REST 作为非Java 前端.
+- Thrift/REST API: HBase 也支持 Thrift 和 REST 作为非Java 前端.
 - Block Cache 和 Bloom Filters: 对于大容量查询优化， HBase支持 Block Cache 和 Bloom Filters。
 - 运维管理: HBase提供内置网页用于运维视角和JMX 度量.
 
@@ -473,5 +473,41 @@ hbase > create 't', {NAME => 't', CONFIGURATION => {CACHE_DATA_IN_L1 => 'true' }
 
 写请求由 RegionServer 处理，它们先被内存中，称之为`memstore`。一旦`memstore`满了，就会被刷写到磁盘中。存储文件聚集之后，RegionServer 会将它们合并成更少、更大的文件。 拆分策略决定了 region 是否需要拆分。
 
-region 拆分的时候，数据不是立刻写到 `daughter regions`的文件中。它会创建很多类似软连接的小文件，称为`Reference files`，指向父存储你文件的顶部或底部。
+region 拆分的时候，数据不是立刻写到 `daughter regions`的文件中。它会创建很多类似软连接的小文件，称为`Reference files`，指向 parent 存储文件的顶部或底部（取决于拆分点）。`Reference file`向正常的数据文件一样使用，但只涉及所有记录的一般。当没有更多的引用指向不可变的数据文件时，region 就开始拆分。
+
+RegionServer 需要在拆分前后通知 Master、更新`.META.`表、重新组织 HDFS 目录结构。为了错误回退，RegionServer在将操作日志保存在内存中。详细的拆分过程见[ RegionServer Split Process](http://hbase.apache.org/book.html#regionserver_split_process_image)。
+
+![](img/chap69/img0.png)
+
+1. RegionServer 在本地决定拆分 region，首先取得一个共享的读锁，防止 Schema 改变。然后在 ZooKeeper 中创建一个 znode，并将状态设置为`SPLITTING`。
+2. Master 从 ZooKeeper 得知该 znode 的信息。
+3. RegionServer 在 parent region 目录下创建一个名为`.splits`的子目录。
+4. RegionServer 关闭 parent region，下线 parent region。这时，客户端关于该 region 请求会抛出`NotServingRegionException`。
+5. RegionServer 在`.splits`目录下创建 daughter region A 和 B 的目录，添加必要的数据结构。然后拆分存储文件，这时有两个引用文件指向parentregion。
+6. RegionServer 在 HDFS 上创建真正的 region 目录，移动引用文件的位置。
+7. RegionServer 发送`Put`请求到`.META.`表，将 parent region 置为 offline，添加 daughter region的信息，但 daughter region 在表中没有单独的条目。这时 client 还是不能从`.META.`查到 daughter region 的信息。
+8. RegionServer 并发打开 daughters A 和 B。
+9. RegionServer 将 daughters A 和 B 的 host 信息加到`.META.`。这时两个 daughters 才上线。
+10. RegionServer 更新 znode 状态为`SPLIT`，master 会得知该变化。这时拆分过程就算完成了。
+11. 拆分后，引用文件仍然存在。daughter regions 在重写数据文件的时候删除它们。master 上的 GC 会定期检查 daughter region 是否有指向 parent region 的引用，如果没有，parent region 会被移除。
+
+## 69.6 Write Ahead Log（WAL）
+
+WAL 记录了 HBase 的所有改变记录，它保存在文件里。当 RegionServer 宕机而 MemStore 没有及时刷写的时候，WAL 就被用来回放数据的操作。如果写入 WAL 失败，则整个修改数据的操作就是失败。
+
+每个 RegionServer 都有唯一的 WAL 实例。在记录到达 MemStore，需先写入 WAL 记录。
+
+WAL 保存在 HDFS 的`/hbase/WALs`目录下。
+
+### MultiWAL
+
+一台 RegionServer 是串行写 WAL 的，这也是 WAL 的性能瓶颈。
+
+HBase 1.0 引入了 MultiWAL，它允许 RegionServer 并发地写入多个 WAL 流。
+
+要开启 MultiWAL，设置`hbase.wal.provider`为`multiwal`。
+
+### WAL 刷写
+
+TODO
 
