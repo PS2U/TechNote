@@ -428,3 +428,46 @@ block 缓存的默认值是0.25，意思是使用可用堆的25%空间。0.99 �
 - HFile 索引。HFile 有多层索引，索引的大小和块大小、key 的大小、存储数据的数量有关。单个 region server 的 HFile 索引有 GB 级也是正常的。
 - Keys。The values that are stored are only half the picture, since each value is stored along with its keys.
 - Bloom Filters。和 HFile 索引一样，也被存在 LRU 中。
+
+HFile 索引和布隆过滤器的使用情况，可以在 RegionServer 的 Web UI 查看。
+
+如果 WSS (working set size，计算需要使用的内存大小)没法放在内存里，那么使用块缓存也就没有意义。如：
+
+1. 全量随机读取。缓存的命中率几乎为0，对这样的表设置块缓存就是浪费，也会产生更多的垃圾。
+2. 映射一张表。每行数据只读一次的 Scan 操作，缓存也没啥意义。
+
+#### 只缓存 META 块
+
+只缓存 META 块，DATA 块不缓存。如果 `fscache` 能容下 DATA 块，那对随机读写超大数据集合来说非常有效。
+
+为了让此设置生效，需要修改表和每个 Column Family 的属性：`BLOCKCACHE => 'false'`。这只是禁止了列族的 BlockCache，你永远无法禁止 META 块的缓存。
+
+### Off-heap 块缓存
+
+使用`BucketCache`的的常见姿势是双层缓存：
+
+- L1 on-heap 的 `LruBlockCache`
+- L2 的 `BucketCache`
+
+双层缓存由 `CombinedBlockCache`管理。INDEX 和 BLOOM 放在 L1，DATA 块放置在 L2。HBase 1.0 之后可以改变这种配置，将 META 和 DATA 都放置在 L1：
+
+```
+hbase > create 't', {NAME => 't', CONFIGURATION => {CACHE_DATA_IN_L1 => 'true' }}
+```
+
+`BucketCache` 块缓存可以部署在 on-heap，off-heap，或者文件上，通过 `hbase.bucketcache.ioengine` 设置：
+
+- `heap`
+- `offheap`
+- `file:PATH_TO_FILE`
+
+如果想绕过`CombinedBlockCache`，设置`CacheConfig.BUCKET_CACHE_COMBINED_KEY`为`false`。这之后，从 L1中剔除的块会放在 L2。块缓存的时候，先放在 L1。查找块的时候，先找 L1, 然后在找 L2。这种模式称为 `Raw L1+L2`。
+
+### 压缩 BlockCache
+
+默认是关闭的，设置`hbase.block.data.cachecompressed`为`true`打开。它能够提升吞吐量、GC 性能。
+
+打开之后，缓存中的 BlockCache 就是磁盘上的格式，它在缓存前不会解压、解密块。
+
+## 69.5 RegionServer 拆分 Region
+
