@@ -469,5 +469,9 @@ hbase > create 't', {NAME => 't', CONFIGURATION => {CACHE_DATA_IN_L1 => 'true' }
 
 打开之后，缓存中的 BlockCache 就是磁盘上的格式，它在缓存前不会解压、解密块。
 
-## 69.5 RegionServer 拆分 Region
+## 69.5 RegionServer 拆分 
+
+写请求由 RegionServer 处理，它们先被内存中，称之为`memstore`。一旦`memstore`满了，就会被刷写到磁盘中。存储文件聚集之后，RegionServer 会将它们合并成更少、更大的文件。 拆分策略决定了 region 是否需要拆分。
+
+region 拆分的时候，数据不是立刻写到 `daughter regions`的文件中。它会创建很多类似软连接的小文件，称为`Reference files`，指向父存储你文件的顶部或底部。
 
