@@ -753,6 +753,8 @@ KeyValue 包装了一个字节数组：
 KeyValue 实例不会跨 block 分隔。即便 KeyValue 是8MB，而 block-size 是64kb，这个 KeyValue 仍会被读作连续的 block。
 
 
-### 紧凑
+### Compaction
+
+
 
 
