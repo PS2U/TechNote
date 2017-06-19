@@ -511,3 +511,18 @@ HBase 1.0 引入了 MultiWAL，它允许 RegionServer 并发地写入多个 WAL 
 
 TODO
 
+### WAL 拆分
+
+一台 RegionServer 有多个 region，这些 region 共享一个 WAL 文件。WAL 文件的修改必须按照 region 分组，方便以后重新生成 region 的数据。这个分组过程称之为 日志拆分。
+
+日志拆分的时机：
+
+1. 集群启动的时候，由`HMaster`完成。
+2. RegionServer 宕机的时候，由`ServerShutdownHandler`完成。
+
+日志拆分的过程：
+
+1. `/hbase/WALs/<host>, <port>, <startcode>`目录重命名。确保已存在的、有效的 WAL 文件不会被仍活跃的 RegionServer 意外写入。
+2. 一次拆分一个日志文件。
+3. 拆分完成后，每个受影响的 region 要指给 RegionServer。
+
