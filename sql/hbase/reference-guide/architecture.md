@@ -661,4 +661,25 @@ Admin 可以手动拆分 region，但在此之前你要想好是否要拆分：
 
 ## 70.6 在线的 region 合并
 
+```
+merge_region 'ENCODED_REGIONNAME', 'ENCODED_REGIONNAME', true
+```
+
+`merge_region` 请求是异步的，它不会等待合并完成而立刻返回。`true`表示强制 merge，默认情况下，只有相邻的 reigon 才能合并。
+
+1. Client 发送合并的 RPC 请求到 Master
+2. Master 将 region 移动到负载较重的 reigon 所在区域的 RegionServer。
+3. Mater 发送合并请求给这台 RegionServer。
+
+region 的合并在 RegionServer 看来就是一个本地事务。它
+
+1. 下线 region，
+2. 在文件系统上合并 region，
+3. 更新 `hbase:meta`表中的 region 信息，
+4. 打开合并后的 region，
+5. 将合并汇报给 Master。
+
+
+# 70.7 Store
+
 
