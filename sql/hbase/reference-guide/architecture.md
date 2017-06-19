@@ -636,4 +636,29 @@ Region 到 RegionServer 的本地化是由 HDFS 的 block 复制实现的。HDFS
 
 ## 70.4 Region 拆分
 
+RegionServer 分割操作是不可见的，因为 Master 不会参与其中。 RegionServer 切割region的步骤是，先将该region下线，然后切割，将其子region加入到`hbase:meta`元信息中，再将他们加入到原本的 RegionServer 中，最后汇报Master。
+
+### 自定义分割策略
+
+自定义的分割策略需要扩展 HBase 默认的`IncreasingToUpperBoundRegionSplitPolicy`。 可以从 HBase 的配置文件，或表的属性设置全局、局部的分割策略。
+
+## 70.5 手动 Region 分割
+
+Admin 可以手动拆分 region，但在此之前你要想好是否要拆分：
+
+- 数据是按时间排序，这意味着读写压力都在最后一个 region 上。
+- 某个 region 上存在热点。
+- 集群中的 RegionServer 增加，要重写协调 region。
+- Bulk-load 容易造成 region 的不平衡。
+
+### 决定分割点
+
+分割 reigon 的方式依赖于数据的特征，说白了就是 key 的设计。
+
+- 字母数字的 Rowkey。使用字母或在数字边界来分割 region。
+- 自定义的算法。HBase 提供了`RegionSplitter`工具，它采用`SplitAlgorithm`来决定分割点。它包括了两种分割算法：`HexStringSplit`将 Rowkey 看做是十六进制的字符串；`UniformSplit`将 Rowkey 看作是随机的字节数组。
+
+
+## 70.6 在线的 region 合并
+
 
