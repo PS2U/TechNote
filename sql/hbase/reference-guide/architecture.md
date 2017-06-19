@@ -551,14 +551,89 @@ TODO
 
     manager 管理所有的日志文件，将所有的日志文件放到 ZooKeeper的日志拆分节点。
 
-2.  manager 监视日志拆分的 task 和 worker。
+2. manager 监视日志拆分的 task 和 worker。
 
-3.  每个 RegionServer 的拆分 worker 执行拆分 task。
+3. 每个 RegionServer 的拆分 worker 执行拆分 task。
 
-4.  manager 监视未完成的 task。
+4. manager 监视未完成的 task。
 
 分布式日志回放，可以直接将 WAL 修改回放到另一台 RegionServer 上，而不用创建`recovered.edits`文件。它避免了创建和并行读取成千的`recovered.edits`文件，加快了 RegionServer 的恢复速度。
 
 
 
- # 70. Regions
+ # 70. Region
+
+HBase 表的层次结构：
+
+```
+Table                    (HBase table)
+    Region               (Regions for the table)
+        Store            (Store per ColumnFamily for each Region for the table)
+            MemStore     (MemStore for each Store for each Region for the table)
+            StoreFile    (StoreFiles for each Store for each Region for the table)
+                Block    (Blocks within a StoreFile within a Store for each Region for the table)
+```
+
+## 70.1 Region 个数的考量
+
+HBase 被设计为在一台服务器上运行少量（20 ~ 200）的相对大（5 ~ 20G）的 region。
+
+### 为什么要控制 Region 的个数？
+
+通常情况下，一个 RegionServer 保持100个 region 是最优的。保持 region 个数较少的原因有：
+
+- MemStore-local 为每个 MemStore分配的缓存是 2MB，这意味着每个 region 的每个 family 都是 2MB。其中 2MB 是可配置的。
+- 过多的 region 会触发压缩。
+- master 要承载更多的 region，指定、移动它们都是很大的复旦。
+- HBase 的老版本，过多的 region 会触发 OOM。
+
+## 70.2 Region -> RegionServer 的指派
+
+### 启动
+
+当HBase启动时，区域分配如下：
+
+1. 启动时主服务器调用 `AssignmentManager`.
+2. `AssignmentManager` 在 `hbase:meta` 中查找已经存在的区域分配。
+3. 如果区域分配还有效（如 RegionServer 还在线） ，那么分配继续保持。
+4. 如果区域分配失效，`LoadBalancerFactory` 被调用来分配区域。 `DefaultLoadBalancer` 将随机分配区域到RegionServer.
+5. `hbase:meta` 随 RegionServer 分配更新（如果需要）， RegionServer 启动区域开启代码（RegionServer 启动时进程）。
+
+### 故障转移
+
+当区域服务器出故障退出时：
+
+1. 区域立即不可获取，因为区域服务器退出。
+
+2. 主服务器会检测到区域服务器退出。
+
+3. 区域分配会失效并被重新分配，如同启动时序。
+
+4. in-flight 查询重试
+
+5. 所有的操作转向一台新的 RegionServer，延迟时间：
+
+   `ZooKeeper session timeout + split time + assignment/replay time`。
+
+### Region负载均衡
+
+Region 之间的移动由 `LoadBalancer`控制。
+
+### Region 状态转换
+
+![](img/chap69/img1.png)
+
+
+## 70.3 Region -> RegionServer 的本地化
+
+Region 到 RegionServer 的本地化是由 HDFS 的 block 复制实现的。HDFS 客户端在选择读取replica 的位置时：
+
+1. 第一个 replica 写入本地节点
+2. 第二个 replica 写入另外一个机架的随机节点
+3. 第三个 replica 写入同一个机架的另外一个随机节点
+4. 余下的 replica 写入集群的随机节点
+
+
+## 70.4 Region 拆分
+
+
