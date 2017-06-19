@@ -524,5 +524,41 @@ TODO
 
 1. `/hbase/WALs/<host>, <port>, <startcode>`目录重命名。确保已存在的、有效的 WAL 文件不会被仍活跃的 RegionServer 意外写入。
 2. 一次拆分一个日志文件。
+  一次读取一个修改条目并将其放入按 region 区分的 buffer。同时 RegionServer 启动多个写线程，负责将region 对应的修改条目放到临时的恢复文件中：
+  ` /hbase/<table_name>/<region_id>/recovered.edits/.temp`。日志拆分完成后，`.temp`文件重命名为该文件第一条日志的序列 ID。这个序列 ID 就是用来确认是否所有的修改已经被写入 HFile。
 3. 拆分完成后，每个受影响的 region 要指给 RegionServer。
+  region 打开的时候，`recovered.edits`文件夹中的修改记录被写入 MemStore 。当所有的修改文件被重放后，MemStore 被写入 HFile，修改文件被删除。
 
+#### 日志拆分的错误处理
+
+`hbase.hlog.split.skip.errors`选项置为`true`，错误会被用如下方式处理：
+
+1. 拆分中的所有错误会被记录。
+2. 出错的 WAL 日志会被移到 HBase 根目录下的 `.corrupt`目录下。
+3. 继续处理 WAL 。
+
+如果置为`false`（默认情况下），异常会被抛出，拆分被记录为失败。
+
+特殊地，即便`hbase.hlog.split.skip.errors`为`false`， `EOFException` 出现时，拆分仍然会继续。
+
+#### 日志拆分的性能调优
+
+分布式日志拆分对于性能的优化粒度极大，只需将`hbase.master.distributed.log.splitting`置为`true`。
+
+分布式日志开启后，HMaster 就控制着拆分的过程，但实际的拆分工作还是 RegionServer 完成的：
+
+1.  集群启动时，HMaster 会创建一个`split log manager`实例。
+
+    manager 管理所有的日志文件，将所有的日志文件放到 ZooKeeper的日志拆分节点。
+
+2.  manager 监视日志拆分的 task 和 worker。
+
+3.  每个 RegionServer 的拆分 worker 执行拆分 task。
+
+4.  manager 监视未完成的 task。
+
+分布式日志回放，可以直接将 WAL 修改回放到另一台 RegionServer 上，而不用创建`recovered.edits`文件。它避免了创建和并行读取成千的`recovered.edits`文件，加快了 RegionServer 的恢复速度。
+
+
+
+ # 70. Regions
