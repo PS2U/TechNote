@@ -682,4 +682,77 @@ region 的合并在 RegionServer 看来就是一个本地事务。它
 
 # 70.7 Store
 
+一个 Store 对应一个 MemStore 和 多个 StoreFiles（HFiles）。一个 Store 对应于一个表在某个 region 上的一个列族。
+
+### MemStore
+
+MemStore 保存着 Store 在内存中的修改。收到 flush 秦秋之后，当前的 MemStore 被移到快照之后清空。HBase 使用新的 MemStore 来应对修改，备份先前的快照直到刷写完成。完成后，快照被丢弃。
+
+flush 的时候，同一个 region 的所有 MemStore 都会flush。
+
+### MemStore flush
+
+MemStore 的flush 由以下条件触发，最小的 flush 单元是 region，而不是独立的 Memstore level：
+
+- MemStore 的大小超过`hbase.hregion.memstore.flush.size`。同一个 region 的所有 MemStore 都被 flush。
+- 总共的 MemStore 大小超过`hbase.regionserver.global.memstore.upperLimit`。flush 的属性是从大到小，直到总大小降到`hbase.regionserver.global.memstore.lowerLimit`。
+- 某台 RegionServer 的WAL 日志条数达到`hbase.regionserver.max.logs`。多个 region 的 MemStore 都会 flush。flush 顺序基于时间。
+
+### 扫描
+
+Client 请求扫描时，HBase 为每个 region 生成一个 `RegionScanner`：
+
+- `RegionScanner`有一个`StoreScanner`对象列表，每个列族对应一个列表。
+- 每个`StoreScanner`有包含一个`StoreFileScanner`列表，一个`KeyValueScanner`列表。一个`StoreFileScanner`对应于列族的 HFile。
+- 两个列表合并为一个， 升序排列。
+- `StoreFileScanner` 对象被构造的时候，与`MultiVersionConcurrencyControl`关联。后者有一个读取点`memstoreTS`，自动过滤读取点后的更新。
+
+### StoreFile（HFile）
+
+StoreFile 存放着最终的数据。
+
+HFile 的格式是基于 SSTable（详见 BitTable 的论文）。
+
+更多参考：
+
+- [HFile: A Block-Indexed File Format to Store Sorted Key-Value Pairs](http://cloudepr.blogspot.com/2009/09/hfile-block-indexed-file-format-to.html)
+- [HBase I/O: HFile](http://th30z.blogspot.com/2011/02/hbase-io-hfile.html?spref=tw)
+
+
+HFile 工具：
+
+```
+hbase org.apache.hadoop.hbase.io.hfile.HFile
+```
+
+### Block
+
+StoreFile 由多个 block 组成，每个列族的 block 大小都可配。
+
+压缩是在 block 这一层。
+
+### KeyValue
+
+KeyValue 包装了一个字节数组：
+
+- key 长度
+- value 长度
+- key 
+- value
+
+其中，Key 可分解为：
+
+- row 长度
+- rowkey
+- 列族长度
+- 列族
+- 列限定符
+- 时间戳
+- key 类型（Put、Delete、DeleteColumn 等）
+
+KeyValue 实例不会跨 block 分隔。即便 KeyValue 是8MB，而 block-size 是64kb，这个 KeyValue 仍会被读作连续的 block。
+
+
+### 紧凑
+
 
