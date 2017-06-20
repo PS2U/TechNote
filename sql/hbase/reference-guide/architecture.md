@@ -755,6 +755,93 @@ KeyValue 实例不会跨 block 分隔。即便 KeyValue 是8MB，而 block-size 
 
 ### Compaction
 
+当 MemStore 的大小超过`hbase.hregion.memstore.flush.size`，它就被 flush 到 StoreFile 中。一个 Store 中的 StoreFile 数量随着时间递增。Compaction 操作就是合并 Store 中的StoreFile，以减少后者的数量。这样可以提升读操作的性能。Compaction 本身是很消耗资源的。
+
+Compaction 可以分为
+
+- Minor Compaction。选择几个小的、连续的 StoreFile ，将其重写到一个单独的 StoreFile 中。Minor Compaction 不会滤掉已删除或过期的版本。
+- Major Compaction。Major Compaction 的最终结果是一个 Store 只保留一个 StoreFile。它也会处理删除标记和最大笨笨。
+
+**Compaction 和删除**
+
+HBase 中的删除操作，不是真的删除数据，而是打上一个墓碑标记。查询的时候会滤掉这些数据。Major Compaction 的时候，这些数据才被真正删除。如果是 TTL 过期，不会有墓碑标记。过期数据同样会被过滤，也不会被重写到 Compacted 的 StoreFile 中。
+
+**Compaction 和版本**
+
+每个列族都有一个最大版本号。超过这个版本号的数据会被过滤，也不会被写到 compacted 后的 StoreFile 中。
+
+Major Compaction 并不总是提高性能，它本身就很消耗资源。
+
+
+Compaction 不会触发 region 的合并。
+
+#### Compaction 策略
+
+HBase 0.96.x 之前只有一种 compaction 策略，现在仍然可用的 `RatioBasedCompactionPolicy`。新引进的策略 `ExploringCompactionPolicy`。
+
+不管是用哪种策略，选择哪个 StoreFile 进行 compaction 还是受到一些可配参数的影响。
+
+一个 Store 最多可以有 `hbase.hstore.blockingStoreFiles` 个文件，所以 MemStore 必须等到 StoreFiles 的数量降到该阈值以下才能 flush。这就造成了：如果 MemStore 太大，同时 StoreFile 文件数太多，这个算法就卡住了。
+
+**ExploringCompactionPolicy 算法**
+
+`ExploringCompactionPolicy`算法会考虑所有连续的 StoreFile 组合。`ExploringCompactionPolicy`让 Minor Compaction 更高效，也减少了 Major Compaction 的发生。
+
+`ExploringCompactionPolicy`的逻辑如下：
+
+1. 创建 Store 中所有存在的 StoreFile 列表。
+2. 如果是用户请求的 compaction，尝试执行请求的 compaction 类型。如果用户请求的是 Major Compaction，不见得能够执行。因为并不是所有的 StoreFile 刚好能够 compact。
+3. 自动排除一些 StoreFile：
+  - 大于 `habse.hstore.compaction.max.size`
+  - 由批量加载创建的 StoreFile。
+4. 迭代步骤1创建的列表，创建一个候选者集合的列表。一个候选集合包括`habse.hstore.compaction.min`个连续的 StoreFile。对每个集合执行一些操作以检查其是否是最好的 compaction 选项：
+  - 集合中的 StoreFile 数量小于 `hbase.hstore.compaction.min`且大于`hbase.hstore.compaction.max`，排除。
+  - 比较当前集合的大小和列表中已知的最小集合大小，如果前者更小，将这个集合保存下来。用作以后算法卡住时的备选。
+  - 对集合中的每个 StoreFile 做检查：`hbase.hstore.compaction.max.size`、`hbase.hstore.compaction.min.size`、`hbase.hstore.compaction.ratio`。
+5. 如果当前集合没被排除，再将它与先前的最优选择比较，必要时可以替换它。
+6. 这个列表遍历完后，执行最优的 compaction。如果没有 StoreFile 被选中，而是有多个 StoreFile，那算法就卡住了，执行步骤3发现的最小 compaction。
+
+**RationBasedCompactionPolicy 算法**
+
+1. 创建一个候选者列表。候选者包括没有在 compaction 队列中的 StoreFile、比最新的 compacted 过的文件更新的 StoreFile。列表按照序列 ID 排序。序列 ID 由 `Put` 操作添加到 WAL 后生成，存在 HFile 的元数据中。
+2. 检查算法是否卡住，如果是强制 Major Compaction。
+3. 如果是用户请求的 compaction，那就老老实实地执行用户请求的 compaction 类型。
+4. 自动排除一些 StoreFile：
+  - 大于 `habse.hstore.compaction.max.size`
+  - 由批量加载创建的 StoreFile。
+5. 如果列表中的 StoreFile 数量大于 `hbase.hstore.compaction.max`，执行 Minor Compaction。如果用户请求的是 Major Compaction，那就照办。
+6. 如果列表中的 StoreFile 数量小于 `hbase.hstore.compaction.min`，终止 Minor Compaction。
+7. 如果 `hbase.hstore.compaction.ratio` 乘以 StoreFile 数量 小于给定的文件，该文件可被 Minor Compaction。
+8. 如果最后一次 Major Compaction 是很久之前的事儿了，同时不止一个 StoreFile 要 Compact，那就执行 Major Compaction，即使他应该执行的是 Minor Compaction。
+
+#### 日期分层 Compaction
+
+日期分层Compaction 用来处理有限的时间范围，特别是扫描最近的数据。它不适用于以下场景：
+
+- 超出时间范围的随机 get
+- 频繁的删除和更新
+- 频繁的无序的数据写入，尤其是写入未来的时间戳
+- 频繁的带有重叠时间范围的批量加载
+
+为某个表或列族开启日期分层 Compaction：`hbase.hstore.engine.class` 设置为 `org.apache.hadoop.hbase.regionserver.DateTieredStoreEngine`。
+
+### 实验性的：Stripe Compaction
+
+Stripe Compaction 是 HBase 0.98 引入的，旨在提高大 region 或不均匀、分布式的 rowkey 的 Compaction 性能。
+
+为了更多细粒度的 Compaction，region 中的 StoreFile 会根据 row-key 分开管理。Stripe Compaction 改变了 HFile 的布局，在 region 中创建了子 region。这些子 region 在 compact 之前，能减少 Major Compaction 的次数。
+
+使用 Stripe Compaction 的场景：
+
+- 超大的 region。
+- 不均匀的 key。
+
+开启 Stripe Compaction的方法 `hbase.hstore.engine.class` 设置为 `org.apache.hadoop.hbase.regionserver.StripeStoreEngine`。
+
+
+
+# 71. 批量加载
+
 
 
 
