@@ -842,6 +842,28 @@ Stripe Compaction 是 HBase 0.98 引入的，旨在提高大 region 或不均匀
 
 # 71. 批量加载
 
+批量加载使用 MapReduce 的 job 用 HBase 内部数据结构输出表的数据，StoreFile 被直接加载到集群中。
+
+批量加载绕过了写路径，也就绕过了 WAL。可以将 HFile 移动到另一个集群，然后再做处理。
+
+## 71.3 批量加载架构
+
+批量加载包括两个主要步骤：
+
+### 通过 MapReduce job 准备数据
+
+使用`HFileOutputFormat2`从 MapReduce 中生成 StoreFile。输出格式是 HBase 的内部存储格式，这样可以有效地为整个集群所用。
+
+`HFileOutputFormat2`必须配置成每个 region 输出一个 HFile。`TotalOrderPartitioner`用来按照 key 进行分区。
+
+### 完成数据加载
+
+数据导入准备好后，使用`importtsv`工具，或者使用`HFileOutputFormat`的 MapReduce job、`completebulikload` 将数据导入到运行的集群中。
+
+这个命令行工具会遍历所有数据文件，找到它所属的 region。然后它请求对应的 RegionServer，将数据文件移到 RegionServer 的存储目录，最后使其对客户端可见。
+
+see [ImportTsv](http://hbase.apache.org/book.html#importtsv) 和 [CompleteBulkLoad](http://hbase.apache.org/book.html#completebulkload)
 
 
+# 72. HDFS
 
