@@ -867,3 +867,23 @@ see [ImportTsv](http://hbase.apache.org/book.html#importtsv) 和 [CompleteBulkLo
 
 # 72. HDFS
 
+HBase 运行在 HDFS 之上。
+
+see [HDFS Architecture](http://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html)
+
+## 72.1 NameNode
+
+NameNode 负责维护文件系统的元信息。
+
+## 72.2 DataNode
+
+DataNode 负责存储 HDFS 块。
+
+
+# 73. 时间线一致的高可用读
+
+## 73.1 介绍
+
+所有的读写请求都从单台 RegionServer 路由，这就确保所有的写操作是按序的，所有的读操作看到的都是最新提交的数据。
+
+
