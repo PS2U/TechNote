@@ -146,17 +146,21 @@ Sentinel发现master有新的slave时，除了会为这个slave创建相应的�
 
 默认情况下，Sentinel会以两秒一次的频率，通过命令连接向所有被监视的master和slave发送：
 
-> PUBLISH \_\_sentinel\_\_:hello "<s_ip>, <s_port>, <s_runid>, <s_epoch>, <m_name>, <m_ip>, <m_port>, <m_epoch>"
+```
+PUBLISH __sentinel__:hello "<s_ip>, <s_port>, <s_runid>, <s_epoch>, <m_name>, <m_ip>, <m_port>, <m_epoch>"
+```
 
-其中以s\_开头的参数表示Sentinel本身的信息，m\_开头的参数是master的信息。如果Sentinel正在监视的是slave，那就是slave正在复制的master信息。
+其中以`s_`开头的参数表示Sentinel本身的信息，`m_`开头的参数是 master 的信息。如果Sentinel 正在监视的是 slave，那就是 slave 正在复制的 master 信息。
 
 # 16.5 接收来自master和slave的频道信息
 
 当Sentinel与一个master或slave建立订阅连接后，会向服务器发送以下命令：
 
-> SUBSCRIBE \_\_sentinel\_\_:hello
+```
+SUBSCRIBE __sentinel__:hello
+```
 
-Sentinel对\_\_sentinel\_\_:hello频道的订阅会持续到两者的连接断开为止。也就是说，Sentinel既可以向服务器的\_\_sentinel\_\_:hello频道发送信息，又通过订阅连接从\_\_sentinel\_\_:hello频道接收信息。
+Sentinel对`__sentinel__:hello`频道的订阅会持续到两者的连接断开为止。也就是说，Sentinel既可以向服务器的`__sentinel__:hello`频道发送信息，又通过订阅连接从`__sentinel__:hello` 频道接收信息。
 
 对于监视同一个server的多个Sentinel来说，一个Sentinel发送的信息会被其他Sentinel收到。这些信息用于更新其他Sentinel队发送信息Sentinel和被监视Server的认知。
 
@@ -180,7 +184,7 @@ Sentinel通过频道信息发现一个新的Sentinel时，不仅会为其创建�
 
 # 16.6 检测主观下线状态
 
-默认情况下，Sentinel会每秒一次地向所有与它创建了嘛命令连接的实例（master、slave、其他sentinel）发送`PING`命令，并通过回复来判断其是否在线。只有+PONG/-LOADING/-MASERDOWN三种有效回复。
+默认情况下，Sentinel会每秒一次地向所有与它创建了命令连接的实例（master、slave、其他sentinel）发送`PING`命令，并通过回复来判断其是否在线。只有+PONG/-LOADING/-MASERDOWN三种有效回复。
 
 Sentinel的配置文件中`down-after-milliseconds`选项指定了判断实例主观下线所需的时间长度。在`down-after-milliseconds`毫秒内，如果连续返回无效回复，那么Sentinel会修改这个实例对应的实例结构，将`flags`属性中打开`SRI_S_DOWN`标识，标识主观下线。
 
