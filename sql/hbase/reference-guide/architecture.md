@@ -886,4 +886,81 @@ DataNode 负责存储 HDFS 块。
 
 所有的读写请求都从单台 RegionServer 路由，这就确保所有的写操作是按序的，所有的读操作看到的都是最新提交的数据。
 
+RegionServer 的恢复过程可分为3个阶段：
+
+- 探测
+- 指派
+- 恢复
+
+其中探测阶段是最耗时的，它依赖于 ZooKeeper 的 session 超时时间，常常是 20 ~ 30 秒。在 RegionServer 恢复之前，Client 都不能读取该 region 的数据。
+
+为了实现读的高可用，HBase 提供了 `region replication`。region 的 replica 会出现在另一台 RegionServer 上。
+
+region 的所有 relica 都有一个唯一的`replica_id`，从 0 开始计数。`replica == 0`的 region 成为 `primary region`，其它的称为 `secondary region`。只有 `primary region`能够接收 Client 的写请求。这也是 HBase 高可用的瓶颈所在。
+
+## 73.2 时间线一致性
+
+```java
+public enum Consistency {
+  STRONG,
+  TIMELINE
+}
+```
+
+`STRONG`是HBase 默认的一致性模型。如果 `region replication = 1`，那么每次读取都会走向`primary region`。这就确保客户端每次拿到的都是最新的数据。
+
+`TIMELINE`设置下，读 RPC 会先发往 `primary region`，在一段时间间隔 `hbase.client.primaryCallTimeout.get` 后，发送另一个并行 RPC 发往 `secondary region replica`。哪个先返回，就使用它的结果。如果返回结果是来自`secondary replica`，那么 `Result.isStale()` 会被置为 `true`。用户可以用该成员变量查看数据过时的原因。
+
+`TIMELINE` 一致性与纯粹的最终一致性有如下区别：
+
+- 单一存储和顺序的更新。只有 `primary region` 接受写请求。这样避免了读请求的冲突。
+- `secondaries` 接受 `primary region` 执行过的写请求。
+- Client 能够感知到读到的数据是最新的还是过时的，也能够定位数据过时的原因。
+- Client 够够观察写乱序，也能够即时回溯。
+
+![](img/chap69/img2.png)
+
+
+## 73.3 权衡
+
+读 `secondary region` 的优势：
+
+- 提高只读表的高可用
+- 提高过期数据的高可用
+- 过期数据读取以更低延迟读取
+
+劣势：
+
+- MemStore 过多
+- 块缓存增加
+- 额外的网络开销
+- 额外的 RPC 
+
+`TIMELINE` 一致性这个 feature 被分为两个阶段，第一阶段在 HBase 1.0.0 发布，第二阶段的开发于 HBase 1.1.0 完成。
+
+## 73.5 散播写请求向 region replica 
+
+`primary region` 要将写请求传播到 `secondaries`。有两种机制：
+
+### StoreFile Refresher
+
+HBase 1.0 引入了 StoreFile Refersher。每个 RegionServer 都有一个 `refresher` 线程，它会定期触发，将`primary region`的 StoreFile 刷新到 `secondary region replica`。
+
+打开这个 feature，要将 `hbase.regionserver.storefile.refresh.period` 设置为非 0 的值。
+
+### 异步 WAL 复制
+
+HBase 1.1 引入了 WAL 异步复制。它和 HBase 的多数据中心复制很相似，只不过是从 `primary region` 复制到 `secondary region`。每个 `secondary replica` 接收、观察 `primary region` 提交的修改，并将这些修改在本地回放。
+
+打开 WAL 异步复制，`hbase.region.replica.replication.enabled` 置为 `true`. 
+
+## 73.6 StoreFile TTL
+
+上述两种方式，`primary StoreFile` 都要在 `secondaries` 上打开，它们都使用 `HFileLink` 来引用这些文件。但是，没有机制来确保这些文件不会过早删除。因此，设置 `hbase.master.hfilecleaner.ttl` 为一个更大的值，可以预防一些 `IOException`。
+
+## 73.7  Region replication for META table’s region
+
+WAL 异步复制不适用于 META 表的 WAL。它只会用 StoreFile 来刷新。这时就要用到 `hbase.regionserver.meta.storefile.refresh.period` 。
+
+## 73.8 内存审计
 
