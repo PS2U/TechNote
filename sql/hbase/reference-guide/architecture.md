@@ -918,7 +918,7 @@ public enum Consistency {
 - Client 能够感知到读到的数据是最新的还是过时的，也能够定位数据过时的原因。
 - Client 够够观察写乱序，也能够即时回溯。
 
-![](img/chap69/img2.png)
+![](img/chap70/img0.png)
 
 
 ## 73.3 权衡

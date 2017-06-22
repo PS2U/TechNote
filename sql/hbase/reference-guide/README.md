@@ -2,4 +2,6 @@
 
 # 目录
 
+[Getting Started](getting-started.md)
+
 [Architecture](architecture.md)
