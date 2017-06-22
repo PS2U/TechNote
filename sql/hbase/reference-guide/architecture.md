@@ -964,3 +964,102 @@ WAL 异步复制不适用于 META 表的 WAL。它只会用 StoreFile 来刷新�
 
 ## 73.8 内存审计
 
+`secondary region replica` 引用 `primary region replica` 的数据文件，它仍然有自己的 MemStore，也使用 块缓存。不同的是，`secondary region replica` 在内存不足的时候不能刷写 MemStore 的数据。当 `primary region ` 刷写完成并将刷写复制到`secondary`之后，后者只能释放 MemStore 的内存。对既持有`primary replica`、又持有 `secondaries` 的 RegionServer 而言，`secondaries` 会触发额外的刷写操作。极端情况下，甚至没有额外的内存来容纳来自 `primary` 的 WAL 复制。
+
+为了打破这种情况，`secondary` 允许选择一些从 `primary`来的请求，再将其刷写。这种情况只有在 `secondary region replica` 最大的 MemStore N 倍（`hbase.region.replica.storefile.refresh.memstore.multiplier` ）大于 `primary replica`的最大 MemStore。
+
+这么做的缺陷是，`secondary` 可能有跨列族的部分 row 更新，因为每个列族单独刷写。所以这个操作不能很频繁。
+
+## 73.9 `Secondary replica` 故障转移
+
+`secondary` 必须等待一个完整的刷写周期（开始刷写、提交刷写）或者`primary`发来的`region open event`之后，才能开始接受用户的读请求。
+
+为了加快恢复，`secondary region`可以在启动的时触发一个来自`primary`的刷写请求，这可以通过 `hbase.region.replica.wait.for.primary.flush` 配置。
+
+## 73.10 配置属性
+
+为了 HBase 的高可用，应该在 `hbase-site.xml` 中配置以下属性：
+
+**服务端的属性**
+
+```
+hbase.regionserver.store.refresh.period
+hbase.region.replica.replication.enabled
+hbase.region.replica.replication.memstore.enabled
+hbase.master.hfilecleaner.ttl
+hbase.meta.replica.count
+hbase.region.replica.storefile.refresh.memstore.multiplier
+hbase.region.replica.wait.for.primary.flush
+```
+
+**客户端的属性**
+
+```
+hbase.ipc.client.specificThreadForWriting
+hbase.client.primaryCallTimeout.get
+hbase.client.primaryCallTimeout.multiget
+hbase.client.replicaCallTimeout.scan
+hbase.meta.replicas.use
+```
+
+## 73.11 用户接口
+
+在 Master 的 UI 上，`region replia` 和 `primary region` 展示在一起。同一个 region 的 replica 共享 start 和 end key、region 名前缀。不同的是 `replica_id` 不同。
+
+## 73.12 创建带有 `region replication`的表
+
+```shell
+create 't1', 'f1', {REGION_REPLICATION => 2}
+```
+
+## 73.13 读 API
+
+```
+get 't1','r6', {CONSISTENCY => "TIMELINE"}
+```
+
+
+
+# 74. 存储 中尺寸的对象（MOB）
+
+HBase 针对 100KB 以下的小文件做了很多优化。当文件大于 100KB 之后，因为split 和 compaction，性能会急剧下降。
+
+HBase-11339 这个issue 之后，MOB的性能大有提升。 针对 MOB 的性能，需要 `HFile version 3`。
+
+## 74.1 为 MOB 配置列
+
+```
+hbase> create 't1', {NAME => 'f1', IS_MOB => true, MOB_THRESHOLD => 102400}
+hbase> alter 't1', {NAME => 'f1', IS_MOB => true, MOB_THRESHOLD => 102400}
+```
+
+## 74.2 测试 MOB
+
+```shell
+sudo -u hbase hbase org.apache.hadoop.hbase.IntegrationTestIngestWithMOB \
+            -threshold 1024 \
+            -minMobDataSize 512 \
+            -maxMobDataSize 5120
+```
+
+## 74.3 配置 MOB 缓存
+
+和 HFile 不同的是，MOB 文件并不总是打开。每台 RegionServer 都可以配置一个 MOB 度缓存。
+
+```
+hbase.mob.file.cache.size
+hbase.mob.cache.evict.period
+hbase.mob.cache.evict.remain.ratio
+```
+
+## 74.4 MOB 优化
+
+**手动 compact MOB 文件**
+
+```
+hbase> compact 't1', 'c1’, ‘MOB’
+hbase> major_compact 't1', 'c1’, ‘MOB’
+```
+
+在代码中可以使用`Admin.compact` 和 `Admin.majorCompact`触发上述方法。
+
