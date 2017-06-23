@@ -73,4 +73,28 @@ bin/stop-hbase.sh
 脚本执行需要几分钟时间，在此之后使用 `jps` 命令确认进程是否终止。
 
 
-## 2.3 
+## 2.3  伪分布模式
+
+伪分布模式意味着 HBase 在一台机器上运行`HMaster`、`HRegionServer`、`ZooKeeper`等独立的进程，而 Standalone 模式下所有的后台服务都是运行在一个 JVM 进程中。默认的 `hbase.rootdir` 为 `/tmp/`。
+
+1. 确保关闭了 HBase。
+
+2. 配置 HBase，修改`hbase-site.xml`中的配置 `hbase.cluster.distributed` 为 `true`。
+
+3. 启动 HBase，`bin/start-hbase.sh`。
+
+4. 检查 HDFS 中 HBase 的目录。`hdfs dfs -ls /hbase`。
+
+5. 创建表，填充数据。
+
+6. 启动和终止一个备用 HMaster 服务器，`local-master-back.sh`，终止一一个备用 HMaster，只能 `kill -9`。HMaster 控制着整个 HBase 集群。
+
+7. 启动和终止额外的 RegionServer，`local-regionservers.sh start 2 3 4 5` 和 `local-regionservers.sh stop 3`。 RegionServer 使用 StoreFile 管理数据，直接受 HMaster 领导。通常来说，一台 HRegionServer 运行在一个节点上。一个机器上运行多个 HRegionServer 是伪分布模式。
+
+8. 关闭 HBase，`bin/stop-hbase.sh`。
+
+# 2.4 进阶 - 全分布式
+
+
+
+
