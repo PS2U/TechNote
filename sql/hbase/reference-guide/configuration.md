@@ -54,3 +54,36 @@ HBase 的主要配置文件，它会覆盖 HBase 的默认选项 `docs/hbase-def
 
 ## 4.1 Hadoop
 
+HBase 与 Hadoop 的版本对应关系：
+
+|                     | HBase-1.1.x | HBase-1.2.x | HBase-1.3.x | HBase-2.0.x |
+| ------------------- | ----------- | ----------- | ----------- | ----------- |
+| Hadoop-2.0.x-alpha  | X           | X           | X           | X           |
+| Hadoop-2.1.0-beta   | X           | X           | X           | X           |
+| Hadoop-2.2.0        | NT          | X           | X           | X           |
+| Hadoop-2.3.x        | NT          | X           | X           | X           |
+| Hadoop-2.4.x        | S           | S           | S           | X           |
+| Hadoop-2.5.x        | S           | S           | S           | X           |
+| Hadoop-2.6.0        | X           | X           | X           | X           |
+| Hadoop-2.6.1+       | NT          | S           | S           | S           |
+| Hadoop-2.7.0        | X           | X           | X           | X           |
+| Hadoop-2.7.1+       | NT          | S           | S           | S           |
+| Hadoop-2.8.0        | X           | X           | X           | X           |
+| Hadoop-3.0.0-alphax | NT          | NT          | NT          | NT          |
+
+- "S" = supported
+- "X" = not supported
+- "NT" = Not tested
+
+### `dfs.datanode.max.transfer.threads`
+
+HDFS DataNode 对同时可用的文件有个上限，设置`dfs.datanode.max.transfer.threads` 然后重启 HDFS。
+
+## 4.2 ZooKeeper 要求
+
+要求ZooKeeper 3.4.x ，HBase 需要其 `multi` 功能，需要将 `hbase.zookeeper.useMulti`设置为 `true`。
+
+
+
+# 5.HBase 运行模式：单机和分布式
+
