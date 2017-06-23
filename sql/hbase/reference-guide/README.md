@@ -4,4 +4,6 @@
 
 [Getting Started](getting-started.md)
 
+[Apache HBase Configuration](configuration.md)
+
 [Architecture](architecture.md)

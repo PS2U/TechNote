@@ -95,6 +95,65 @@ bin/stop-hbase.sh
 
 # 2.4 进阶 - 全分布式
 
+一个全分布式的 HBase 集群包括多个节点，每个节点运行一个或多个 HBase 后台服务，包括 primary 和 backup Master、多个 ZooKeeper 节点、多个 RegionServer 节点。
+
+假设有三个节点 node-a、node-b、node-c：
+
+| Node Name          | Master | ZooKeeper | RegionServer |
+| ------------------ | ------ | --------- | ------------ |
+| node-a.example.com | yes    | yes       | no           |
+| node-b.example.com | backup | yes       | yes          |
+| node-c.example.com | no     | yes       | yes          |
+
+**配置 ssh 连接**
+
+1. node-a 上，生成 ssh key：以 `hbase` 用户登录，`ssh-keygen -t rsa`。
+2. 在 node-b 和 node-c 上，创建 `~/.ssh`目录。
+3. 将 node-a 的公钥拷贝到 node-b 和 node-c的 `.ssh/authorized_keys`。
+4. 测试 ssh 登录。从 node-a 登录其他节点试试。
+5. 因为 node-b 是备用 Master，将 HBase 的公钥也部署到其他节点。
+
+**准备 node-a**
+
+1. 修改`conf/regionservers`，移除`localhost`，添加 node-b 和 node-c。
+
+2. 配置 HBase 使用 node-b 作为备用 master。创建新文件 `conf/backup-masters`，添加 node-b 的地址。
+
+3. 配置 ZooKeeper，参考[zookeeper](http://hbase.apache.org/book.html#zookeeper)，在 node-a 上，修改`conf/hbase-site.xml`：
+
+   ```xml
+   <property>
+     <name>hbase.zookeeper.quorum</name>
+     <value>node-a.example.com,node-b.example.com,node-c.example.com</value>
+   </property>
+   <property>
+     <name>hbase.zookeeper.property.dataDir</name>
+     <value>/usr/local/zookeeper</value>
+   </property>
+   ```
+
+4. 将所有配置中的`localhost`替换为 node-a。
+
+**准备 node-b 和 node-c**
+
+1. 下载、解压 HBase。
+2. 复制 node-a 的配置文件到 node-b 和 node-c。
+
+**启动、测试集群**
+
+1. 确保 HBase 没有在任何节点上运行。
+2. 启动集群：在 node-a 上，`start-hbase.sh`，ZooKeeper 会先启动，接着是 Master，然后是 RegionServer，最后是备用 Master。
+3. 检查进程是否运行正常：`jps`。
+4. 查看 Web UI。
+5. 测试节点下线后集群的状态。
+
+## 2.5 Next
+
+更多配置查看 [configuration]([configuration](http://hbase.apache.org/book.html#configuration))
 
 
+# 导航
 
+[目录](README.md)
+
+下一章：[Apache HBase Configuration](configuration.md)

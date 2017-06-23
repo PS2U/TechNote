@@ -1063,3 +1063,9 @@ hbase> major_compact 't1', 'c1’, ‘MOB’
 
 在代码中可以使用`Admin.compact` 和 `Admin.majorCompact`触发上述方法。
 
+
+# 导航
+
+[目录](README.md)
+
+下一章：
