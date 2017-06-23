@@ -148,4 +148,22 @@ HBase 不需要 MapReduce 和 Yarn，没必要启动它们。
 
 # 7. 默认配置
 
+HBase 的自定义配置在`conf/hbase-site.xml`文件中，默认配置在`hbase-default.xml`中。配置文件的修改需要重启 HBase 集群。
+
+## 7.2 HBase 默认配置
+
+| 属性                                       | 描述                                       | 默认                                       |
+| ---------------------------------------- | ---------------------------------------- | ---------------------------------------- |
+| `hbase.tmp.dir`                          | 本地文件系统上的临时目录。注：`/tmp`目录重启后清空。            | `${java.io.tmpdir}/hbase-${user.name}`   |
+| `hbase.rootdir`                          | RegionServer 共享的目录，URL 必须包括文件系统 Schema。  | ` ${hbase.tmp.dir}/hbase`                |
+| ` hbase.fs.tmp.dir`                      | 一个 staging 目录，保留临时数据                     | ` /user/${user.name}/hbase-staging`      |
+| ` hbase.cluster.distributed`             | 表明集群所处的模式，单机或分布式                         | `false`                                  |
+| ` hbase.zookeeper.quorum`                | ZooKeeper 服务器的列表，若果`hbase-env.sh`中设置了`HBASE_MANAGES_ZK`，那么 HBase 就负责启动、停止 ZooKeeper。从客户端看来，这个列表和`hbase.zookeeper.clientPort`一起传递给 ZooKeeper 构造器，用作`connectString`的参数 | `localhost`                              |
+| ` zookeeper.recovery.retry.maxsleeptime` | ZooKeeper 重试操作的最大休眠时间。                   | 60000                                    |
+| `hbase.local.dir`                        | 本地文件系统的目录，用来本地存储                         | `${hbase.tmp.dir}/local/`                |
+| ` hbase.master.port`                     | Master 绑定的端口                             | 16000                                    |
+| `hbase.master.info.port`                 | Master 的 Web UI 端口                       | 16010                                    |
+| `hbase.master.info.bindAddress`          | Master Web UI 的绑定地址                      | 0.0.0.0                                  |
+| `hbase.master.logcleaner.plugins`        | `LogsCleaner`服务用到的` BaseLogCleanerDelegate`列表。这些 WAL cleaner 会顺序调用。 | ` org.apache.hadoop.hbase.master.cleaner.TimeToLiveLogCleaner` |
+|                                          |                                          |                                          |
 
