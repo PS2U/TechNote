@@ -152,18 +152,114 @@ HBase 的自定义配置在`conf/hbase-site.xml`文件中，默认配置在`hbas
 
 ## 7.2 HBase 默认配置
 
-| 属性                                       | 描述                                       | 默认                                       |
-| ---------------------------------------- | ---------------------------------------- | ---------------------------------------- |
-| `hbase.tmp.dir`                          | 本地文件系统上的临时目录。注：`/tmp`目录重启后清空。            | `${java.io.tmpdir}/hbase-${user.name}`   |
-| `hbase.rootdir`                          | RegionServer 共享的目录，URL 必须包括文件系统 Schema。  | ` ${hbase.tmp.dir}/hbase`                |
-| ` hbase.fs.tmp.dir`                      | 一个 staging 目录，保留临时数据                     | ` /user/${user.name}/hbase-staging`      |
-| ` hbase.cluster.distributed`             | 表明集群所处的模式，单机或分布式                         | `false`                                  |
-| ` hbase.zookeeper.quorum`                | ZooKeeper 服务器的列表，若果`hbase-env.sh`中设置了`HBASE_MANAGES_ZK`，那么 HBase 就负责启动、停止 ZooKeeper。从客户端看来，这个列表和`hbase.zookeeper.clientPort`一起传递给 ZooKeeper 构造器，用作`connectString`的参数 | `localhost`                              |
-| ` zookeeper.recovery.retry.maxsleeptime` | ZooKeeper 重试操作的最大休眠时间。                   | 60000                                    |
-| `hbase.local.dir`                        | 本地文件系统的目录，用来本地存储                         | `${hbase.tmp.dir}/local/`                |
-| ` hbase.master.port`                     | Master 绑定的端口                             | 16000                                    |
-| `hbase.master.info.port`                 | Master 的 Web UI 端口                       | 16010                                    |
-| `hbase.master.info.bindAddress`          | Master Web UI 的绑定地址                      | 0.0.0.0                                  |
-| `hbase.master.logcleaner.plugins`        | `LogsCleaner`服务用到的` BaseLogCleanerDelegate`列表。这些 WAL cleaner 会顺序调用。 | ` org.apache.hadoop.hbase.master.cleaner.TimeToLiveLogCleaner` |
-|                                          |                                          |                                          |
+**hbase.tmp.dir**
+
+本地文件系统上的临时目录。注：`/tmp`目录重启后清空。
+
+默认：`${java.io.tmpdir}/hbase-${user.name}`
+
+**hbase.rootdir**
+
+RegionServer 共享的目录，URL 必须包括文件系统 Schema。
+
+默认：${hbase.tmp.dir}/hbase
+
+**hbase.fs.tmp.dir**
+
+一个 staging 目录，保存临时数据。
+
+默认：` /user/${user.name}/hbase-staging`
+
+**hbase.cluster.distributed**
+
+表明集群所处的模式，单机或分布式。
+
+默认：`false`
+
+**hbase.zookeeper.quorum**
+
+ZooKeeper 服务器的列表，若果`hbase-env.sh`中设置了`HBASE_MANAGES_ZK`，那么 HBase 就负责启动、停止 ZooKeeper。从客户端看来，这个列表和`hbase.zookeeper.clientPort`一起传递给 ZooKeeper 构造器，用作`connectString`的参数。
+
+默认：`localhost`
+
+**zookeeper.recovery.retry.maxsleeptime**
+
+ZooKeeper 重试操作的最大休眠时间。
+
+默认：60000
+
+**hbase.local.dir**
+
+本地文件系统的目录，用来本地存储。
+
+默认：`${hbase.tmp.dir}/local/`
+
+**hbase.master.port**
+
+Master 绑定的端口
+
+默认：16000
+
+**hbase.master.info.port**
+
+Master 的 Web UI 端口
+
+默认：16010
+
+**hbase.master.info.bindAddress**
+
+Master Web UI 的绑定地址
+
+默认：0.0.0.0
+
+**hbase.master.logcleaner.plugins**
+
+`LogsCleaner`服务用到的` BaseLogCleanerDelegate`列表。这些 WAL cleaner 会顺序调用。
+
+默认：`org.apache.hadoop.hbase.master.cleaner.TimeToLiveLogCleaner`
+
+**hbase.master.logcleaner.ttl**
+
+WAL 停留在 `.oldlogdir` 目录中的最大时间，之后就被 Master 线程清理掉。
+
+默认：600000
+
+**hbase.master.hfilecleaner.plugins**
+
+`HFileCleaner`服务用到的`BaseHFileCleanerDelegate`列表。
+
+默认：`org.apache.hadoop.hbase.master.cleaner.TimeToLiveHFileCleaner`
+
+**hbase.master.infoserver.redirect**
+
+Master 是否监听 Master Web UI 端口，并将请求重定向到 Master 和 RegionServer 共享的 Web UI 服务器。
+
+默认：`true`
+
+**hbase.regionserver.port**
+
+RegionServer 绑定的端口。
+
+默认：16020
+
+**hbase.regionserver.info.port**
+
+RegionServer 的 Web UI 端口
+
+默认：16030
+
+**hbase.regionserver.info.bindAddress**
+
+RegionServer Web UI 的绑定地址
+
+默认：0.0.0.0
+
+**hbase.regionserver.info.port.auto**
+
+Master 或 RegionServer 是否应该查找一个能够绑定的端口。生产环境一般不用，直接 `hbase.regionserver.info.port`。
+
+默认：`false`
+
+**hbase.regionserver.handler.count**
+
 
