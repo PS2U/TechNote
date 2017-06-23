@@ -87,3 +87,65 @@ HDFS DataNode 对同时可用的文件有个上限，设置`dfs.datanode.max.tra
 
 # 5.HBase 运行模式：单机和分布式
 
+## 5.1 单机 HBase
+
+单机模式上，HBase 不使用 HDFS，而是使用本地文件系统。所有的 HBase 后台服务和本地 ZooKeeper 全部在一个 JVM 中。
+
+单机模式的 HBase 也可以使用 HDFS：
+
+```xml
+<configuration>
+  <property>
+    <name>hbase.rootdir</name>
+    <value>hdfs://namenode.example.org:8020/hbase</value>
+  </property>
+  <property>
+    <name>hbase.cluster.distributed</name>
+    <value>false</value>
+  </property>
+</configuration>
+```
+
+# 5.2 分布式
+
+分布式又分为伪分布式和全分布式，前者所有的后台服务跑在单节点，后者是跑在各个节点。
+
+伪分布式可以使用本地文件系统，也可以使用 HDFS。全分布式只能使 HDFS。
+
+### 伪分布式
+
+ 伪分布式最好用来做 HBase 的测试和原型设计，不要用于估计生产环境的 HBase 性能。
+
+ ## 5.3 全分布式
+
+默认情况下，HBase 是单机模式。
+
+在全分布式下，集群的节点被配置为 RegionServer、ZooKeeper QuorumPeers、备用 HMaster。RegionServer 运行在不同的节点上，包括主备 Master。
+
+**HDFS 客户端配置**
+
+如果你修改了 HDFS 的客户端配置，必须通知 HBase，以下方法可选其一：
+
+- `hbase-env.sh` 修改 `HBASE_CLASSPATH`，添加一个指向 `HADOOP_CONF_DIR` 的引用。
+- 软连接 `hdfs-site.xml` 到 HBase 的`conf`目录。
+- 如果只改了小部分的 HDFS 客户端配置，将它们添加到 `hbase-site.xml`。
+
+
+# 6. 运行 HBase
+
+首先确保 HDFS 运行正常。启动和终止 HDFS 采用 `bin/start-hdfs.sh`，使用`put`或 `get` 来测试 HDFS
+
+HBase 不需要 MapReduce 和 Yarn，没必要启动它们。
+
+如果有独立的 ZooKeeper，启动它。没有的话，HBase 会代劳。
+
+启动 HBase: `bin/start-hbase.sh`。
+
+默认情况下 Master 的端口 16010 会暴露 Web UI。
+
+终止 HBase：`bin/stop-hbase.sh`。
+
+
+# 7. 默认配置
+
+
