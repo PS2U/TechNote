@@ -40,4 +40,37 @@ HBase 需要安装 JDK。
 </configuration>
 ```
 
-5. 启动 HBase `bin/start-hbase.sh`
+5. 启动 HBase `bin/start-hbase.sh`。使用`jps`命令可以查看`HMaster`进程。
+
+**首次使用 HBase**
+
+1. 连接到 HBase：`hbase shell`。
+
+2. 查看 `help` 选项。
+
+3. 创建表：`create 'test', 'cf'`。
+
+4. 查看表的信息：`list 'test'`。
+
+5. `Put` 数据到表中：`put 'test', 'row1', 'cf:a', 'value1'`。
+
+6. 扫描表中的所有数据：`scan 'test'`。
+
+7. 取单行数据：`get 'test', 'row1'`。
+
+8. Disable 一个表：`disable 'test'`。
+
+9. Drop 表：`drop 'test'`。
+
+10. 退出 HBase Shell：`quit`。
+
+**关闭 HBase**
+
+```shell
+bin/stop-hbase.sh
+```
+
+脚本执行需要几分钟时间，在此之后使用 `jps` 命令确认进程是否终止。
+
+
+## 2.3 
