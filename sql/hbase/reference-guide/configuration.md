@@ -350,3 +350,126 @@ RegionServer 使用的 DNS 主机名或 IP 地址，RegionServer 据此与 Maste
 
 **hbase.regionserver.regionSplitLimit**
 
+region 的数量限制，在此数字之后，region 就不能再拆分了。这不是硬性限制，只是个参考。
+
+默认：1000。
+
+**zookeeper.session.timeout**
+
+ZooKeeper 的 session 超时时间。使用的情境有两个：
+
+1. ZK 客户端使用，HBase 来连接 ZK 集群。
+2. HBase 启动 ZK 服务器的时候，传递给`maxSesstionTimeout`。
+
+默认：90000
+
+**zookeeper.znode.parent**
+
+ZooKeeper 的 Root Znode。HBase 的所有 ZooKeeper 文件都被配置为该节点下的相对地址。
+
+默认：`/hbase`。
+
+**ookeeper.znode.acl.parent**
+
+访问控制列表 (access control list) 的Root ZNode。
+
+默认：`acl`。
+
+**hbase.zookeeper.dns.interface**
+
+ZooKeeper 服务器报告自己 IP 地址的网络接口名。
+
+默认：`default`。
+
+**hbase.zookeeper.dns.nameserver**
+
+ZooKeeper 服务器使用的主机名或 IP 地址，它据此实现与 Master 的通信。
+
+默认：`default`。
+
+**hbase.zookeeper.peerport**
+
+ZooKeeper peer 用来相互沟通的端口。
+
+默认：2888。
+
+**hbase.zookeeper.leaderport**
+
+ZooKeeper 用来选举领导的端口。
+
+默认：3888。
+
+**hbase.zookeeper.property.initLimit**
+
+ZooKeeper `zoo.cfg` 的属性。首次同步阶段花费的时钟节拍。
+
+默认：10。
+
+**hbase.zookeeper.property.syncLimit**
+
+ZooKeeper `zoo.cfg` 的属性。发送一个请求和收到一个确认之间的时钟节拍。
+
+默认：5。
+
+**hbase.zookeeper.property.dataDir**
+
+ZooKeeper `zoo.cfg` 的属性。快照存放的目录。
+
+默认：`${hbase.tmp.dir}/zookeeper`。
+
+**hbase.zookeeper.property.clientPort**
+
+ZooKeeper `zoo.cfg` 的属性。client 连接的端口。
+
+默认：2181。
+
+**hbase.zookeeper.property.maxClientCnxns**
+
+ZooKeeper `zoo.cfg` 的属性。单个 client 并发连接数的限制，以 IP 来区分独立 client。
+
+默认：300。
+
+**hbase.client.write.buffer**
+
+HTable 客户端写缓冲的大小。数值调大，会占用 client 和 server 的内存，也减少了 RPC 请求的次数。`hbase.client.write.buffer * hbase.regionserver.handler.count` 就是服务器端的内存占用。
+
+默认：2097152。
+
+**hbase.client.pause**
+
+通用的 client 暂定值。常用来作为 get 失败重试、region 查找等。
+
+默认：100。
+
+
+**hbase.client.pause.cqtbe**
+
+是否为 `CallQueueTooBigException` 使用一个特殊的 client 暂定值。
+
+默认：none。
+
+**hbase.client.retries.number**
+
+最大重试次数。所有操作的最大重试次数，包括 get，row 更新等。重试的间隔基于`hbase.client.pause`。首次重试是 `hbase.client.pause`间隔，接下来就是退避算法。
+
+默认：35。
+
+**hbase.client.max.total.tasks**
+
+一个 HTable 实例发送给集群的最多的并行修改任务。
+
+默认：100。
+
+**hbase.client.max.perserver.tasks**
+
+一个 HTable  实例发送给单台 RegionServer 的最多并发修改任务。
+
+默认：5。
+
+**hbase.client.max.perregion.tasks**
+
+client 维护的和单个 region 的最多并行修改任务。如果已经有`hbase.client.max.perregion.tasks`个任务在往这个 region 中写，那么新的`Put`请求会不会被发送到这个 region。
+
+默认：1。
+
+
