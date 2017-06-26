@@ -262,4 +262,91 @@ Master 或 RegionServer 是否应该查找一个能够绑定的端口。生产�
 
 **hbase.regionserver.handler.count**
 
+RegionServer 上启动的 RPC 处理实例的数量，同样的属性 Master 上也有。
+
+默认：30
+
+**hbase.ipc.server.callqueue.handler.factor**
+
+调用队列数量的因子。0 意味着所有的 handlers 共享一个队列。1 意味着每个 handler 都有自己的队列。
+
+默认：0.1
+
+**hbase.ipc.server.callqueue.read.ratio**
+
+将调用队列拆分为读和写两个队列。0 意味着不拆分调用队列，即读和写请求都被 push 到该队列。0.5 意味着有相同数量的读队列和写队列。1.0 意味着除了一个之外的所有队列，都用于分发读请求。
+
+默认：0
+
+**hbase.ipc.server.callqueue.scan.ratio**
+
+给定读队列的数量，设定 `get` 和 `scan` 队列的比例。比如设置为0.1，表示1个队列用于scan请求，另外8个用于get请求。
+
+默认：0
+
+**hbase.regionserver.msginterval**
+
+RegionServer 到 Master 消息的时间间隔。
+
+默认：3000
+
+**hbase.regionserver.logroll.period**
+
+滚动日志的周期，不管日志中包含多少个修改。
+
+默认：3600000
+
+**hbase.regionserver.logroll.errors.tolerated**
+
+触发服务器终止之前允许的 连续的WAL 关闭错误数量。0 意味着在log rolling 时关闭当前 WAL writer，服务器会终止。设置一个小数值，允许 RegionServer 无视一些 HDFS 错误。
+
+默认：2
+
+**hbase.regionserver.hlog.reader.impl**
+
+WAL file reader 的实现。
+
+默认：`org.apache.hadoop.hbase.regionserver.wal.ProtobufLogReader`
+
+同样的 hbase.regionserver.hlog.writer.impl，默认是：`org.apache.hadoop.hbase.regionserver.wal.ProtobufLogWriter`。
+
+**hbase.regionserver.global.memstore.size**
+
+在更新和刷写之前，一台 RegionServer 上允许的所有 MemStore 的 最大大小。默认是 0.4 倍的堆大小。
+
+如果总大小达到了 `hbase.regionserver.global.memstore.size.lower.limit`，更新会被阻塞、刷写会被强制执行。这个值默认为空，让位于`hbase.regionserver.global.memstore.size.lower.limit`。
+
+默认：none。
+
+**hbase.regionserver.global.memstore.size.lower.limit**
+
+刷写被强制执行前，一台 RegionServer 上所有 MemStore 的最大大小。默认是 `hbase.regionserver.global.memstore.size` 的 95%。100% 意味着 MemStore 限制让更新阻塞的时候，只会引发最小的可能的刷写。默认选项留空，让位于`hbase.regionserver.global.memstore.lowerLimit`。
+
+默认：none。
+
+**hbase.regionserver.optionalcacheflushinterval**
+
+在被自动刷写前，一个修改在内存中的最长存活时间。默认一小时，设置为0表示禁用自动刷写。
+
+默认：3600000
+
+**hbase.regionserver.dns.interface**
+
+RegionServer 报告 IP 地址的网络接口名字。
+
+默认：`default`。
+
+**hbase.regionserver.dns.nameserver**
+
+RegionServer 使用的 DNS 主机名或 IP 地址，RegionServer 据此与 Master 通信。
+
+默认：`default`。
+
+**hbase.regionserver.region.split.policy**
+
+决定 region 何时被拆分的策略。可选项包括：BusyRegionSplitPolicy, ConstantSizeRegionSplitPolicy, DisabledRegionSplitPolicy, DelimitedKeyPrefixRegionSplitPolicy, and KeyPrefixRegionSplitPolicy。
+
+默认：`org.apache.hadoop.hbase.regionserver.SteppingSplitPolicy`。
+
+**hbase.regionserver.regionSplitLimit**
 
