@@ -6,4 +6,6 @@
 
 [Apache HBase Configuration](configuration.md)
 
+[Upgrading](upgrading.md)
+
 [Architecture](architecture.md)

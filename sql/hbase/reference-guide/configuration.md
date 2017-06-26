@@ -294,4 +294,143 @@ export HBASE_HEAPSIZE=4G
 
 ### `hbase.regionserver.handler.count`
 
+RegionServer 打开的最大线程个数，用来相应用户表的请求。如果每次请求的数据再 MB 级别，应该将该值调低，反之就调高。正在执行的查询最大数量受`hbase.ipc.server.max.callqueue.size` 控制。
 
+这个值过高，可能触发 OOM。
+
+### 大内存机器的配置
+
+TODO
+
+### 压缩
+
+打开列族的压缩选项，减少了 StoreFile 的大小，也缓解了 I/O。
+
+### WAL 配置
+
+WAL 文件应该比 HDFS 块小一点点，默认 HDFS 块是 64MB，WAL 文件时 60MB 左右。 
+
+HBase 针对 WAL 文件数量也有个上限，这个值的选定要参考 MemStore。
+
+### 拆分
+
+当一个 region 增长到 `hbase.hregion.max.filesize` 大小，就会被拆分。多数情况下，应该使用自动拆分。
+
+HBase 0.90.0 引入了手动拆分。除非你明确知道自己的 key 空间，否则别选择手动拆分。
+
+欲拆分也是一个办法，拆分后 region 的数量依赖于region 中最大的 StoreFile 大熊啊。
+
+### Compaction
+
+默认情况下，Major Compaction 每个七天执行一次。如果你想更精确得使用 Major Compaction，看看 `hbase.hregion.majorcompaction`。
+
+### 推测执行
+
+MapReduce 的推测执行默认打开。HBase 集群建议关闭：``mapreduce.map.speculative` and `mapreduce.reduce.speculative` 设置为 `false`。
+
+# 9.3 其他选项
+
+### 平衡器
+
+Master 定期运行一个 balancer 来重新分配集群中的 region，执行间隔由 `hbase.balancer.period` 控制。
+
+### 关闭 BlockCache
+
+不要关闭 BlockCache（将`hfile.block.cache.size 设置为 0）。
+
+## Nagle's 或者小包问题
+
+如果偶尔看到 HBase 操作的延迟，试一下 Nagle's 算法。
+
+### Better Mean Time to Recover (MTTR)
+
+MTTR 让服务器更快地从失败后恢复服务。
+
+RegionServer 的配置：
+
+```xml
+<property>
+  <name>hbase.lease.recovery.dfs.timeout</name>
+  <value>23000</value>
+  <description>How much time we allow elapse between calls to recover lease.
+  Should be larger than the dfs timeout.</description>
+</property>
+<property>
+  <name>dfs.client.socket-timeout</name>
+  <value>10000</value>
+  <description>Down the DFS timeout from 60 to 10 seconds.</description>
+</property>
+```
+
+NameNode 和 DataNode 的配置：
+
+```xml
+<property>
+  <name>dfs.client.socket-timeout</name>
+  <value>10000</value>
+  <description>Down the DFS timeout from 60 to 10 seconds.</description>
+</property>
+<property>
+  <name>dfs.datanode.socket.write.timeout</name>
+  <value>10000</value>
+  <description>Down the DFS timeout from 8 * 60 to 10 seconds.</description>
+</property>
+<property>
+  <name>ipc.client.connect.timeout</name>
+  <value>3000</value>
+  <description>Down from 60 seconds to 3.</description>
+</property>
+<property>
+  <name>ipc.client.connect.max.retries.on.timeouts</name>
+  <value>2</value>
+  <description>Down from 45 seconds to 3 (2 == 3 retries).</description>
+</property>
+<property>
+  <name>dfs.namenode.avoid.read.stale.datanode</name>
+  <value>true</value>
+  <description>Enable stale state in hdfs</description>
+</property>
+<property>
+  <name>dfs.namenode.stale.datanode.interval</name>
+  <value>20000</value>
+  <description>Down from default 30 seconds</description>
+</property>
+<property>
+  <name>dfs.namenode.avoid.write.stale.datanode</name>
+  <value>true</value>
+  <description>Enable stale state in hdfs</description>
+</property>
+```
+
+### JMX
+
+JMX 提供了内置的机制服务于 JVM 的监控和管理。要远程监控和管理主机，启动 JVM 的时候打开系统属性`com.sun.management.jmxremote.port`。
+
+另外，你可使用HBase 听的协处理 JMX：
+
+```xml
+<property>
+  <name>hbase.coprocessor.regionserver.classes</name>
+  <value>org.apache.hadoop.hbase.JMXListener</value>
+</property>
+```
+
+
+
+# 10. 动态配置
+
+HBase 1.0.0 之后，server 启动后可以动态修改配置。HBase shell 中，`update_config` 和 `update_all_config`命令能够让一个和全部 server 重新加载配置。
+
+支持动态调整的参数包括：`hbase.regionserver.thread.compaction.large`, `hbase.regionserver.thread.compaction.small`, `hbase.regionserver.thread.split`, `hbase.regionserver.thread.merge`。还有compaction 策略、offpeak hours。
+
+完整列表在：[HBASE-12147 Porting Online Config Change from 89-fb](https://issues.apache.org/jira/browse/HBASE-12147)
+
+
+
+# 导航
+
+[目录](README.md)
+
+上一章：[Getting Started](getting-started.md)
+
+下一章：[Upgrading](upgrading.md)
