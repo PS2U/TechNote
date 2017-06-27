@@ -262,3 +262,11 @@ HBase 不支持 Join。
 
 [ACID in HBase](http://hadoop-hbase.blogspot.com/2012/03/acid-in-hbase.html)
 
+
+# 导航
+
+[目录](README.md)
+
+上一章：[The Apache HBase Shell](shell.md)
+
+下一章：[HBase and Schema Design](shema-design.md)

@@ -14,4 +14,8 @@
 
 [Data Model](data-model.md)
 
+[HBase and Schema Design](shema-design.md)
+
+[RegionServer Sizing Rules of Thumb](regionserver-sizing.md)
+
 [Architecture](architecture.md)

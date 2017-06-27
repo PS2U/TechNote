@@ -116,3 +116,12 @@ HBase 只保证这些接口在各个 patch 版本间是兼容的。
 
 滚动升级是依次停止每台服务器、更新软件、重启机器。通常是首先升级 Master，接着是 RegionServer。
 
+
+
+# 导航
+
+[目录](README.md)
+
+上一章：[Apache HBase Configuration](configuration.md)
+
+下一章：[Upgrade Paths](upgrade-paths.md)
