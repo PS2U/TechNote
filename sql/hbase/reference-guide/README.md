@@ -8,4 +8,10 @@
 
 [Upgrading](upgrading.md)
 
+[Upgrade Paths](upgrade-paths.md)
+
+[The Apache HBase Shell](shell.md)
+
+[Data Model](data-model.md)
+
 [Architecture](architecture.md)

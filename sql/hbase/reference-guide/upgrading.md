@@ -63,6 +63,56 @@ Server 端有限的 API 兼容性：
 - Minor 升级不需要应用或客户端的代码改动。理想的情况下它会是一个插入式的替换，但客户端源码、协处理器、过滤器，如果使用了新的 jar 包，要重新编译。
 - Major 升级允许 HBase 做出重大的改变。
 
+|                                       | Major                                    | Minor | Patch |
+| ------------------------------------- | ---------------------------------------- | ----- | ----- |
+| Client-Server wire Compatibility      | N                                        | Y     | Y     |
+| Server-Server Compatibility           | N                                        | Y     | Y     |
+| File Format Compatibility             | N [[4](http://hbase.apache.org/book.html#_footnote_4)] | Y     | Y     |
+| Client API Compatibility              | N                                        | Y     | Y     |
+| Client Binary Compatibility           | N                                        | N     | Y     |
+| Server-Side Limited API Compatibility |                                          |       |       |
+| Stable                                | N                                        | Y     | Y     |
+| Evolving                              | N                                        | N     | Y     |
+| Unstable                              | N                                        | N     | N     |
+| Dependency Compatibility              | N                                        | Y     | Y     |
+| Operational Compatibility             | N                                        | N     | Y     |
+
 ### HBase API Surface
 
+HBase 的接口可以分为：
+
+- `InterfaceAudience`， 可选项包括：Public（对于终端用户和外部项目）、LimitedPrivate（对于其他项目、协处理、插件）和 Private（内部使用）。
+- `InterfaceStability`，描述了允许什么类型的接口修改，可能是 Stable, Evolving, Unstable 和 Deprecated。这个annotation 只对 `IA.LimitedPrivated`标记的类生效。
+
+**HBase Client API**
+
+Client API 由所有标记为`InterfaceAudience.Public`接口的类和方法组成。
+
+**HBase LimitedPrivate API**
+
+LimitedPrivate 注解面向一群目标消费者，包括协处理、Phoenix、replication endpoint 等。
+
+HBase 只保证这些接口在各个 patch 版本间是兼容的。
+
+**HBase Private API**
+
+被注解为`InterfaceAudience.Private`和没有任何注解标记的类，都限于 HBase 内部使用。所以它们的接口和函数签名，可以随时修改。
+
+## 11.2 1.0 之前的版本
+
+**奇偶版本或开发系列发布**
+
+在重大 release 之前，HBase 会先发一个预览版。这就是『开发』系列发布，用奇数表示，不保证在两个连续的版本之间能够平滑升级。
+
+第一个开发系列是 0.89，为 0.90.0 打前站并搜集用户反馈。0.95、0.99.x 皆是如此公用。
+
+**二进制兼容性**
+
+兼容的 HBase 版本意味着 Client 能够和不同版本的 Server 通信。除非特别声明，HBase 的 point version 是二进制兼容的，可以滚动升级。比如从 0.94.5 到 0.94.6。
+
+## 11.3 滚动升级
+
+[Rolling Upgrade Between Versions that are Binary/Wire Compatible](http://hbase.apache.org/book.html#hbase.rolling.restart)
+
+滚动升级是依次停止每台服务器、更新软件、重启机器。通常是首先升级 Master，接着是 RegionServer。
 
