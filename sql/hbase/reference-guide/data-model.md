@@ -157,7 +157,108 @@ Delete 删除一列，执行`Table.delete`。
 
 HBase 不是原地修改数据，而是为它创建个墓碑标记。在 Major Compaction 的时候，带有该标记的值会被清理。
 
-
 # 27. 版本
 
+RowKey 和 ColumnKey 都是字节表示，version 是一个长整型，即`ava.util.Date.getTime()` or `System.currentTimeMillis`的返回。
+
+版本按照Long 的值降序排列，这样读数据的时候最先读到的是最新的数据。
+
+在 HBase 中：
+
+- 对一个 Cell 的多个写操作带有相同版本号，只有最后的写操作生效。
+- 不按照版本的递增数据，也可以写入数据。
+
+## 27.1 指定版本号的存储
+
+创建表的时候，列的最大版本号就确定了。通过`alter`命令可以修改版本号。HBase 0.96以前，默认的最大版本号是3，之后是 1。
+
+```
+hbase> alter ‘t1′, NAME => ‘f1′, VERSIONS => 5
+```
+
+0.98.2 之后，HBase 可以指定一个全局的最大版本号，它对新加入的列有效：`hbase.column.max.version`。
+
+## 27.2 版本和 HBase 操作
+
+### Get/Scan
+
+Get 是基于 Scan 实现的，故以下说法也适用于 Scan。
+
+Get 请求默认返回最新的版本，要自定义的话：
+
+- 返回不止一个版本：`Get.setMaxVersions()`。
+- 返回一个老版本：`Get.setTimeRange()`。
+
+```java
+public static final byte[] CF = "cf".getBytes();
+public static final byte[] ATTR = "attr".getBytes();
+...
+Get get = new Get(Bytes.toBytes("row1"));
+get.setMaxVersions(3);  // will return last 3 versions of row
+Result r = table.get(get);
+byte[] b = r.getValue(CF, ATTR);  // returns current version of value
+List<KeyValue> kv = r.getColumn(CF, ATTR);  // returns all versions of this column
+```
+
+### Put
+
+Put 请求总是会创建一个新版本的 cell。默认情况下，系统使用服务器的`curentTimeMillis`，用户也可以为每个列指定一个版本（可以比当前时间老）。
+
+```java
+public static final byte[] CF = "cf".getBytes();
+public static final byte[] ATTR = "attr".getBytes();
+...
+Put put = new Put( Bytes.toBytes(row));
+long explicitTimeInMs = 555;  // just an example
+put.add(CF, ATTR, explicitTimeInMs, Bytes.toBytes(data));
+table.put(put);
+```
+
+### Delete
+
+有三种不同类型的内部删除：
+
+- Delete：删除一个列的特定版本。
+- Delete Column：删除一个列的所有版本。
+- Delete Family：删除特定列族的所有列。
+
+删除一个行的时候，HBase 在内部为该行的每个列族都创建一个墓碑标记。
+
+`KEEP_DELETED_CELLS`选项能够阻止 Major Compaction 删除带有墓碑标记的 cell。设置删除 TTL（`hbase.hstore.time.to.purge.deletes`）可以让 cell 呆的更久一点。
+
+## 27.3 当前的限制
+
+### Delete 可能覆盖 Put
+
+即便是 Put 在 Delete 之后，Delete 仍有可能覆盖 Put。 设想一下同时 Delete 和 Put 一个带有相同时间戳的 cell。
+
+### Major Compaction 改变查询结果
+
+假设cell 有三个版本：t1, t2, t3。最大版本号为3。获取全部的版本只会得到 t2 和 t3。如果删除了 t2，t1就会返回。一旦 Major Compaction 执行了，这个行为就不是在这样了。
+
+# 28. 排列顺序
+
+HBase 的所有操作返回都是排序好的。首先按照行、然后列族、再是列，最后是时间戳。
+
+
+
+# 29. 列的元数据
+
+除了内部的 KeyValue 实例，没有其他地方存储列族的列元数据。
+
+过去所有列的唯一办法，就是处理所有的行。
+
+
+
+# 30. Join
+
+HBase 不支持 Join。
+
+
+
+# 31. ACID
+
+[ACID Semantics](http://hbase.apache.org/acid-semantics.html)
+
+[ACID in HBase](http://hadoop-hbase.blogspot.com/2012/03/acid-in-hbase.html)
 
