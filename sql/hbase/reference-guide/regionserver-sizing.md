@@ -301,3 +301,29 @@ see: [http://opentsdb.net/schema.html](http://opentsdb.net/schema.html), and [Le
 
 ### 单表？多表？
 
+传统的做法是用两个独立表 CUSTOMER 和 SALES。另一个选项是用一个记录类型区分记录，将它们全部压入一张表。
+
+客户记录类型的 RowKey：
+
+- [customer-id]
+- [type] = type indicating `1' for customer record type
+
+订单记录类型的 RowKey：
+
+- [customer-id]
+- [type] = type indicating `2' for order record type
+- [order]
+
+这样做的好处是，将不同类型的记录按照客户编号组织。坏处是，扫描某个特定类型的记录就蛋疼了。
+
+### 订单对象设计
+
+订单对象包括：
+- Order。一个 Order 包含多个 ShippingLocation。
+- LineItem。一个 ShippingLocation 包含多个 LineItem。
+
+几个独立的表 `ORDER`、`SHIPPING_LOCATION`、`LINE_ITEM`。
+
+
+# 44. 性能调优
+
