@@ -143,3 +143,22 @@ HBase 还支持一个计数器，参见[Increment](http://hbase.apache.org/apido
 
 # 39. TTL
 
+列族可以设定一个 TTL，HBase 会自动删除达到过期时间的行，包括最新版本的行。
+
+HBase 1.0.0 后，增加了 Cell 的 TTL。Cell 的 TTL 和列族的 TTL 有两点不同：
+
+1. Cell 的 TTL 单位是毫秒，而列族是秒。
+2. Cell TTL 的优先级低于列族的 TTL。
+
+
+# 40. 保留已删除的 Cell
+
+默认情况下，删除标记让 Cell 对 Get 和 Scan 不可见，甚至是 Get 和 Scan 操作带有一个时间戳，而在这个时间之前，Cell 尚未被删除。
+
+列族可以选择保留已删除的 Cell。这时，它对 Get 和 Scan 可见，甚至是它们带有一个时间戳，而在这个时间之后，Cell 才被删除。
+
+已删除的 Cell 仍需要 TTL，并且永远不过超过『版本的最大数量』规定。
+
+```java
+HColumnDescriptor.setKeepDeletedCells(true);
+```
