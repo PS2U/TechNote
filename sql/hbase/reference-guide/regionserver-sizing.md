@@ -134,11 +134,9 @@ HBase 还支持一个计数器，参见[Increment](http://hbase.apache.org/apido
 计数器的同步是在 RegionServer 做的，而不是 Client 。
 
 
-
 # 38. Joins
 
 如果你有多张表，可能在 Schema 设计的时候，就考虑到 Join 的问题，毕竟 HBase 不支持 Join。
-
 
 
 # 39. TTL
@@ -162,3 +160,144 @@ HBase 1.0.0 后，增加了 Cell 的 TTL。Cell 的 TTL 和列族的 TTL 有两�
 ```java
 HColumnDescriptor.setKeepDeletedCells(true);
 ```
+
+
+# 41. 二级索引和备用查询路径
+
+HBase 并没有像关系型数据库一样提供二级索引，它更擅长更大的数据存储空间。
+
+## 41.1 过滤器
+
+[Client Request Filters](http://hbase.apache.org/book.html#client.filter)
+
+不要全表扫描！不要全表扫描！不要全表扫描！
+
+## 41.2 定期更新二级索引
+
+MapReduce 任务定期更新的表，看用作一个二级索引。但这可能和最新的数据不同步。
+
+## 41.3 双写二级索引
+
+另一个策略是在数据打到 HBase 集群的时候，在另一张表中构建索引。但如果数据表已经存在，只能依靠 MapReduce 来更新一遍索引表。
+
+## 41.4 汇总表
+
+如果时间宽度很大（一年），同时数据量巨大，可以使用汇总表。也是借助 MapReduce 生成一个新表。
+
+[mapreduce.example.summary](http://hbase.apache.org/book.html#mapreduce.example.summary)
+
+# 41.5 协处理器二级索引
+
+协处理器像是关系型数据库的触发器，0.92 后添加。
+
+参加：[coprocessors](http://hbase.apache.org/book.html#cp)
+
+
+# 42. 约束
+
+HBase 0.94 引入了[Constraint](http://hbase.apache.org/devapidocs/org/apache/hadoop/hbase/constraint/Constraint.html)。它用强制约束表中的属性（比如，值必须是0~10）遵循某种规则。
+
+使用约束会大幅降低写吞吐量，不建议使用。
+
+
+# 43. Schema 设计案例
+
+## 43.1 日志和时间序列的数据
+
+假设我们收集的数据包括：
+
+- 主机名
+- 时间戳
+- 日志事件
+- 值/信息
+
+### 时间戳作为 RowKey 前缀
+
+`[timestamp][hostname][log-event]` 的设计在面对 RowKey 的单向递增时会出现问题。
+
+引入 bucket 的概念：
+
+```
+long bucket = timestamp % numBuckets;
+```
+
+所以最终的 RowKey，
+
+```
+[bucket][timestamp][hostname][log-event]
+```
+
+查询特定时间段的数据，需要每个 bucket 遍历一遍。这也是一种权衡。
+
+### 主机名作为 RowKey 前缀
+
+`[hostname][log-event][timestamp]` 也可作为备选，如果你想大量的主机。这样一来，查询某个主机的数据就很简单了。
+
+### 时间戳或者反向时间戳
+
+如果更多关注的是最近的时间，那么应该使用反向时间戳：
+
+`timestamp = Long.MAX_VALUE – timestamp`
+
+### RowKey 长度可变还是固定？
+
+使用哈希构成 RowKey：
+
+- [MD5 hash of hostname] = 16 bytes
+- [MD5 hash of event-type] = 16 bytes
+- [timestamp] = 8 bytes
+
+使用数字替换构成的 RowKey：
+
+- [substituted long for hostname] = 8 bytes
+- [substituted long for event type] = 8 bytes
+- [timestamp] = 8 bytes
+
+无论是哪种方式，主机名和事件类型，都作为列。
+
+## 43.2 Log Data and Timeseries Data on Steroids 
+
+最好使用 OpenTSDB 方案，它重写数据，将时间排列的行塞进列中。
+
+see: [http://opentsdb.net/schema.html](http://opentsdb.net/schema.html), and [Lessons Learned from OpenTSDB](http://www.cloudera.com/content/cloudera/en/resources/library/hbasecon/video-hbasecon-2012-lessons-learned-from-opentsdb.html) from HBaseCon2012.
+
+```
+[hostname][log-event][timestamp1]
+[hostname][log-event][timestamp2]
+[hostname][log-event][timestamp3]
+```
+
+上述数据被重写为：
+
+```
+[hostname][log-event][timerange]
+```
+
+然后写入列。
+
+## 43.3 客户/订单
+
+客户记录包括：
+
+- 编号
+- 名称
+- 地址
+- 手机号
+
+订单记录包括：
+
+- 客户编号
+- 订单编号
+- 交易日志
+- 一系列嵌套对象，包含地址等
+
+假设客户编号和订单编号唯一地区分了一次订单。这两个属性应该构成 RowKey：
+
+```
+[customer number][order number]
+```
+
+同样的，你也可以使用哈希或数字替换来组合 RowKey。
+
+### 单表？多表？
+
