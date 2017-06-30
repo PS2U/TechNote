@@ -18,4 +18,8 @@
 
 [RegionServer Sizing Rules of Thumb](regionserver-sizing.md)
 
+[HBase and MapReduce](hbase-mapreduce.md)
+
 [Architecture](architecture.md)
+
+[Apache HBase Performance Tuning](perfomance-tuning.md)

@@ -429,5 +429,113 @@ OpenTSDB 就是个很好的例子，单行表示定义的时间范围，然后�
 
 上述两个选择就是高表和宽表的问题。
 
+
 # 44. 性能调优
 
+## 44.1 RPC 调优
+
+- `hbase.regionserver.handler.count`设置成CPU 核心数。
+- `hbase.ipc.server.callqueue.handler.factor` 拆分读和写的队列。
+- `hbase.ipc.server.callqueue.read.ratio` 拆分读和写的队列。
+- `hbase.ipc.server.callqueue.scan.ratio` 拆分 Get 和 Scan 的队列。
+
+## 44.2 停用 Nagle
+
+延迟的 ACK 会增加 RPC 的往返时间 200ms。
+
+- In Hadoop’s `core-site.xml`:
+  - `ipc.server.tcpnodelay = true`
+  - `ipc.client.tcpnodelay = true`
+- In HBase’s `hbase-site.xml`:
+  - `hbase.ipc.client.tcpnodelay = true`
+  - `hbase.ipc.server.tcpnodelay = true`
+
+## 44.3 限制服务器故障影响
+
+尽快发现 RegionServer 的故障并转移：
+
+- In `hbase-site.xml`, set `zookeeper.session.timeout` to 30 seconds or less to bound failure detection (20-30 seconds is a good start).
+- Detect and avoid unhealthy or failed HDFS DataNodes: in `hdfs-site.xml` and `hbase-site.xml`, set the following parameters:
+  - `dfs.namenode.avoid.read.stale.datanode = true`
+  - `dfs.namenode.avoid.write.stale.datanode = true`
+
+## 44.4 优化服务端
+
+- Skip the network for local blocks. In `hbase-site.xml`, set the following parameters:
+  - `dfs.client.read.shortcircuit = true`
+  - `dfs.client.read.shortcircuit.buffer.size = 131072` (Important to avoid OOME)
+- Ensure data locality. In `hbase-site.xml`, set `hbase.hstore.min.locality.to.skip.major.compact = 0.7` (Meaning that 0.7 <= n <= 1)
+- Make sure DataNodes have enough handlers for block transfers. In `hdfs-site.xml`, set the following parameters:
+  - `dfs.datanode.max.xcievers >= 8192`
+  - `dfs.datanode.handler.count =` number of spindles
+
+## 44.5 JVM 调优
+
+- 使用 CMS 垃圾回收器: `-XX:+UseConcMarkSweepGC`
+
+- Keep eden space as small as possible to minimize average collection time. Example:
+
+  ```
+  -XX:CMSInitiatingOccupancyFraction=70
+  ```
+
+- Optimize for low collection latency rather than throughput: `-Xmn512m`
+
+- Collect eden in parallel: `-XX:+UseParNewGC`
+
+- Avoid collection under pressure: `-XX:+UseCMSInitiatingOccupancyOnly`
+
+- Limit per request scanner result sizing so everything fits into survivor space but doesn’t tenure. In `hbase-site.xml`, set `hbase.client.scanner.max.result.size` to 1/8th of eden space (with -`Xmn512m` this is ~51MB )
+
+- Set `max.result.size` x `handler.count` less than survivor space
+
+## 44.6 OS 级别调优
+
+- Turn transparent huge pages (THP) off:
+
+  ```
+  echo never > /sys/kernel/mm/transparent_hugepage/enabled
+  echo never > /sys/kernel/mm/transparent_hugepage/defrag
+  ```
+
+- Set `vm.swappiness = 0`
+
+- Set `vm.min_free_kbytes` to at least 1GB (8GB on larger memory systems)
+
+- Disable NUMA zone reclaim with `vm.zone_reclaim_mode = 0`
+
+
+
+# 45. 特殊案例
+
+## 45.1 尽快失败优于等待
+
+- In `hbase-site.xml` on the client side, set the following parameters:
+  - Set `hbase.client.pause = 1000`
+  - Set `hbase.client.retries.number = 3`
+  - If you want to ride over splits and region moves, increase `hbase.client.retries.number` substantially (>= 20)
+  - Set the RecoverableZookeeper retry count: `zookeeper.recovery.retry = 1` (no retry)
+- In `hbase-site.xml` on the server side, set the Zookeeper session timeout for detecting server failures: `zookeeper.session.timeout` ⇐ 30 seconds (20-30 is good).
+
+## 45.2 能够忍受轻微的数据过期
+
+开启时间线一致性：
+
+- Deploy HBase 1.0.0 or later.
+- Enable timeline consistent replicas on the server side.
+- Use one of the following methods to set timeline consistency:
+  - Use `ALTER SESSION SET CONSISTENCY = 'TIMELINE’`
+  - Set the connection property `Consistency` to `timeline` in the JDBC connect string
+
+## 45.3 更多信息
+
+[perf.schema](http://hbase.apache.org/book.html#perf.schema)
+
+
+# 导航
+
+[目录](README.md)
+
+上一章：[HBase and Schema Design](shema-design.md)
+
+下一章：[HBase and MapReduce](hbase-mapreduce.md)
