@@ -322,8 +322,112 @@ see: [http://opentsdb.net/schema.html](http://opentsdb.net/schema.html), and [Le
 - Order。一个 Order 包含多个 ShippingLocation。
 - LineItem。一个 ShippingLocation 包含多个 LineItem。
 
+**完全范式化**
+
 几个独立的表 `ORDER`、`SHIPPING_LOCATION`、`LINE_ITEM`。
 
+`ORDER` 表的 RowKey 设计如章节 43.3 开头。
+
+`SHIPPING_LOCATION` 的 RowKey 构成：
+
+- `[order-rowkey]`
+- `[shipping location number]` (e.g., 1st location, 2nd, etc.)
+
+`LINE_ITEM`的 RowKey 构成：
+
+- `[order-rowkey]`
+- `[shipping location number]` (e.g., 1st location, 2nd, etc.)
+- `[line item number]` (e.g., 1st lineitem, 2nd, etc.)
+
+这样设计的缺点是获取某个订单的消息，你必须：
+
+1. 从`ORDER`表中获得 Order
+2. 扫描`SHIPPING_LOCATION`表，找到`ShippingLocation`实例。
+3. 扫描`LINE_ITEM`表，找到每个`ShippingLocation`。
+
+**单表**
+
+Order 的 RowKey：
+
+- `[order-rowkey]`
+- `[ORDER record type]`
+
+`ShippingLocation`组成的 RowKey：
+
+- `[order-rowkey]`
+- `[SHIPPING record type]`
+- `[shipping location number]` (e.g., 1st location, 2nd, etc.)
+
+`LineItem`组成的 RowKey：
+
+- `[order-rowkey]`
+- `[LINE record type]`
+- `[shipping location number]` (e.g., 1st location, 2nd, etc.)
+- `[line item number]` (e.g., 1st lineitem, 2nd, etc.)
+
+**反范式化**
+
+单表的一个变体是反范式化，将对象层次结构压平，比如将`ShppingLocation`属性变成一个个`LineItem`实例。
+
+`LineItem`组成的 RowKey：
+
+- `[order-rowkey]`
+- `[LINE record type]`
+- `[line item number]` (e.g., 1st lineitem, 2nd, etc., care must be taken that there are unique across the entire order)
+
+`LineItem`的列如下：
+
+- itemNumber
+- quantity
+- price
+- shipToLine1 (denormalized from ShippingLocation)
+- shipToLine2 (denormalized from ShippingLocation)
+- shipToCity (denormalized from ShippingLocation)
+- shipToState (denormalized from ShippingLocation)
+- shipToZip (denormalized from ShippingLocation)
+
+这么做的缺点是更新变得很复杂。
+
+**BLOB 对象**
+
+这个订单对象看做一个 BLOB，RowKey 不变，只有一列`order`来存储序列化后的容器（Order, ShippingLocation, LienItem）。
+
+好处是减少了 I/O，缺点是兼容性问题。
+
+## 43.4 高 vs. 宽 vs. 中
+
+### 列 vs. 版本
+
+一般来说，倾向于使用行，而不是版本来存更多的诗句。
+
+因为使用行可以存储 RowKey 的时间戳，这样其后的操作就不会覆盖它。
+
+### 行 vs. 列
+
+一般来说，还是倾向于行。
+
+### 行作为列
+
+OpenTSDB 就是个很好的例子，单行表示定义的时间范围，然后离散事件被视为列。这种方法的覆写数据很复杂，但能提高 I/O 性能。
+
+## 43.5 列表数据
+
+本节的例子是如何存储每个用户的列表数据。一个选项是将大部分数据存在 Key 中：
+
+```
+<FixedWidthUserName><FixedWidthValueId1>:"" (no value)
+<FixedWidthUserName><FixedWidthValueId2>:"" (no value)
+<FixedWidthUserName><FixedWidthValueId3>:"" (no value)
+```
+
+另一个选项是：
+
+```
+<FixedWidthUserName><FixedWidthPageNum0>:<FixedWidthLength><FixedIdNextPageNum><ValueId1><ValueId2><ValueId3>...
+<FixedWidthUserName><FixedWidthPageNum1>:<FixedWidthLength><FixedIdNextPageNum><ValueId1><ValueId2><ValueId3>...
+```
+
+上述两个选择就是高表和宽表的问题。
 
 # 44. 性能调优
 
