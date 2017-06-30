@@ -147,3 +147,25 @@ See [[hbase.regionserver.checksum.verify\]](http://hbase.apache.org/book.html#hb
 - 0.5 表示每两个 handler 共享一个队列
 
 
+# 97. ZooKeeper
+
+See [ZooKeeper](http://hbase.apache.org/book.html#zookeeper) for information on configuring ZooKeeper, and see the part about having a dedicated disk.
+
+# 98. Schema 设计
+
+## 98.1 列族的数量
+
+[On the number of column families](http://hbase.apache.org/book.html#number.of.cfs)
+
+## 98.2 键和属性长度
+
+See [Try to minimize row and column sizes](http://hbase.apache.org/book.html#keysize). See also [However…](http://hbase.apache.org/book.html#perf.compression.however) for compression caveats.
+
+## 98.3 表的 region 大小
+
+每张表的 region 大小可调用`HTableDescriptor`上的`setFileSize`设置。
+
+[Determining region count and size](http://hbase.apache.org/book.html#ops.capacity.regions)
+
+## 98.4 布隆过滤器
+
