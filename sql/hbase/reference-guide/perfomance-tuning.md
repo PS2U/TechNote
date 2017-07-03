@@ -167,9 +167,9 @@ See [Try to minimize row and column sizes](http://hbase.apache.org/book.html#key
 
 [Determining region count and size](http://hbase.apache.org/book.html#ops.capacity.regions)
 
-## 98.4 布隆过滤器
+## 98.4 Bloom 过滤器
 
-布隆过滤器以的发明者命名，用来预测给定元素是否是一组数据的成员。它的积极结果并不总是准确的，但是否定的结果保证是准确的。
+Bloom 过滤器以的发明者命名，用来预测给定元素是否是一组数据的成员。它的积极结果并不总是准确的，但是否定的结果保证是准确的。
 
 对 HBase 而言，Bloom 过滤器提供了轻量级的内存结构，可将给定 Get 操作（Bloom过滤器不适用于Scans）的磁盘读取数减少到仅包含所需行的StoreFiles。性能随并行读数的增加而提升。
 
@@ -183,11 +183,11 @@ Bloom 过滤器在[HBASE-1200](https://issues.apache.org/jira/browse/HBASE-1200)
 
 RegionServer 的`blockCacheHitRatio`就标识了 Bloom 过滤器的效果。Bloom 过滤器不仅可以基于行，也可以基于行+列。
 
-如果通常扫描整行，行+列组合将不会带来任何好处。基于行的 Bloom 过滤器可以在行+列Get上操作，但反过来不行。但是，如果有大量的列级别 Puts，比如每个StoreFile中都只 Put 一行，那么基于行的过滤器将始终返回一个积极的结果，这没有任何好处。除非每行有一列，否则列+列布隆过滤器需要更多空间，以便存储更多的键。当每个数据条目的大小至少为几 KB 大小时，布隆过滤器工作最好。
+如果通常扫描整行，行+列组合将不会带来任何好处。基于行的 Bloom 过滤器可以在行+列Get上操作，但反过来不行。但是，如果有大量的列级别 Puts，比如每个StoreFile中都只 Put 一行，那么基于行的过滤器将始终返回一个积极的结果，这没有任何好处。除非每行有一列，否则列+列Bloom 过滤器需要更多空间，以便存储更多的键。当每个数据条目的大小至少为几 KB 大小时，Bloom 过滤器工作最好。
 
 如果数据存储在几个较大的 StoreFile 中时，开销将减少，以避免在低级扫描期间额外的磁盘IO来查找特定的行。
 
-布隆过滤器需要在删除时进行重建。
+Bloom 过滤器需要在删除时进行重建。
 
 ### 开启 Bloom 过滤器
 
@@ -313,4 +313,69 @@ HBase 的 client 能够直接与 RegionServer 通信：`Table.getRegionLocation`
 
 # 101. 读 HBase
 
+## 101.1 扫描缓存
+
+将扫描缓存设置为 500，可以一次向 client 传输 500 行数据。
+
+设置过高， 也会消耗不少的双方不少的内存，这是一种权衡。
+
+### MapReduce 作业的扫描缓存
+
+客户端返回到下一组数据的RegionServer之前处理一批记录需要更长时间，则Map任务中可能超时。如果处理行的速度很快，可以将缓存设大。
+
+## 101.2 扫描的属性选择
+
+`scan.addFamily` 让扫描只返回特定列族的数据，减少性能压力。
+
+## 101.3 避免扫描查找
+
+使用 `scan.addColumn` 显式选择列时，HBase将调度搜索操作以在所选列之间进行搜索。当行列数很、每列只有几个版本时，这可能是低效的。如果不搜索5-10列或512-1024字节，寻找操作通常较慢。
+
+为了机会性地查看几列/版本，以查看在调度搜索操作之前是否可以找到下一列/版本，可以在 Scan 对象上设置新的属性`Scan.HINT_LOOKAHEAD`。
+
+```java
+Scan scan = new Scan();
+scan.addColumn(...);
+scan.setAttribute(Scan.HINT_LOOKAHEAD, Bytes.toBytes(2));
+table.getScanner(scan);
+```
+
+## 101.4 MapReduce: 输入拆分
+
+如果 MapReduce 作业使用 HBase 作为输入源，且存在一个慢的 map 任务使用同样的输入拆分，可以查阅：[Case Study #1 (Performance Issue On A Single Node)](https://hbase.apache.org/book.html#casestudies.slownode)。
+
+## 101.5 关闭 `ResultScanner`
+
+这个操作不能提高性能，但能规避性能问题。如果你忘了关闭 `ResultScanner`，RegionServer 可能会出现问题：
+
+```java
+Scan scan = new Scan();
+// set attrs...
+ResultScanner rs = table.getScanner(scan);
+try {
+  for (Result r = rs.next(); r != null; r = rs.next()) {
+  // process result...
+} finally {
+  rs.close();  // always close the ResultScanner!
+}
+table.close()
+```
+
+## 101.6 Block Cache
+
+Scan 实例可以使用 RegionServer 的 block cache，通过 `setCacheBlocks` 即可。对于 MapReduce 作业的 Scan，应当设置为 `false`。
+
+对于频繁访问的行，应当使用 block cache。
+
+将Block Cache移出堆栈可以缓存更多数据。[Off-heap Block Cache](https://hbase.apache.org/book.html#offheap.blockcache)
+
+## 101.7 RowKey 的加载
+
+执行仅需要 RowKey（无列族、限定符、值或时间戳）的表扫描时，使用 `setFilter` 添加一个具有 `MUST_PASS_ALL` 操作符的 `FilterList` 。过滤器列表应包括`FirstKeyOnlyFilter` 和 `KeyOnlyFilter`。使用此过滤器组合将导致 `RegionServer` 从磁盘读取单个值的最坏情况情况，并为单个行向客户端提供最小的网络流量。
+
+## 101.8 并发：监控数据分布
+
+当执行大量并发读取时，监视目标表的数据分布。如果目标表的 region 太少，则可能从太少的节点提供读取。
+
+## 101.9 Bloom 过滤器
 
