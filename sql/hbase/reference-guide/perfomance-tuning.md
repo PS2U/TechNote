@@ -169,3 +169,48 @@ See [Try to minimize row and column sizes](http://hbase.apache.org/book.html#key
 
 ## 98.4 布隆过滤器
 
+布隆过滤器以的发明者命名，用来预测给定元素是否是一组数据的成员。它的积极结果并不总是准确的，但是否定的结果保证是准确的。
+
+对 HBase 而言，Bloom 过滤器提供了轻量级的内存结构，可将给定 Get 操作（Bloom过滤器不适用于Scans）的磁盘读取数减少到仅包含所需行的StoreFiles。性能随并行读数的增加而提升。
+
+Bloom 过滤器本身存储在每个 HFile 的元数据中，不需要更新。当一个 region 被部署到RegionServer时，打开一个HFile，Bloom 过滤器被加载到内存中。
+
+HBase 包括一些调整机制，用于折叠 Bloom 过滤器以减小尺寸并将 false positive 的概率保持在所需范围内。
+
+Bloom 过滤器在[HBASE-1200](https://issues.apache.org/jira/browse/HBASE-1200) 引入。HBase 0.96之后，基于行的 Bloom 过滤器默认开启。
+
+### 什么时候使用 Bloom 过滤器
+
+RegionServer 的`blockCacheHitRatio`就标识了 Bloom 过滤器的效果。Bloom 过滤器不仅可以基于行，也可以基于行+列。
+
+如果通常扫描整行，行+列组合将不会带来任何好处。基于行的 Bloom 过滤器可以在行+列Get上操作，但反过来不行。但是，如果有大量的列级别 Puts，比如每个StoreFile中都只 Put 一行，那么基于行的过滤器将始终返回一个积极的结果，这没有任何好处。除非每行有一列，否则列+列布隆过滤器需要更多空间，以便存储更多的键。当每个数据条目的大小至少为几 KB 大小时，布隆过滤器工作最好。
+
+如果数据存储在几个较大的 StoreFile 中时，开销将减少，以避免在低级扫描期间额外的磁盘IO来查找特定的行。
+
+布隆过滤器需要在删除时进行重建。
+
+### 开启 Bloom 过滤器
+
+`HColumnDescriptor` 上的 `setBloomFilterType` 方法设置列族的 Bloom 过滤器。
+
+在 HBase shell 的操作：
+
+```
+hbase> create 'mytable',{NAME => 'colfam1', BLOOMFILTER => 'ROWCOL'}
+```
+
+### 配置服务端 Bloom 过滤器的行为
+
+| Parameter                                | Default   | Description                              |
+| ---------------------------------------- | --------- | ---------------------------------------- |
+| io.storefile.bloom.enabled               | yes       | 设置为 no 会关闭服务器端的过滤器 |
+| io.storefile.bloom.error.rate            | .01       | false positive 的平均比率 |
+| io.storefile.bloom.max.fold              | 7         | 保证最大折合率 |
+| io.storefile.bloom.max.keys              | 128000000 | 指定最大数量的 key |
+| io.storefile.delete.family.bloom.enabled | true      | Master 启动 Delete Family Bloom过滤器并将其存储在StoreFile中。 |
+| io.storefile.bloom.block.size            | 131072    | 目标Bloom块大小 |
+| hfile.block.bloom.cacheonwrite           | false     | 开启 cache-on-write，针对复合 Bloom 过滤器的内联块 |
+
+## 98.5 列族 BlockSize
+
+
