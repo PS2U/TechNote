@@ -288,4 +288,29 @@ Put 之后默认立即刷写 WAL。但 WAL 的刷写是可以延迟的，这样�
 
 ## 100.4 HBase Client：自动 flush
 
+执行很多 Put 时，请确保在 `Table` 实例上将 `setAutoFlush` 设置为 `false`。否则将一次发送一个 Put 到 RegionServer。通过 `table.add(Put)` 和`table.add(<List> Put)` 添加到同一写入缓冲区中。如果 `autoFlush = false`，这些消息不会被发送，直到写缓冲区被填满。要显式刷新消息，请调用 `flushCommits`。调用 `close` 表实例将触发 `flushCommits`。
+
+## 100.5 HBase Client: 关闭 Put 的 WAL
+
+禁用 WAL 可以提高 Put 的性能，这只在批量加载的时候有效。因为它可能会丢失数据，而批量加载可以在宕机之后重跑。
+
+## 100.6 HBase Client：根据 RegionServer 的 Put 分组
+
+根据 RegionServer，将 Put 分组，能够减少每个 `wirteBuffer`flush 的客户端 RPC 请求数量。
+
+`HTableUtil`在 Master 上提供该功能。
+
+## 100.7 MapReduce：跳过 Reducer
+
+使用 Reducer 时，Mapper 中的所有输出（Puts）将被 spool 到磁盘，然后将其排序/shuffle 到其他可能在节点外的 Reducer。这比直接写入HBase更有效率。
+
+## 100.8 反模式：一个热点 region
+
+确保你的预拆分策略，能够让所有的 key 分布到不同的 region 上。
+
+HBase 的 client 能够直接与 RegionServer 通信：`Table.getRegionLocation`。
+
+
+# 101. 读 HBase
+
 
