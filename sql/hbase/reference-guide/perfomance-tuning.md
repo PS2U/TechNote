@@ -379,3 +379,31 @@ Scan 实例可以使用 RegionServer 的 block cache，通过 `setCacheBlocks` �
 
 ## 101.9 Bloom 过滤器
 
+启用 Bloom 过滤器可以加快进入磁盘的速度，并有助于改善读取延迟。
+
+HBase 0.19.X 之前有个动态版本的 Bloom 过滤器，工作地很不理想。第二版是静态的。
+
+[HBASE-1200](https://issues.apache.org/jira/browse/HBASE-1200)
+
+### StoreFile footprint
+
+Bloom过滤器添加一个条目到StoreFile 通用 `FileInfo` 数据结构中，添加两个条目到 StoreFile 元数据。
+
+- `FileInfo` 的 `BLOOM_FILTER_TYPE` 可设置为 `NONE`/`ROW`/`ROWCOL`。
+- `StoreFile` 元数据的 `BLOOM_FILTER_META`，保存 Bloom 的大小、使用的哈希函数。它很小， `StoreFile.read`加载时被缓存。
+- `StoreFile` 元数据的 `BLOOM_FILTER_DATA`，保存实际的过滤器数据，按需获取，存在 LRU 缓存中。
+
+### Bloom 过滤器配置
+
+##### `io.storefile.bloom.enabled` global kill switch
+
+`io.storefile.bloom.enabled` in `Configuration` serves as the kill switch in case something goes wrong. Default = `true`.
+
+##### `io.storefile.bloom.error.rate`
+
+`io.storefile.bloom.error.rate` = average false positive rate. Default = 1%. Decrease rate by ½ (e.g. to .5%) == +1 bit per bloom entry.
+
+##### `io.storefile.bloom.max.fold`
+
+`io.storefile.bloom.max.fold` = guaranteed minimum fold rate. Most people should leave this alone. Default = 7, or can collapse to at least 1/128th of original size.
+
