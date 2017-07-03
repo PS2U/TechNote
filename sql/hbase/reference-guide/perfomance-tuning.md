@@ -203,14 +203,89 @@ hbase> create 'mytable',{NAME => 'colfam1', BLOOMFILTER => 'ROWCOL'}
 
 | Parameter                                | Default   | Description                              |
 | ---------------------------------------- | --------- | ---------------------------------------- |
-| io.storefile.bloom.enabled               | yes       | 设置为 no 会关闭服务器端的过滤器 |
-| io.storefile.bloom.error.rate            | .01       | false positive 的平均比率 |
-| io.storefile.bloom.max.fold              | 7         | 保证最大折合率 |
-| io.storefile.bloom.max.keys              | 128000000 | 指定最大数量的 key |
+| io.storefile.bloom.enabled               | yes       | 设置为 no 会关闭服务器端的过滤器                       |
+| io.storefile.bloom.error.rate            | .01       | false positive 的平均比率                     |
+| io.storefile.bloom.max.fold              | 7         | 保证最大折合率                                  |
+| io.storefile.bloom.max.keys              | 128000000 | 指定最大数量的 key                              |
 | io.storefile.delete.family.bloom.enabled | true      | Master 启动 Delete Family Bloom过滤器并将其存储在StoreFile中。 |
-| io.storefile.bloom.block.size            | 131072    | 目标Bloom块大小 |
-| hfile.block.bloom.cacheonwrite           | false     | 开启 cache-on-write，针对复合 Bloom 过滤器的内联块 |
+| io.storefile.bloom.block.size            | 131072    | 目标Bloom块大小                               |
+| hfile.block.bloom.cacheonwrite           | false     | 开启 cache-on-write，针对复合 Bloom 过滤器的内联块     |
 
 ## 98.5 列族 BlockSize
+
+每个列族都有自己的 blocksize，默认是 64K。大的 cell 值需要大的 blockssize。blocksize 和生成的 StoreFile 索引之间存在反比关系（即，如果将 blocksize 加倍，则生成的索引应大致减半）。
+
+## 98.6 内存中的列族
+
+列族可以被配置为 in-memory。数据仍然永久存储在磁盘。内存中的 block 在Block Cache 中最高的优先级，但不保证保证整个表都在内存中。
+
+## 98.7 Compression
+
+生产环境下，定义列族的时候就应该使用 Compression。
+
+查看更多：[Compression and Data Block Encoding In HBase](https://hbase.apache.org/book.html#compression)
+
+### 但是。。。
+
+Compaction 减少磁盘上的数据。当它在内存中（在MemStore中）或在线上（在RegionServer和客户端之间传输）时，它被增大。所以尽管使用ColumnFamily压缩是一个最佳实践，但是不会完全消除过大尺寸的键、超大尺寸的列族名称、超大尺寸的列名的影响。
+
+
+# 99. HBase 通用范式
+
+## 99.1 约束
+
+```java
+Get get = new Get(rowkey);
+Result r = table.get(get);
+byte[] b = r.getValue(Bytes.toBytes("cf"), Bytes.toBytes("attr"));  // returns current version of value
+```
+
+上述写法的问题在于，将 String 转换为字节数组非常耗时，推荐下面这种写法：
+
+```java
+public static final byte[] CF = "cf".getBytes();
+public static final byte[] ATTR = "attr".getBytes();
+
+// ...
+Get get = new Get(rowkey);
+Result r = table.get(get);
+byte[] b = r.getValue(CF, ATTR);  // returns current version of value
+```
+
+
+# 100. 写 HBase
+
+## 100.1 批量加载
+
+[Bulk Loading](https://hbase.apache.org/book.html#arch.bulk.load)
+
+## 100.2 创建表：预创建 region
+
+默认情况下，HBase中的表最初创建一个 region。加快批量导入过程的办法是预先创建空 region。
+
+预创建 region 有两种办法，第一种基于`Admin`：
+
+```java
+byte[] startKey = ...;      // your lowest key
+byte[] endKey = ...;        // your highest key
+int numberOfRegions = ...;  // # of regions to create
+admin.createTable(table, startKey, endKey, numberOfRegions);
+```
+
+另一种使用 HBase API：
+
+```java
+byte[][] splits = ...;   // create your own splits
+admin.createTable(table, splits);
+```
+
+## 100.3 创建表：延迟日志刷新
+
+Put 之后默认立即刷写 WAL。但 WAL 的刷写是可以延迟的，这样做的好处是性能得到提升，但如果 RegionServer 宕机了会损失一些数据。
+
+可以通过 `HTableDescriptor` 在表上配置延迟日志刷新。 `hbase.regionserver.optionallogflushinterval`的默认值为1000ms。
+
+
+## 100.4 HBase Client：自动 flush
 
 
