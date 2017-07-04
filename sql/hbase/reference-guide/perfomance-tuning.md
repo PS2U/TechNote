@@ -401,9 +401,85 @@ Bloom过滤器添加一个条目到StoreFile 通用 `FileInfo` 数据结构中�
 
 ##### `io.storefile.bloom.error.rate`
 
-`io.storefile.bloom.error.rate` = average false positive rate. Default = 1%. Decrease rate by ½ (e.g. to .5%) == +1 bit per bloom entry.
+`io.storefile.bloom.error.rate` = false positive 的平均比率。 默认 1%。 减少 0.5% 约等于每个 Bloom 条目+1。
 
 ##### `io.storefile.bloom.max.fold`
 
-`io.storefile.bloom.max.fold` = guaranteed minimum fold rate. Most people should leave this alone. Default = 7, or can collapse to at least 1/128th of original size.
+`io.storefile.bloom.max.fold` = 确保的最小的 fold 比率。 默认 7。
+
+## 101.10 对冲读取
+
+Hadoop 2.4.0 引入了对冲读取。正常情况，每个读请求会触发一个线程。开启对冲读取后，Client 会等待一段时间（可配置），如果没有结果返回，Client 会再启第二个线程读取另一个 replica。这两个线程，后返回的数据被丢弃。
+
+对冲读取可以消除瘸腿 datanode 的影响。但也会增加 RegionServer 的负载。这也是一种权衡。
+
+另外，使用对重读还要注意 （[HBASE-17083](https://issues.apache.org/jira/browse/HBASE-17083)）：
+
+- 可能导致网络拥堵 
+- 确保线程池足够大 
+
+因为 HBase 的 RegionServer 就是一个 HDFS 客户端，所以你可以在 HBase 中开启对冲读取：
+
+- `dfs.client.hedged.read.threadpool.size` - 专用于服务对冲读取的线程数。如果设置为0（默认值），对冲读取被禁用。
+- `dfs.client.hedged.read.threshold.millis` - 在产生第二个读取线程之前等待的毫秒数。
+
+对冲读取的性能指标：
+
+- hedgedReadOps - 读取线程的已触发次数。这可能表明读请求通常很慢，或者对冲读取被触发得太快。
+- hedgeReadOpsWin - 对冲读取线程比原始线程更快的次数。这可能表明给定的RegionServer在处理请求时遇到问题。
+
+# 102 删除 HBase 的数据
+
+## 102.1 使用 HBase 表作为队列
+
+HBase 用作队列时，必须定期执行 Major Compaction。将行标记为已删除，会产生额外的 StoreFile，读取的时候仍需要处理。
+
+## 102.2 删除 RPC
+
+`Table.delete(Delete)`不使用 writeBuffer，每次删除都会产生一次 RPC。批量删除请使用`Table.delete(List)`。
+
+# 103. HDFS
+
+## 103.1 低延迟读取问题
+
+HDFS 就是为批处理设计的，因此低延迟的读取不是它优先考虑的。随着 HBase 的日益普及，这一变化正在改变，HDFS 已进行了一些改进。
+
+参见：[Umbrella Jira Ticket for HDFS Improvements for HBase](https://issues.apache.org/jira/browse/HDFS-1599)
+
+## 103.2 利用本地数据
+
+Hadoop 1.0.0 之后，DFSClient 可以直接读取本地磁盘的数据，而不是通过 DataNode。这意味着 HBase 的 RegionServer 也不用使用 socket 与 DataNode 通信了。
+
+参考资料：
+
+- [Performance Talk](http://files.meetup.com/1350427/hug_ebay_jdcryans.pdf)
+- [HBase, mail # dev - read short circuit](http://search-hadoop.com/m/zV6dKrLCVh1)
+
+```xml
+<property>
+  <name>dfs.client.read.shortcircuit</name>
+  <value>true</value>
+  <description>
+    This configuration parameter turns on short-circuit local reads.
+  </description>
+</property>
+<property>
+  <name>dfs.domain.socket.path</name>
+  <value>/home/stack/sockets/short_circuit_read_socket_PORT</value>
+  <description>
+    Optional.  This is a path to a UNIX domain socket that will be used for
+    communication between the DataNode and local HDFS clients.
+    If the string "_PORT" is present in this path, it will be replaced by the
+    TCP port of the DataNode.
+  </description>
+</property>
+```
+
+开启该特性需要注意目录的读取权限问题，以`hbase`用户。
+
+## 103.3 HBase 和 HDFS 的性能比较
+
+HBase 在批处理的表现不如 HDFS，原因在于它做的事情更多（读取 KeyValue、返回最新的行、特殊的时间戳等）。
+
+随着时间的推移，这个差距正在缩写。
 
