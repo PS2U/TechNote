@@ -23,3 +23,5 @@
 [Architecture](architecture.md)
 
 [Apache HBase Performance Tuning](perfomance-tuning.md)
+
+[Troubleshooting and Debugging Apache HBase](troubleshooting.md)

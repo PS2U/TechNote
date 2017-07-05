@@ -483,3 +483,29 @@ HBase 在批处理的表现不如 HDFS，原因在于它做的事情更多（读
 
 随着时间的推移，这个差距正在缩写。
 
+
+# 104. Amazon EC2
+
+Amazon EC2 环境下的新跟那个问题很常见，因为它是共享的环境，吞吐量和专用服务器肯定不一样。所以针对它的测试要重复多次。
+
+
+# 105. HBase 与 MapReduce 的协作
+
+HBase 和 MapReduce 的集群不要混布。重型的 MapReduce 作业会影响 HBase 的实时请求处理。OLTP 和 OLAP 常常是冲突的。比如，短延迟敏感的磁盘读取将不得不等待更长的读取，试图挤出尽可能多的吞吐量。写 HBase 的 MR 作业会触发 flush 和 compaction，反过来又会使得 BlockCache 中的块失效。
+
+如果要使用 MapReduce 处理 HBase 中的数据，则可以使用CopyTable（ship the deltas），也可以使用复制在OLAP集群上实时获取新数据。如果非要一同使用二者，最好设置 MR 使用更少的Map 和 Reduce 插槽，最好就一个。
+
+HBase 用作 OLAP 操作时，最好以强化的方式进行设置，例如将ZooKeeper会话超时设置为更高，并为MemStores提供更多内存（该参数是Block Cache不会因为长扫描而被使用太多）。
+
+# 106. 案例
+
+[Apache HBase Case Studies](https://hbase.apache.org/book.html#casestudies)
+
+
+# 导航
+
+[目录](README.md)
+
+上一章：
+
+下一章：[Troubleshooting and Debugging Apache HBase](troubleshooting.md)

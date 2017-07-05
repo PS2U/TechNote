@@ -1,0 +1,281 @@
+# 107. 一般准则
+
+始终从 Master 的日志开始查看。通常它总会反复地打印同一行，Google 它总会获得一些提示。
+
+如果 HBase 里面有成百个异常和堆栈信息，通常都会有个开始的位置。仔细查阅它！
+
+Region 自杀是很正常的，如果 `ulimit` 和 线程数没有设置好，HBase 就不能访问文件系统的文件了。另一种情况，多长的 GC 触发了 ZooKeeper session 的超时。
+
+# 108. 日志
+
+NameNode: `$HADOOP_HOME/logs/hadoop-<user>-namenode-<hostname>.log`
+
+DataNode: `$HADOOP_HOME/logs/hadoop-<user>-datanode-<hostname>.log`
+
+JobTracker: `$HADOOP_HOME/logs/hadoop-<user>-jobtracker-<hostname>.log`
+
+TaskTracker: `$HADOOP_HOME/logs/hadoop-<user>-tasktracker-<hostname>.log`
+
+HMaster: `$HBASE_HOME/logs/hbase-<user>-master-<hostname>.log`
+
+RegionServer: `$HBASE_HOME/logs/hbase-<user>-regionserver-<hostname>.log`
+
+ZooKeeper: *TODO*
+
+## 108.1 日志位置
+
+单机模式的 HBase，日志都在同一个机器上。但在生产模式，HBase 必须是运行在集群上的。
+
+### NameNode
+
+NameNode 日志在 NameNode 服务器上。HBase Master 通常在 NameNode 服务器 和 ZooKeeper 上运行。
+
+对于较小的集群，JobTracker/ResourceManager 通常也在 NameNode 服务器上运行。
+
+### DataNode
+
+每个 DataNode 服务器，都有一个相对 HDFS 的 DataNode 日志、一个相对于 HBase 的 RegionServer 日志。
+
+此外，每个 DataNode 服务器还有一个TaskTracker / NodeManager日志，用于MapReduce任务执行
+
+## 108.2 日志级别
+
+### 开启 RPC 级别日志
+
+在RegionServer上启用RPC级日志记录可以了解服务器上的时序。一旦启用，日志数量会剧增，故不建议开启太长时间。
+
+要启用RPC级日志记录，请浏览到 RegionServer UI，然后单击日志级别。将日志级别设置为包`org.apache.hadoop.ipc`（不是`hbase.ipc`）的`DEBUG`。然后tail RegionServers日志。分析。
+
+要禁用，请将日志记录级别设置回`INFO`级别。
+
+## 108.3 GC 日志
+
+HBase 对内存很敏感，使用默认的 GC 会造成长时间的暂停。
+
+打开 GC 日志：
+
+```shell
+# This enables basic gc logging to the .out file.
+# export SERVER_GC_OPTS="-verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps"
+
+# This enables basic gc logging to its own file.
+# export SERVER_GC_OPTS="-verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:<FILE-PATH>"
+
+# This enables basic GC logging to its own file with automatic log rolling. Only applies to jdk 1.6.0_34+ and 1.7.0_2+.
+# export SERVER_GC_OPTS="-verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:<FILE-PATH> -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=1 -XX:GCLogFileSize=512M"
+
+# If <FILE-PATH> is not replaced, the log file(.gc) would be generated in the HBASE_LOG_DIR.
+```
+
+接着你应该能看到如下的 GC 日志：
+
+```
+64898.952: [GC [1 CMS-initial-mark: 2811538K(3055704K)] 2812179K(3061272K), 0.0007360 secs] [Times: user=0.00 sys=0.00, real=0.00 secs]
+64898.953: [CMS-concurrent-mark-start]
+64898.971: [GC 64898.971: [ParNew: 5567K->576K(5568K), 0.0101110 secs] 2817105K->2812715K(3061272K), 0.0102200 secs] [Times: user=0.07 sys=0.00, real=0.01 secs]
+```
+
+第一行看出 CMS 的标记造成了0.0007360秒的暂停。第三行，一次`minor GC`造成了 0.0101110 的暂停。
+
+同样，开启客户端的 GC 日志（`hbase-env.sh`）：
+
+```shell
+# This enables basic gc logging to the .out file.
+# export CLIENT_GC_OPTS="-verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps"
+
+# This enables basic gc logging to its own file.
+# export CLIENT_GC_OPTS="-verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:<FILE-PATH>"
+
+# This enables basic GC logging to its own file with automatic log rolling. Only applies to jdk 1.6.0_34+ and 1.7.0_2+.
+# export CLIENT_GC_OPTS="-verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:<FILE-PATH> -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=1 -XX:GCLogFileSize=512M"
+
+# If <FILE-PATH> is not replaced, the log file(.gc) would be generated in the HBASE_LOG_DIR .
+```
+
+# 109. 资源
+
+## 109.1. search-hadoop.com
+
+search-hadoop.com 索引了所有的邮件列表，可用于历史搜索。遇到 HBase 相关的问题，应该首先求助这里。
+
+## 109.2.  邮件列表
+
+在 [Apache HBase mailing lists](http://hbase.apache.org/mail-lists.html) 提问。`dev` 邮件列表，旨在构建 HBase 的新 feature。`user`列表用于发布 HBase 版本的问题。
+
+使用邮件列表前，在 search-hadoop.com 上确认先前没有类似问题。花些时间想好问题，一个高质量的问题，应该包括上下文、尝试寻求答案的证据等等。
+
+## 109.3. Slack
+
+[http://apache-hbase.slack.com](http://apache-hbase.slack.com/) 上看看 Slack 的 channel。
+
+## 109.4. IRC
+(You will probably get a more prompt response on the Slack channel)
+
+hbase on irc.freenode.net
+
+## 109.5. JIRA
+
+从 [JIRA](https://issues.apache.org/jira/browse/HBASE) 找 Hadoop/HBase 相关的 issue。
+
+
+# 110. 工具
+
+## 110.1 内置工具
+
+### Master Web 界面
+
+Master 默认以 16010 为 Web 接口。
+
+Master 的 Web 界面列出了表及其定义（列族、blocksize等）、RegionServer。
+
+从 Master 的 Web UI 可以跳转到每个 RegionServer 的 UI。
+
+### RegionServer Web 界面
+
+RegionServer 默认以 16030 为 Web 接口。
+
+RegionServer Web UI 列出了在线的 region 及其起止key、RegionServer 的指标（请求、region、compactionQueueSize等）
+
+### zkcli
+
+`zkcli`用来定位 ZooKeeper 相关的 issue: 
+
+```shell
+./hbase zkcli -server host:port <cmd> <args>
+```
+
+## 110.2 外部工具
+
+### tail
+
+```shell
+tail -f xxx.log
+```
+
+`-f` 自动刷新打开的文件。
+
+### top
+
+top 用来查看机器的资源占用情况。
+
+SWAP 意味着频繁的交换活动，这是 Java 性能恶化的标识。
+
+top 只能看出来 Java 程序的资源占用，要想知道是哪一个进程，按`c`。
+
+### jps
+
+jps 显示当前用户的每个 Java 进程的 ID。
+
+### jstack
+
+jstack 能够看出一个 Java 进程在看什么。它必须与 jps 命令结合使用，以获取进程 ID。它会显示一个线程列表。
+
+### OpenTSDB
+
+OpenTSDB 是 Ganglia 的绝佳替补，它使用 HBase 来存储所有的时间序列，而不必下调采样率。
+
+### clusterssh+top
+
+穷人的监控系统，容易设置，对于几台机器来说足够了。
+
+# 111. Client
+
+More information：[client](https://hbase.apache.org/book.html#architecture.client)
+
+### 111.1 hbase.client.scanner.max.result.size在客户端和服务器之间的不匹配导致错误的扫描结果
+
+如果客户端或服务器版本低于0.98.11/1.0.0，并且服务器的 `hbase.client.scanner.max.result.size` 的值比客户端要小，则到达服务器且超过`hbase.client.scanner.max.result.size` 请求可能会丢失数据。
+
+特殊地，0.98.11 的 `hbase.client.scanner.max.result.size` 默认是2MB，其他版本的默认值更大点。
+
+### 111.2 ScannerTimeoutException 或 UnknownScannerException 
+
+如果从客户端到RegionServer的RPC调用之间的时间超过扫描超时，则抛出此异常。例如，如果`Scan.setCaching`设置为500，那么`next()`调用都会产生一个 RPC 请求，获取下一批500行数据。
+
+减少setCaching值是一个选择，但是将该值设置得太低可能更加低效。
+
+### 111.3 Thrift 和 Java API 的性能差异 
+
+如前所述，`Scan.setCaching` 设置过大会产生性能问题。Thrift 客户端也是一样。
+
+Thrift 客户端使用`scannerGetList(scannerId, numRows)`来设置缓存。
+
+## 111.4 `Scanner.next`引发的`LeaseException` 
+
+`LeaseException` 经常发生在一个缓慢/冻结的`RegionServer#next`调用中。通过 `hbase.rpc.timeout` > `hbase.regionserver.lease.period` 可以防止它。 
+
+See more：[HBase, mail # user - Lease does not exist exceptions](http://mail-archives.apache.org/mod_mbox/hbase-user/201209.mbox/%3CCAOcnVr3R-LqtKhFsk8Bhrm-YW2i9O6J6Fhjz2h7q6_sxvwd2yw%40mail.gmail.com%3E)
+
+## 111.5 正常操作触发的异常
+
+0.20.0 之后，默认的`org.apache.hadoop.hbase.*`日志级别为 `DEBUG`。
+
+你可以在客户端，打开`$HBASE_HOME/conf/log4j.properties`更改它。
+
+### 111.6 压缩伴随的客户端停顿
+
+客户端将大量数据插入到未优化的HBase集群中。压缩可能加剧停顿，虽然它不是问题的根源。
+
+- 首先确保， 所有数据不是打向单个 region。
+- 检查配置 `hbase.hstore.blockingStoreFiles`, `hbase.hregion.memstore.block.multiplier`, `MAX_FILESIZE` (region size), 和 `MEMSTORE_FLUSHSIZE`。
+
+根本原因是小文件太多，等待 compact。
+
+See more：[Long client pauses with compression](http://search-hadoop.com/m/WUnLM6ojHm1/Long+client+pauses+with+compression&subj=Long+client+pauses+with+compression)
+
+## 111.7 安全的客户端连接
+
+```
+Secure Client Connect ([Caused by GSSException: No valid credentials provided
+        (Mechanism level: Request is a replay (34) V PROCESS_TGS)])
+```
+
+上述异常是 MIT Kerberos 的`replay_cache`组件的 bug。你可以忽略这个异常，因为客户端会重试 34 次，直到 `IOException`。
+
+## 111.8 ZooKeeper 客户端连接错误
+
+```
+11/07/05 11:26:41 WARN zookeeper.ClientCnxn: Session 0x0 for server null,
+ unexpected error, closing socket connection and attempting reconnect
+ java.net.ConnectException: Connection refused: no further information
+        at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+        at sun.nio.ch.SocketChannelImpl.finishConnect(Unknown Source)
+        at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1078)
+ 11/07/05 11:26:43 INFO zookeeper.ClientCnxn: Opening socket connection to
+ server localhost/127.0.0.1:2181
+ 11/07/05 11:26:44 WARN zookeeper.ClientCnxn: Session 0x0 for server null,
+ unexpected error, closing socket connection and attempting reconnect
+ java.net.ConnectException: Connection refused: no further information
+        at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+        at sun.nio.ch.SocketChannelImpl.finishConnect(Unknown Source)
+        at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1078)
+ 11/07/05 11:26:45 INFO zookeeper.ClientCnxn: Opening socket connection to
+ server localhost/127.0.0.1:2181
+```
+
+上述异常，要么是 ZooKeeper 挂了，要么是因为网络原因不可用了。
+
+使用 `zkcli` 可以定位 ZooKeeper 的问题。
+
+## 111.9 客户端超内存，尽管堆大小很稳定
+
+[HBase, mail # user - Suspected memory leak](http://search-hadoop.com/m/ubhrX8KvcH/Suspected+memory+leak&subj=Re+Suspected+memory+leak)
+
+[HBase, mail # dev - FeedbackRe: Suspected memory leak](http://search-hadoop.com/m/p2Agc1Zy7Va/MaxDirectMemorySize+Was%253A+Suspected+memory+leak&subj=Re+FeedbackRe+Suspected+memory+leak)
+
+workaround 是使用`-XX:MaxDirectMemorySize`传给客户端 JVM 一个合理的值。默认情况下，`MaxDirectMemorySize`等于`-Xmx`。把它设置小一点，但过小会触发 `FullGC`。
+
+## 111.10 调用 Admin 方法时的 Client slowdown
+
+[HBASE-5073](https://issues.apache.org/jira/browse/HBASE-5073) fix 了这个 bug。
+
+起因，客户端有一个ZooKeeper漏洞，客户端调用 Admin API 的时候会被ZooKeeper事件淹没。
+
+## 111.11 安全客户端无法连接
+
+Caused by GSSException: No valid credentials provided(Mechanism level: Failed to find any Kerberos tgt)
+
+1. 检查 Kerberos ticket 是否有效。
+2. 查看 [Java Security Guide troubleshooting section](http://docs.oracle.com/javase/1.5.0/docs/guide/security/jgss/tutorials/Troubleshooting.html)
+3. 根据 Kerberos 配置，安装 [Java Cryptography Extension](http://docs.oracle.com/javase/1.4.2/docs/guide/security/jce/JCERefGuide.html)。
+
