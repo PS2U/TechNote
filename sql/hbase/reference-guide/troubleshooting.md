@@ -324,3 +324,7 @@ HADOOP_CLASSPATH=`hbase classpath` hadoop jar $HBASE_HOME/hbase-server-VERSION.j
 
 # 113. NameNode
 
+See more: [HDFS](https://hbase.apache.org/book.html#arch.hdfs)
+
+## 113.1 表和 region
+
