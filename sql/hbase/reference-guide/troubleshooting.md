@@ -279,3 +279,48 @@ Caused by GSSException: No valid credentials provided(Mechanism level: Failed to
 2. 查看 [Java Security Guide troubleshooting section](http://docs.oracle.com/javase/1.5.0/docs/guide/security/jgss/tutorials/Troubleshooting.html)
 3. 根据 Kerberos 配置，安装 [Java Cryptography Extension](http://docs.oracle.com/javase/1.4.2/docs/guide/security/jce/JCERefGuide.html)。
 
+
+# 112. MapReduce
+
+### 112.1 你以为你在集群，其实你在本地
+
+使用 `ImportTsv` 时，可能会出现以下问题：
+
+```
+    WARN mapred.LocalJobRunner: job_local_0001
+java.lang.IllegalArgumentException: Can't read partitions file
+       at org.apache.hadoop.hbase.mapreduce.hadoopbackport.TotalOrderPartitioner.setConf(TotalOrderPartitioner.java:111)
+       at org.apache.hadoop.util.ReflectionUtils.setConf(ReflectionUtils.java:62)
+       at org.apache.hadoop.util.ReflectionUtils.newInstance(ReflectionUtils.java:117)
+       at org.apache.hadoop.mapred.MapTask$NewOutputCollector.<init>(MapTask.java:560)
+       at org.apache.hadoop.mapred.MapTask.runNewMapper(MapTask.java:639)
+       at org.apache.hadoop.mapred.MapTask.run(MapTask.java:323)
+       at org.apache.hadoop.mapred.LocalJobRunner$Job.run(LocalJobRunner.java:210)
+Caused by: java.io.FileNotFoundException: File _partition.lst does not exist.
+       at org.apache.hadoop.fs.RawLocalFileSystem.getFileStatus(RawLocalFileSystem.java:383)
+       at org.apache.hadoop.fs.FilterFileSystem.getFileStatus(FilterFileSystem.java:251)
+       at org.apache.hadoop.fs.FileSystem.getLength(FileSystem.java:776)
+       at org.apache.hadoop.io.SequenceFile$Reader.<init>(SequenceFile.java:1424)
+       at org.apache.hadoop.io.SequenceFile$Reader.<init>(SequenceFile.java:1419)
+       at org.apache.hadoop.hbase.mapreduce.hadoopbackport.TotalOrderPartitioner.readPartitions(TotalOrderPartitioner.java:296)
+```
+
+`LocalJobRunner` 意味着作业运行在本地，而不是集群。
+
+解决这个问题，得让`HADOOP_CLASSPATH`包括 HBase 的依赖：
+
+```
+HADOOP_CLASSPATH=`hbase classpath` hadoop jar $HBASE_HOME/hbase-server-VERSION.jar rowcounter usertable
+```
+
+## 112.2 启动作业时的`IllegalAccessError`。
+
+[HBASE-10304 Running an hbase job jar: IllegalAccessError: class com.google.protobuf.ZeroCopyLiteralByteString cannot access its superclass com.google.protobuf.LiteralByteString](https://issues.apache.org/jira/browse/HBASE-10304)
+
+[HBASE-11118 non environment variable solution for "IllegalAccessError: class com.google.protobuf.ZeroCopyLiteralByteString cannot access its superclass com.google.protobuf.LiteralByteString"](https://issues.apache.org/jira/browse/HBASE-11118)
+
+启动 Spark 作业时，也会有这个 issue：[HBASE-10877 HBase non-retriable exception list should be expanded](https://issues.apache.org/jira/browse/HBASE-10877)
+
+
+# 113. NameNode
+
