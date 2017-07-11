@@ -31,7 +31,7 @@ HBase 内部将数据放到索引好的 "存储文件(StoreFiles)" ，以便高�
 
 # 65. 目录表（Catalog Tables）
 
-目录表 `hbase:meta` 作为 HBase 表存在。他们被HBase shell的 list 命令过滤掉了， 但他们和其他表一样存在。
+目录表 `hbase:meta` 作为 HBase 表存在。他们被HBase shell的 `list` 命令过滤掉了， 但它们和其它表一样存在。
 
 ## 65.1 `-ROOT-`
 
@@ -424,7 +424,7 @@ block 缓存的默认值是0.25，意思是使用可用堆的25%空间。0.99 �
 
 其他需要考虑的因素：
 
-- 目录表。`-ROOT-`和`hbase:meta`表默认缓存，且是 in-memory 级别。前者只占用几百字节，后者顶多及 MB。
+- 目录表。`-ROOT-`和`hbase:meta`表默认缓存，且是 in-memory 级别。前者只占用几百字节，后者顶多几 MB。
 - HFile 索引。HFile 有多层索引，索引的大小和块大小、key 的大小、存储数据的数量有关。单个 region server 的 HFile 索引有 GB 级也是正常的。
 - Keys。The values that are stored are only half the picture, since each value is stored along with its keys.
 - Bloom Filters。和 HFile 索引一样，也被存在 LRU 中。
@@ -636,11 +636,11 @@ Region 到 RegionServer 的本地化是由 HDFS 的 block 复制实现的。HDFS
 
 ## 70.4 Region 拆分
 
-RegionServer 分割操作是不可见的，因为 Master 不会参与其中。 RegionServer 切割region的步骤是，先将该region下线，然后切割，将其子region加入到`hbase:meta`元信息中，再将他们加入到原本的 RegionServer 中，最后汇报Master。
+RegionServer 分割操作是不可见的，因为 Master 不会参与其中。 RegionServer 切割region的步骤是，先将该region下线，然后切割，将其子region加入到`hbase:meta`元信息中，再将他们加入到原本的 RegionServer 中，最后汇报 Master。
 
 ### 自定义分割策略
 
-自定义的分割策略需要扩展 HBase 默认的`IncreasingToUpperBoundRegionSplitPolicy`。 可以从 HBase 的配置文件，或表的属性设置全局、局部的分割策略。
+自定义的分割策略需要扩展 HBase 默认的 `IncreasingToUpperBoundRegionSplitPolicy`。 可以从 HBase 的配置文件，或表的属性设置全局、局部的分割策略。
 
 ## 70.5 手动 Region 分割
 

@@ -73,7 +73,7 @@ HBase 在一致性和分区容错上做的非常好。参见：[blog post](https
 
 定位第一个问题，要开启`-XX:CMSInitiatingOccupancyFraction`，并降低它的值。
 
-第二个问题，MSLAB 可以派上用场：`hbase.hregion.memstore.mslab.enabled`置为 `true`。开启后，每个MemStore实例将占用至少一个MSLAB内存实例。如果有数以千计的 region，每个r egion 都有许多列族，那么 MSLAB 的这种分配对内存是个考验，甚至导致 OOM。
+第二个问题，MSLAB 可以派上用场：`hbase.hregion.memstore.mslab.enabled`置为 `true`。开启后，每个 MemStore 实例将占用至少一个 MSLAB 内存实例。如果有数以千计的 region，每个 region 都有许多列族，那么 MSLAB 的这种分配对内存是个考验，甚至导致 OOM。
 
 [HBASE-8163 MemStoreChunkPool: An improvement for JAVA GC when using MSLAB](https://issues.apache.org/jira/browse/HBASE-8163) 是对 GC 的改进，在写入大量负载期间降低年轻GC的量的配置。
 
