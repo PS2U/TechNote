@@ -58,6 +58,8 @@
 
 [《Elasticsearch权威指南》](es/the-definitive-guide/README.md)
 
+[滥竽充数：我的博客](es/my-footprint/README.md)
+
 ## Spark
 
 [《Spark快速大数据分析》](spark/learning-spark/README.md)
