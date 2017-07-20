@@ -8,7 +8,7 @@
 
 [深入理解Elasticsearch：引导检查](深入理解Elasticsearch：引导检查.md)
 
-[深入理解Elasticsearch：索引](深入理解Elasticsearch：索引)
+[深入理解Elasticsearch：索引](深入理解Elasticsearch：索引.md)
 
 [深入理解Elasticsearch：节点](深入理解Elasticsearch：节点.md)
 
