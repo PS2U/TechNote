@@ -2,6 +2,8 @@
 
 [深入理解Elasticsearch：概念](深入理解Elasticsearch：概念.md)
 
+[深入理解Elasticsearch：启动](深入理解Elasticsearch：启动.md)
+
 [深入理解Elasticsearch：Guice](深入理解Elasticsearch：Guice.md)
 
 [深入理解Elasticsearch：主要模块](深入理解Elasticsearch：主要模块.md)
