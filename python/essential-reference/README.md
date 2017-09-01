@@ -32,3 +32,5 @@
 ## II: The Python Library
 
 [12. Build-In Functions and Exceptions](12-built-in-functions-and-exceptions.md)
+
+[13. Python Runtime Services](13-python-runtime-services.md)
