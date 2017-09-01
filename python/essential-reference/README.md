@@ -5,6 +5,8 @@
 
 # 目录
 
+## I: The Python Language
+
 [1、Python简介](1、Python简介.md)
 
 [2、词法约定和语法](2、词法约定和语法.md)
@@ -26,3 +28,7 @@
 [10、执行环境](10、执行环境.md)
 
 [11、测试、调试、探查与调优](11、测试、调试、探查与调优.md)
+
+## II: The Python Library
+
+[12. Build-In Functions and Exceptions](12-built-in-functions-and-exceptions.md)
