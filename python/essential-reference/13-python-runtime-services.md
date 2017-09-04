@@ -91,3 +91,26 @@ Notes
 
 # 13.4 `inspect`
 
+The `inspect` module is used to gather information about live Python objects such as attributes, documentation strings, source code, stack frames, and so on.
+
+```python
+'''
+Cleans up a documentation string doc by changing all tabs into whitespace and removing
+indentation that might have been inserted to make the docstring line up with other
+statements inside a function or method
+'''
+cleandoc(doc)
+
+# Returns the frame object corresponding to the caller’s stack frame.
+currentframe()
+
+# Produces a nicely formatted string representing the values returned by getargspec()
+formatargspec(args [, varags [, varkw [, defaults]]])
+
+# Produces a nicely formatted string representing the values returned by getargvalues()
+formatargvalues(args [, varargs [, varkw [, locals]]])
+
+# Given a function, func, returns a named tuple ArgSpec(args, varargs, varkw, defaults)
+getargspec(func)
+
+```
