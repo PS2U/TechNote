@@ -36,7 +36,7 @@ A class can implement customized copy methods by implementing the methods `__cop
 
 The `gc` module provides an interface for controlling the garbage collector used to collect cycles in objects such as lists, tuples, dictionaries, and instances.
 
-The garbage collector uses a **threelevel generational scheme** in which objects that survive the initial garbage-collection step are placed onto lists of objects that are checked less frequently.
+The garbage collector uses a **three level generational scheme** in which objects that survive the initial garbage-collection step are placed onto lists of objects that are checked less frequently.
 
 ```python
 # Runs a full garbage
@@ -86,7 +86,7 @@ set_threshold(threshold0 [, threshold1[, threshold2]])
 Notes
 
 - Circular references involving objects with a _ _del_ _() method are not garbage-collected and are placed on the list gc.garbage (uncollectable objects). 
--  The functions get_referrers() and get_referents() only apply to objects that support garbage collection. In addition, these functions are only intended for debugging.
+- The functions get_referrers() and get_referents() only apply to objects that support garbage collection. In addition, these functions are only intended for debugging.
 
 
 # 13.4 `inspect`
@@ -112,5 +112,4 @@ formatargvalues(args [, varargs [, varkw [, locals]]])
 
 # Given a function, func, returns a named tuple ArgSpec(args, varargs, varkw, defaults)
 getargspec(func)
-
 ```
