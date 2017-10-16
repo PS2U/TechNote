@@ -112,4 +112,89 @@ formatargvalues(args [, varargs [, varkw [, locals]]])
 
 # Given a function, func, returns a named tuple ArgSpec(args, varargs, varkw, defaults)
 getargspec(func)
+
+# Returns the values of arguments supplied to a function with execution frame frame.
+getargvalues(frame)
+ 
+# Given a list of related classes, classes, this function organizes the classes into a hierarchy based on inheritance. 
+getclasstree(classes [, unique])
+
+# Returns a string consisting of comments that immediately precede the definition of object in Python source code.
+getcomments(object)
+
+# Return the documentation string for object
+getdoc(object)
+ 
+# Returns the name of the file in which object was defined.
+getfile(object)
+
+ 
+# Returns a named tuple Traceback(filename, lineno, function, code_context, index) containing information about the frame object frame. filename and line specify a source code location. 
+getframeinfo(frame [, context])
+
+# Returns all of the members of object.
+getmembers(object [, predicate])
+
+# Returns the module in which object was defined.
+getmodule(object)
+
+# Returns information about how Python would interpret the file path.
+getmoduleinfo(path)
+
+# Return a tuple of classes that represent the method-resolution ordering used to resolve methods in class cls.
+getmro(cls)
+
+# Returns a list of frame records for frame and all outer frames.
+getouterframes(frame [, context])
+
+# Returns the name of the Python source file in which object was defined.
+getsourcefile(object)
+
+# Returns True if object is an abstract base class.
+isabstract(object)
+
+isbuiltin(object)
+isclass(object)
+iscode(object)
+isdatadescriptor(object)
+isfunction(object)
+isgenerator(object)
+ismethod(object)
+
+# Returns a list of frame records corresponding to the stack of the caller.
+stack([context])
+
+# Returns a list of frame records for the stack between the current frame and the frame in which the current exception was raised. 
+trace([context])
 ```
+
+
+# 13.5 `marshal`
+
+The marshal module is used to serialize Python objects in an “undocumented” Python-specific data format.
+
+```python
+# Writes the object value to the open file object file.
+dump(value, file [, version])
+
+# Reads and returns the next value from the open file object file.
+load(file)
+```
+
+Only `None`, integers, long integers, floats, complex numbers, strings, Unicode strings, tuples, lists, dictionaries, and code objects are supported. Lists, tuples, and dictionaries can only contain supported objects. Class instances and recursive references in lists, tuples, and dictionaries are not supported.
+
+
+# 13.6 `pickle`
+
+The pickle module is used to serialize Python objects into a stream of bytes suitable for storing in a file, transferring across a network, or placing in a database.
+
+```python
+# Dumps a pickled representation of object to the file object file. protocol specifies the output format of the data
+dump(object, file [, protocol ])
+
+# Loads and returns a pickled representation of an object from the file object file.
+load(file)
+```
+
+When loading, it is not necessary to specify the protocol or any information about the type of object being loaded. That information is saved as part of the pickle data format itself.
+
