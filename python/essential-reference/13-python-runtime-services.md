@@ -198,3 +198,29 @@ load(file)
 
 When loading, it is not necessary to specify the protocol or any information about the type of object being loaded. That information is saved as part of the pickle data format itself.
 
+When working with complicated data structures involving cycles or shared references, using `dump()` and `load()` can be problematic because they don’t maintain any internal state about objects that have already been pickled or restored. This can result in output files that are excessively large and that don’t properly restore the relationship between objects when loaded. An alternative approach is to use `Pickler` and `Unpickler` objects.
+
+
+# 13.7 `sys`
+
+The sys module contains variables and functions that pertain to the operation of the interpreter and its environment.
+
+## Variables
+
+1. `api_version`
+2. `argv`
+3. `builtin_module_names`
+4. `byteorder`
+5. `__excepthook__`
+6. `exeutable`
+7. `flags`
+8. `float_info`
+9. `hexversion`
+10. `last_type`, `laste_value`, `last_traceback`
+11. `maxint`, `maxsize`, `maxunicode`
+12. `modules`
+13. `path`, `platform`
+14. `stdin`, `stdout`, `stderr`
+
+## Functions
+
