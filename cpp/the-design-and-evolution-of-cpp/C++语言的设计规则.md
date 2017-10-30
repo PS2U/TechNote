@@ -1,3 +1,11 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 C++的整体设计目标是：让程序员觉得编程很愉快，一种通用的程序设计语言，更好的C，支持数据抽象，支持面向对象。
 
 C++的一般性规则（社会性规则）

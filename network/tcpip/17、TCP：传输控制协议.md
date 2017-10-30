@@ -1,3 +1,12 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [TCP首部](#tcp%E9%A6%96%E9%83%A8)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 TCP提供一种面向连接的、可靠的字节流服务。
 
 TCP通过下列方式来提供可靠性。

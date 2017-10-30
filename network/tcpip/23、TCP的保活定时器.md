@@ -1,3 +1,11 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 如果TCP连接的双方都没有向对方发送数据，则在两个TCP模块之间不交换任何信息。
     
 如果一个给定的连接在两个小时之内没有任何动作，则服务器就向客户发送一个探查报文段。。客户主机必须处于以下 4个状态之一：

@@ -1,3 +1,14 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [路径MTU发现](#%E8%B7%AF%E5%BE%84mtu%E5%8F%91%E7%8E%B0)
+- [窗口扩大选项](#%E7%AA%97%E5%8F%A3%E6%89%A9%E5%A4%A7%E9%80%89%E9%A1%B9)
+- [为事务用的TCP扩展](#%E4%B8%BA%E4%BA%8B%E5%8A%A1%E7%94%A8%E7%9A%84tcp%E6%89%A9%E5%B1%95)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # 路径MTU发现
 
 TCP的路径MTU发现按如下方式进行：在连接建立时，TCP使用输出接口或对端声明的MSS中的最小MTU作为起始的报文段大小。路径 MTU发现不允许TCP超过对端声明的MSS。如果对端没有指定一个MSS，则默认为536。一个实现为每个路由单独保存路径MTU信息。

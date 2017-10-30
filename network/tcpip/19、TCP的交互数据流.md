@@ -1,3 +1,13 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [经受延时的确认](#%E7%BB%8F%E5%8F%97%E5%BB%B6%E6%97%B6%E7%9A%84%E7%A1%AE%E8%AE%A4)
+- [Nagle算法](#nagle%E7%AE%97%E6%B3%95)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 交互数据总是以小于最大报文段长度的分组发送。
 
 # 经受延时的确认

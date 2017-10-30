@@ -1,3 +1,53 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [107. 一般准则](#107-%E4%B8%80%E8%88%AC%E5%87%86%E5%88%99)
+- [108. 日志](#108-%E6%97%A5%E5%BF%97)
+  - [108.1 日志位置](#1081-%E6%97%A5%E5%BF%97%E4%BD%8D%E7%BD%AE)
+    - [NameNode](#namenode)
+    - [DataNode](#datanode)
+  - [108.2 日志级别](#1082-%E6%97%A5%E5%BF%97%E7%BA%A7%E5%88%AB)
+    - [开启 RPC 级别日志](#%E5%BC%80%E5%90%AF-rpc-%E7%BA%A7%E5%88%AB%E6%97%A5%E5%BF%97)
+  - [108.3 GC 日志](#1083-gc-%E6%97%A5%E5%BF%97)
+- [109. 资源](#109-%E8%B5%84%E6%BA%90)
+  - [109.1. search-hadoop.com](#1091-search-hadoopcom)
+  - [109.2.  邮件列表](#1092--%E9%82%AE%E4%BB%B6%E5%88%97%E8%A1%A8)
+  - [109.3. Slack](#1093-slack)
+  - [109.4. IRC](#1094-irc)
+  - [109.5. JIRA](#1095-jira)
+- [110. 工具](#110-%E5%B7%A5%E5%85%B7)
+  - [110.1 内置工具](#1101-%E5%86%85%E7%BD%AE%E5%B7%A5%E5%85%B7)
+    - [Master Web 界面](#master-web-%E7%95%8C%E9%9D%A2)
+    - [RegionServer Web 界面](#regionserver-web-%E7%95%8C%E9%9D%A2)
+    - [zkcli](#zkcli)
+  - [110.2 外部工具](#1102-%E5%A4%96%E9%83%A8%E5%B7%A5%E5%85%B7)
+    - [tail](#tail)
+    - [top](#top)
+    - [jps](#jps)
+    - [jstack](#jstack)
+    - [OpenTSDB](#opentsdb)
+    - [clusterssh+top](#clustersshtop)
+- [111. Client](#111-client)
+    - [111.1 hbase.client.scanner.max.result.size在客户端和服务器之间的不匹配导致错误的扫描结果](#1111-hbaseclientscannermaxresultsize%E5%9C%A8%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%92%8C%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B9%8B%E9%97%B4%E7%9A%84%E4%B8%8D%E5%8C%B9%E9%85%8D%E5%AF%BC%E8%87%B4%E9%94%99%E8%AF%AF%E7%9A%84%E6%89%AB%E6%8F%8F%E7%BB%93%E6%9E%9C)
+    - [111.2 ScannerTimeoutException 或 UnknownScannerException](#1112-scannertimeoutexception-%E6%88%96-unknownscannerexception)
+    - [111.3 Thrift 和 Java API 的性能差异](#1113-thrift-%E5%92%8C-java-api-%E7%9A%84%E6%80%A7%E8%83%BD%E5%B7%AE%E5%BC%82)
+  - [111.4 `Scanner.next`引发的`LeaseException`](#1114-scannernext%E5%BC%95%E5%8F%91%E7%9A%84leaseexception)
+  - [111.5 正常操作触发的异常](#1115-%E6%AD%A3%E5%B8%B8%E6%93%8D%E4%BD%9C%E8%A7%A6%E5%8F%91%E7%9A%84%E5%BC%82%E5%B8%B8)
+    - [111.6 压缩伴随的客户端停顿](#1116-%E5%8E%8B%E7%BC%A9%E4%BC%B4%E9%9A%8F%E7%9A%84%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%81%9C%E9%A1%BF)
+  - [111.7 安全的客户端连接](#1117-%E5%AE%89%E5%85%A8%E7%9A%84%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%BF%9E%E6%8E%A5)
+  - [111.8 ZooKeeper 客户端连接错误](#1118-zookeeper-%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%BF%9E%E6%8E%A5%E9%94%99%E8%AF%AF)
+  - [111.9 客户端超内存，尽管堆大小很稳定](#1119-%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%B6%85%E5%86%85%E5%AD%98%E5%B0%BD%E7%AE%A1%E5%A0%86%E5%A4%A7%E5%B0%8F%E5%BE%88%E7%A8%B3%E5%AE%9A)
+  - [111.10 调用 Admin 方法时的 Client slowdown](#11110-%E8%B0%83%E7%94%A8-admin-%E6%96%B9%E6%B3%95%E6%97%B6%E7%9A%84-client-slowdown)
+  - [111.11 安全客户端无法连接](#11111-%E5%AE%89%E5%85%A8%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%97%A0%E6%B3%95%E8%BF%9E%E6%8E%A5)
+- [112. MapReduce](#112-mapreduce)
+    - [112.1 你以为你在集群，其实你在本地](#1121-%E4%BD%A0%E4%BB%A5%E4%B8%BA%E4%BD%A0%E5%9C%A8%E9%9B%86%E7%BE%A4%E5%85%B6%E5%AE%9E%E4%BD%A0%E5%9C%A8%E6%9C%AC%E5%9C%B0)
+  - [112.2 启动作业时的`IllegalAccessError`。](#1122-%E5%90%AF%E5%8A%A8%E4%BD%9C%E4%B8%9A%E6%97%B6%E7%9A%84illegalaccesserror)
+- [113. NameNode](#113-namenode)
+  - [113.1 表和 region](#1131-%E8%A1%A8%E5%92%8C-region)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # 107. 一般准则
 
 始终从 Master 的日志开始查看。通常它总会反复地打印同一行，Google 它总会获得一些提示。

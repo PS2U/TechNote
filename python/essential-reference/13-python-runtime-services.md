@@ -1,3 +1,19 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [13.1 `atexit`](#131-atexit)
+- [13.2 `copy`](#132-copy)
+- [13.3 `gc`](#133-gc)
+- [13.4 `inspect`](#134-inspect)
+- [13.5 `marshal`](#135-marshal)
+- [13.6 `pickle`](#136-pickle)
+- [13.7 `sys`](#137-sys)
+  - [Variables](#variables)
+  - [Functions](#functions)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # 13.1 `atexit`
 
 The `atexit` module is used to register functions to execute when the Python interpreter exits. A single function is provided:

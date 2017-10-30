@@ -1,3 +1,17 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [2. 快速开始 - Standalone HBase](#2-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B---standalone-hbase)
+  - [2.1 JDK 版本](#21-jdk-%E7%89%88%E6%9C%AC)
+  - [2.2 开始](#22-%E5%BC%80%E5%A7%8B)
+  - [2.3  伪分布模式](#23--%E4%BC%AA%E5%88%86%E5%B8%83%E6%A8%A1%E5%BC%8F)
+- [2.4 进阶 - 全分布式](#24-%E8%BF%9B%E9%98%B6---%E5%85%A8%E5%88%86%E5%B8%83%E5%BC%8F)
+  - [2.5 Next](#25-next)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # 2. 快速开始 - Standalone HBase
 
 Standalone 实例包含所有的 HBase 守护进程：

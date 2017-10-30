@@ -1,3 +1,15 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [4.3 ARP高速缓存](#43-arp%E9%AB%98%E9%80%9F%E7%BC%93%E5%AD%98)
+- [4.4 ARP分组格式](#44-arp%E5%88%86%E7%BB%84%E6%A0%BC%E5%BC%8F)
+- [4.6 ARP代理](#46-arp%E4%BB%A3%E7%90%86)
+- [4.7 免费ARP](#47-%E5%85%8D%E8%B4%B9arp)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 当一台主机把以太网数据帧发送到位于同一局域网上的另一台主机时，是根据48bit的以太网地址来确定目的接口的。ARP为IP地址到对应的硬件地址之间提供动态映射。
 
 ARP发送一份称作ARP请求的以太网数据帧给以太网上的每个主，这个过程称为“广播”。ARP请求数据帧中包含目的主机的IP地址。如果你是这个IP地址的拥有者，请回答你的硬件地址。

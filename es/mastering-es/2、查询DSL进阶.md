@@ -1,3 +1,20 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [2.1 Apache Lucene 默认评分公式](#21-apache-lucene-%E9%BB%98%E8%AE%A4%E8%AF%84%E5%88%86%E5%85%AC%E5%BC%8F)
+  - [2.2.1 何时文档被匹配上](#221-%E4%BD%95%E6%97%B6%E6%96%87%E6%A1%A3%E8%A2%AB%E5%8C%B9%E9%85%8D%E4%B8%8A)
+  - [2.1.2 TF/IDF 评分公式](#212-tfidf-%E8%AF%84%E5%88%86%E5%85%AC%E5%BC%8F)
+  - [2.1.3 Elasticsearch 如何看评分](#213-elasticsearch-%E5%A6%82%E4%BD%95%E7%9C%8B%E8%AF%84%E5%88%86)
+- [2.2 查询改写](#22-%E6%9F%A5%E8%AF%A2%E6%94%B9%E5%86%99)
+- [2.3 二次评分](#23-%E4%BA%8C%E6%AC%A1%E8%AF%84%E5%88%86)
+- [2.4 批量操作](#24-%E6%89%B9%E9%87%8F%E6%93%8D%E4%BD%9C)
+- [2.4.1 批量取](#241-%E6%89%B9%E9%87%8F%E5%8F%96)
+  - [2.4.2 批量查询](#242-%E6%89%B9%E9%87%8F%E6%9F%A5%E8%AF%A2)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # 2.1 Apache Lucene 默认评分公式
 
 文档得分是刻画文档与查询匹配程度的参数。

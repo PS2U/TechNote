@@ -1,3 +1,15 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [协议](#%E5%8D%8F%E8%AE%AE)
+- [管理信息结构](#%E7%AE%A1%E7%90%86%E4%BF%A1%E6%81%AF%E7%BB%93%E6%9E%84)
+- [对象标识符](#%E5%AF%B9%E8%B1%A1%E6%A0%87%E8%AF%86%E7%AC%A6)
+- [管理信息库介绍](#%E7%AE%A1%E7%90%86%E4%BF%A1%E6%81%AF%E5%BA%93%E4%BB%8B%E7%BB%8D)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 基于TCP/IP的网络管理包含两个部分：网络管理站（也叫管理进程， manager）和被管的网络单元（也叫被管设备）。被管设备端和管理相关的软件叫做代理程序( agent)或代理进程。
     
 管理进程和代理进程之间的通信可以有两种方式。一种是管理进程向代理进程发出请求，询问一个具体的参数值（例如：你产生了多少个不可达的 ICMP端口？）。另外一种方式是代理进程主动向管理进程报告有某些重要的事件发生。

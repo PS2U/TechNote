@@ -1,3 +1,15 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [环境变量](#%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F)
+- [设置提示](#%E8%AE%BE%E7%BD%AE%E6%8F%90%E7%A4%BA)
+- [设置默认](#%E8%AE%BE%E7%BD%AE%E9%BB%98%E8%AE%A4)
+- [日志配置](#%E6%97%A5%E5%BF%97%E9%85%8D%E7%BD%AE)
+- [重要配置](#%E9%87%8D%E8%A6%81%E9%85%8D%E7%BD%AE)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 Elasticsearch默认配置已经够好，顶多需要一些微调。大多数的设置可用通过 API 修改。
 
 Elasticsearch有两个配置文件：

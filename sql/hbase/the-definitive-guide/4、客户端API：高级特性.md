@@ -1,3 +1,28 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [4.1 过滤](#41-%E8%BF%87%E6%BB%A4)
+  - [比较过滤器](#%E6%AF%94%E8%BE%83%E8%BF%87%E6%BB%A4%E5%99%A8)
+  - [专用过滤器](#%E4%B8%93%E7%94%A8%E8%BF%87%E6%BB%A4%E5%99%A8)
+  - [附加过滤器](#%E9%99%84%E5%8A%A0%E8%BF%87%E6%BB%A4%E5%99%A8)
+  - [`FilterList`](#filterlist)
+  - [自定义过滤器](#%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BF%87%E6%BB%A4%E5%99%A8)
+- [4.2 计数器](#42-%E8%AE%A1%E6%95%B0%E5%99%A8)
+  - [单计数器](#%E5%8D%95%E8%AE%A1%E6%95%B0%E5%99%A8)
+  - [多计数器](#%E5%A4%9A%E8%AE%A1%E6%95%B0%E5%99%A8)
+- [4.3 协处理器](#43-%E5%8D%8F%E5%A4%84%E7%90%86%E5%99%A8)
+  - [Coprocessor](#coprocessor)
+  - [协处理器加载](#%E5%8D%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%8A%A0%E8%BD%BD)
+  - [`RegionObserver`类](#regionobserver%E7%B1%BB)
+  - [`MasterObserver`类](#masterobserver%E7%B1%BB)
+  - [endpoint](#endpoint)
+  - [4.4 `HTablePool`](#44-htablepool)
+- [4.5 连接管理](#45-%E8%BF%9E%E6%8E%A5%E7%AE%A1%E7%90%86)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # 4.1 过滤
 
 用户可以使用 HBase 预定义的过滤器，也可以实现自己的过滤器。

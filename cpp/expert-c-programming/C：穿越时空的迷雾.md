@@ -1,3 +1,21 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [C的史前阶段](#c%E7%9A%84%E5%8F%B2%E5%89%8D%E9%98%B6%E6%AE%B5)
+- [C的早期体验](#c%E7%9A%84%E6%97%A9%E6%9C%9F%E4%BD%93%E9%AA%8C)
+- [标准I/O库和C预处理器](#%E6%A0%87%E5%87%86io%E5%BA%93%E5%92%8Cc%E9%A2%84%E5%A4%84%E7%90%86%E5%99%A8)
+- [K&R C](#kr%C2%A0c)
+- [今日之ANSI C](#%E4%BB%8A%E6%97%A5%E4%B9%8Bansi%C2%A0c)
+- [它很棒，但符合标准吗](#%E5%AE%83%E5%BE%88%E6%A3%92%E4%BD%86%E7%AC%A6%E5%90%88%E6%A0%87%E5%87%86%E5%90%97)
+- [编译限制](#%E7%BC%96%E8%AF%91%E9%99%90%E5%88%B6)
+- [ANSI C标准的结构](#ansi%C2%A0c%E6%A0%87%E5%87%86%E7%9A%84%E7%BB%93%E6%9E%84)
+- [阅读ANSI C标准](#%E9%98%85%E8%AF%BBansi%C2%A0c%E6%A0%87%E5%87%86)
+- [安静的改变](#%E5%AE%89%E9%9D%99%E7%9A%84%E6%94%B9%E5%8F%98)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # C的史前阶段
 
 C语言体现的“小即是美”。

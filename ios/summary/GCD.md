@@ -1,3 +1,11 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [系统提供的dispatch方法](#%E7%B3%BB%E7%BB%9F%E6%8F%90%E4%BE%9B%E7%9A%84dispatch%E6%96%B9%E6%B3%95)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 GCD（Grand Central Dispatch）是苹果开发的一个多核编程的解决方法，和其他的多线程技术方案（如NSThread，NSOperationQueue，NSInvocationOperation）相比，使用起来更加简单方便。
 
 GCD的定义像函数指针，差别是用"^"取代了"*"：

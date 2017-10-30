@@ -1,3 +1,15 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [往返时间测量](#%E5%BE%80%E8%BF%94%E6%97%B6%E9%97%B4%E6%B5%8B%E9%87%8F)
+- [拥塞避免算法](#%E6%8B%A5%E5%A1%9E%E9%81%BF%E5%85%8D%E7%AE%97%E6%B3%95)
+- [快速重传与快速恢复算法](#%E5%BF%AB%E9%80%9F%E9%87%8D%E4%BC%A0%E4%B8%8E%E5%BF%AB%E9%80%9F%E6%81%A2%E5%A4%8D%E7%AE%97%E6%B3%95)
+- [ICMP的差错](#icmp%E7%9A%84%E5%B7%AE%E9%94%99)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 对每个连接，TCP管理4个不同的定时器：
 
 1)  重传定时器使用于当希望收到另一端的确认。

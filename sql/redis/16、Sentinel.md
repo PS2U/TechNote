@@ -1,3 +1,30 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [16.1 启动并初始化Sentinel](#161-%E5%90%AF%E5%8A%A8%E5%B9%B6%E5%88%9D%E5%A7%8B%E5%8C%96sentinel)
+  - [初始化服务器](#%E5%88%9D%E5%A7%8B%E5%8C%96%E6%9C%8D%E5%8A%A1%E5%99%A8)
+  - [使用Sentinel专用代码](#%E4%BD%BF%E7%94%A8sentinel%E4%B8%93%E7%94%A8%E4%BB%A3%E7%A0%81)
+  - [初始化Sentinel状态](#%E5%88%9D%E5%A7%8B%E5%8C%96sentinel%E7%8A%B6%E6%80%81)
+  - [初始化Sentinel状态的masters属性](#%E5%88%9D%E5%A7%8B%E5%8C%96sentinel%E7%8A%B6%E6%80%81%E7%9A%84masters%E5%B1%9E%E6%80%A7)
+  - [创建与master的网络连接](#%E5%88%9B%E5%BB%BA%E4%B8%8Emaster%E7%9A%84%E7%BD%91%E7%BB%9C%E8%BF%9E%E6%8E%A5)
+- [16.2 获取master信息](#162-%E8%8E%B7%E5%8F%96master%E4%BF%A1%E6%81%AF)
+- [16.3 获取slave信息](#163-%E8%8E%B7%E5%8F%96slave%E4%BF%A1%E6%81%AF)
+- [16.4 向master和slave发送信息](#164-%E5%90%91master%E5%92%8Cslave%E5%8F%91%E9%80%81%E4%BF%A1%E6%81%AF)
+- [16.5 接收来自master和slave的频道信息](#165-%E6%8E%A5%E6%94%B6%E6%9D%A5%E8%87%AAmaster%E5%92%8Cslave%E7%9A%84%E9%A2%91%E9%81%93%E4%BF%A1%E6%81%AF)
+  - [更新sentinels字典](#%E6%9B%B4%E6%96%B0sentinels%E5%AD%97%E5%85%B8)
+  - [创建连向其他Sentinel的命令连接](#%E5%88%9B%E5%BB%BA%E8%BF%9E%E5%90%91%E5%85%B6%E4%BB%96sentinel%E7%9A%84%E5%91%BD%E4%BB%A4%E8%BF%9E%E6%8E%A5)
+- [16.6 检测主观下线状态](#166-%E6%A3%80%E6%B5%8B%E4%B8%BB%E8%A7%82%E4%B8%8B%E7%BA%BF%E7%8A%B6%E6%80%81)
+- [16.7 检查客观下线时长](#167-%E6%A3%80%E6%9F%A5%E5%AE%A2%E8%A7%82%E4%B8%8B%E7%BA%BF%E6%97%B6%E9%95%BF)
+- [16.8 选举领头Sentinel](#168-%E9%80%89%E4%B8%BE%E9%A2%86%E5%A4%B4sentinel)
+- [16.8 故障转移](#168-%E6%95%85%E9%9A%9C%E8%BD%AC%E7%A7%BB)
+  - [选出新的master](#%E9%80%89%E5%87%BA%E6%96%B0%E7%9A%84master)
+  - [修改salve的复制目标](#%E4%BF%AE%E6%94%B9salve%E7%9A%84%E5%A4%8D%E5%88%B6%E7%9B%AE%E6%A0%87)
+  - [将旧的master变为slave](#%E5%B0%86%E6%97%A7%E7%9A%84master%E5%8F%98%E4%B8%BAslave)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 Sentinel（哨兵）是Redis的高可用性解决方案，由一个或多个Sentinel实例组成的Sentinel系统可以监视任意多个master以及属下的所有slave。Sentinel在被监视的master下线后，自动将其属下的某个slave升级为新的master，然后由新的master继续处理命令请求。
 
 # 16.1 启动并初始化Sentinel

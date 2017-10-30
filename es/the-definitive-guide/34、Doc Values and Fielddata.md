@@ -1,3 +1,32 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Doc Values](#doc-values)
+- [深入文档值](#%E6%B7%B1%E5%85%A5%E6%96%87%E6%A1%A3%E5%80%BC)
+  - [列式存储的压缩](#%E5%88%97%E5%BC%8F%E5%AD%98%E5%82%A8%E7%9A%84%E5%8E%8B%E7%BC%A9)
+  - [禁用文档值](#%E7%A6%81%E7%94%A8%E6%96%87%E6%A1%A3%E5%80%BC)
+- [聚合与分析](#%E8%81%9A%E5%90%88%E4%B8%8E%E5%88%86%E6%9E%90)
+  - [分析字符串和 Fielddata（Analyzed strings and Fielddata）](#%E5%88%86%E6%9E%90%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C-fielddataanalyzed-strings-and-fielddata)
+  - [高基数内存的影响（High-Cardinality Memory Implications）](#%E9%AB%98%E5%9F%BA%E6%95%B0%E5%86%85%E5%AD%98%E7%9A%84%E5%BD%B1%E5%93%8Dhigh-cardinality-memory-implications)
+- [限制内存使用](#%E9%99%90%E5%88%B6%E5%86%85%E5%AD%98%E4%BD%BF%E7%94%A8)
+  - [Fielddata的大小](#fielddata%E7%9A%84%E5%A4%A7%E5%B0%8F)
+  - [监控 fielddata](#%E7%9B%91%E6%8E%A7-fielddata)
+  - [断路器](#%E6%96%AD%E8%B7%AF%E5%99%A8)
+- [Fielddata 的过滤](#fielddata-%E7%9A%84%E8%BF%87%E6%BB%A4)
+- [预加载 fielddata](#%E9%A2%84%E5%8A%A0%E8%BD%BD-fielddata)
+  - [预加载 fielddata（Eagerly Loading Fielddata）](#%E9%A2%84%E5%8A%A0%E8%BD%BD-fielddataeagerly-loading-fielddata)
+  - [全局序号（Global Oridinals）](#%E5%85%A8%E5%B1%80%E5%BA%8F%E5%8F%B7global-oridinals)
+    - [构建全局序号（Building global ordinals）](#%E6%9E%84%E5%BB%BA%E5%85%A8%E5%B1%80%E5%BA%8F%E5%8F%B7building-global-ordinals)
+  - [索引预热器（Index Warmers）](#%E7%B4%A2%E5%BC%95%E9%A2%84%E7%83%AD%E5%99%A8index-warmers)
+- [优化聚合查询](#%E4%BC%98%E5%8C%96%E8%81%9A%E5%90%88%E6%9F%A5%E8%AF%A2)
+- [深度优先](#%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88)
+  - [广度优先](#%E5%B9%BF%E5%BA%A6%E4%BC%98%E5%85%88)
+- [总结](#%E6%80%BB%E7%BB%93)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Doc Values
 
 聚合使用一个叫 doc values 的数据结构。

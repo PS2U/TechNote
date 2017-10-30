@@ -1,3 +1,21 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [5.1 模式定义](#51-%E6%A8%A1%E5%BC%8F%E5%AE%9A%E4%B9%89)
+  - [5.1.1 表](#511-%E8%A1%A8)
+  - [5.1.2 表属性](#512-%E8%A1%A8%E5%B1%9E%E6%80%A7)
+  - [5.1.3 列族](#513-%E5%88%97%E6%97%8F)
+- [5.2 `HBaseAdmin`](#52-hbaseadmin)
+  - [5.2.1 基本操作](#521-%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C)
+  - [5.2.2 表操作](#522-%E8%A1%A8%E6%93%8D%E4%BD%9C)
+  - [5.2.3 模式操作](#523-%E6%A8%A1%E5%BC%8F%E6%93%8D%E4%BD%9C)
+  - [5.2.4 集群管理](#524-%E9%9B%86%E7%BE%A4%E7%AE%A1%E7%90%86)
+  - [5.2.5 集群状态信息](#525-%E9%9B%86%E7%BE%A4%E7%8A%B6%E6%80%81%E4%BF%A1%E6%81%AF)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # 5.1 模式定义
 
 ## 5.1.1 表

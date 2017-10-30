@@ -1,3 +1,13 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [IGMP报文](#igmp%E6%8A%A5%E6%96%87)
+- [IGMP协议](#igmp%E5%8D%8F%E8%AE%AE)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 支持主机和路由器进行多播的Internet组管理协议（IGMP）。它让一个物理网络上的所有系统知道主机当前所在的多播组。
 
 IGMP也被当作IP层的一部分。IGMP报文通过IP数据报进行传输。IGMP有固定的报文长度，没有可选数据。

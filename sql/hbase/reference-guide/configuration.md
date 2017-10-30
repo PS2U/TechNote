@@ -1,3 +1,52 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [3. 配置文件](#3-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6)
+- [4. 基本前提](#4-%E5%9F%BA%E6%9C%AC%E5%89%8D%E6%8F%90)
+  - [4.1 Hadoop](#41-hadoop)
+    - [`dfs.datanode.max.transfer.threads`](#dfsdatanodemaxtransferthreads)
+  - [4.2 ZooKeeper 要求](#42-zookeeper-%E8%A6%81%E6%B1%82)
+- [5.HBase 运行模式：单机和分布式](#5hbase-%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F%E5%8D%95%E6%9C%BA%E5%92%8C%E5%88%86%E5%B8%83%E5%BC%8F)
+  - [5.1 单机 HBase](#51-%E5%8D%95%E6%9C%BA-hbase)
+- [5.2 分布式](#52-%E5%88%86%E5%B8%83%E5%BC%8F)
+    - [伪分布式](#%E4%BC%AA%E5%88%86%E5%B8%83%E5%BC%8F)
+  - [5.3 全分布式](#53-%E5%85%A8%E5%88%86%E5%B8%83%E5%BC%8F)
+- [6. 运行 HBase](#6-%E8%BF%90%E8%A1%8C-hbase)
+- [7. 默认配置](#7-%E9%BB%98%E8%AE%A4%E9%85%8D%E7%BD%AE)
+  - [7.2 HBase 默认配置](#72-hbase-%E9%BB%98%E8%AE%A4%E9%85%8D%E7%BD%AE)
+  - [7.3 `hbase-env.sh`](#73-hbase-envsh)
+  - [7.4 `log4j.properties`](#74-log4jproperties)
+  - [7.5 客户端配置和依赖](#75-%E5%AE%A2%E6%88%B7%E7%AB%AF%E9%85%8D%E7%BD%AE%E5%92%8C%E4%BE%9D%E8%B5%96)
+    - [Java 客户端配置](#java-%E5%AE%A2%E6%88%B7%E7%AB%AF%E9%85%8D%E7%BD%AE)
+- [8. 配置示例](#8-%E9%85%8D%E7%BD%AE%E7%A4%BA%E4%BE%8B)
+    - [`hbase-site.xml`](#hbase-sitexml)
+    - [`regionservers`](#regionservers)
+    - [`hbase-env.sh`](#hbase-envsh)
+- [9. 重要配置](#9-%E9%87%8D%E8%A6%81%E9%85%8D%E7%BD%AE)
+- [9.1 必须的配置](#91-%E5%BF%85%E9%A1%BB%E7%9A%84%E9%85%8D%E7%BD%AE)
+    - [超大集群的配置](#%E8%B6%85%E5%A4%A7%E9%9B%86%E7%BE%A4%E7%9A%84%E9%85%8D%E7%BD%AE)
+- [9.2 推荐配置](#92-%E6%8E%A8%E8%8D%90%E9%85%8D%E7%BD%AE)
+    - [ZooKeeper 配置](#zookeeper-%E9%85%8D%E7%BD%AE)
+    - [HDFS 配置](#hdfs-%E9%85%8D%E7%BD%AE)
+    - [`hbase.regionserver.handler.count`](#hbaseregionserverhandlercount)
+    - [大内存机器的配置](#%E5%A4%A7%E5%86%85%E5%AD%98%E6%9C%BA%E5%99%A8%E7%9A%84%E9%85%8D%E7%BD%AE)
+    - [压缩](#%E5%8E%8B%E7%BC%A9)
+    - [WAL 配置](#wal-%E9%85%8D%E7%BD%AE)
+    - [拆分](#%E6%8B%86%E5%88%86)
+    - [Compaction](#compaction)
+    - [推测执行](#%E6%8E%A8%E6%B5%8B%E6%89%A7%E8%A1%8C)
+- [9.3 其他选项](#93-%E5%85%B6%E4%BB%96%E9%80%89%E9%A1%B9)
+    - [平衡器](#%E5%B9%B3%E8%A1%A1%E5%99%A8)
+    - [关闭 BlockCache](#%E5%85%B3%E9%97%AD-blockcache)
+  - [Nagle's 或者小包问题](#nagles-%E6%88%96%E8%80%85%E5%B0%8F%E5%8C%85%E9%97%AE%E9%A2%98)
+    - [Better Mean Time to Recover (MTTR)](#better-mean-time-to-recover-mttr)
+    - [JMX](#jmx)
+- [10. 动态配置](#10-%E5%8A%A8%E6%80%81%E9%85%8D%E7%BD%AE)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # 3. 配置文件
 
 所有的配置文件都在`conf/`目录下，它需要在所有节点间保持同步。

@@ -1,3 +1,40 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [20.1 创建并修改Lua环境](#201-%E5%88%9B%E5%BB%BA%E5%B9%B6%E4%BF%AE%E6%94%B9lua%E7%8E%AF%E5%A2%83)
+  - [创建Lua环境](#%E5%88%9B%E5%BB%BAlua%E7%8E%AF%E5%A2%83)
+  - [载入函数库](#%E8%BD%BD%E5%85%A5%E5%87%BD%E6%95%B0%E5%BA%93)
+  - [创建redis全局表格](#%E5%88%9B%E5%BB%BAredis%E5%85%A8%E5%B1%80%E8%A1%A8%E6%A0%BC)
+  - [使用Redis自制的随机函数来替换Lua原有的随机函数](#%E4%BD%BF%E7%94%A8redis%E8%87%AA%E5%88%B6%E7%9A%84%E9%9A%8F%E6%9C%BA%E5%87%BD%E6%95%B0%E6%9D%A5%E6%9B%BF%E6%8D%A2lua%E5%8E%9F%E6%9C%89%E7%9A%84%E9%9A%8F%E6%9C%BA%E5%87%BD%E6%95%B0)
+  - [创建排序辅助函数](#%E5%88%9B%E5%BB%BA%E6%8E%92%E5%BA%8F%E8%BE%85%E5%8A%A9%E5%87%BD%E6%95%B0)
+  - [创建 redis.pcall 函数的错误报告辅助函数](#%E5%88%9B%E5%BB%BA-redispcall-%E5%87%BD%E6%95%B0%E7%9A%84%E9%94%99%E8%AF%AF%E6%8A%A5%E5%91%8A%E8%BE%85%E5%8A%A9%E5%87%BD%E6%95%B0)
+  - [保护Lua的全局环境](#%E4%BF%9D%E6%8A%A4lua%E7%9A%84%E5%85%A8%E5%B1%80%E7%8E%AF%E5%A2%83)
+  - [将Lua环境保存到服务器状态的`lua`属性中](#%E5%B0%86lua%E7%8E%AF%E5%A2%83%E4%BF%9D%E5%AD%98%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8A%B6%E6%80%81%E7%9A%84lua%E5%B1%9E%E6%80%A7%E4%B8%AD)
+- [20.2 Lua环境协作组件](#202-lua%E7%8E%AF%E5%A2%83%E5%8D%8F%E4%BD%9C%E7%BB%84%E4%BB%B6)
+  - [伪客户端](#%E4%BC%AA%E5%AE%A2%E6%88%B7%E7%AB%AF)
+  - [`lua_sripts`字典](#lua_sripts%E5%AD%97%E5%85%B8)
+- [20.3 `EVAL` 命令的实现](#203-eval-%E5%91%BD%E4%BB%A4%E7%9A%84%E5%AE%9E%E7%8E%B0)
+  - [定义脚本函数](#%E5%AE%9A%E4%B9%89%E8%84%9A%E6%9C%AC%E5%87%BD%E6%95%B0)
+  - [将脚本保存到`lua_scripts`字典](#%E5%B0%86%E8%84%9A%E6%9C%AC%E4%BF%9D%E5%AD%98%E5%88%B0lua_scripts%E5%AD%97%E5%85%B8)
+  - [执行脚本函数](#%E6%89%A7%E8%A1%8C%E8%84%9A%E6%9C%AC%E5%87%BD%E6%95%B0)
+- [20.4 `EVALSHA`命令的实现](#204-evalsha%E5%91%BD%E4%BB%A4%E7%9A%84%E5%AE%9E%E7%8E%B0)
+- [20.5 脚本管理命令的实现](#205-%E8%84%9A%E6%9C%AC%E7%AE%A1%E7%90%86%E5%91%BD%E4%BB%A4%E7%9A%84%E5%AE%9E%E7%8E%B0)
+  - [`SCRIPT FLUSH`](#script-flush)
+  - [`SCRIPT EXISTS`](#script-exists)
+  - [`SCRIPT LOAD`](#script-load)
+  - [`SCRIPT KILL`](#script-kill)
+- [20.6 脚本复制](#206-%E8%84%9A%E6%9C%AC%E5%A4%8D%E5%88%B6)
+  - [复制`EVAL`、`SCRIPT FLUSH`、`SCRIPT LOAD`](#%E5%A4%8D%E5%88%B6evalscript-flushscript-load)
+  - [复制`EVALSHA`](#%E5%A4%8D%E5%88%B6evalsha)
+    - [1、判断`EVALSHA`命令是否安全](#1%E5%88%A4%E6%96%ADevalsha%E5%91%BD%E4%BB%A4%E6%98%AF%E5%90%A6%E5%AE%89%E5%85%A8)
+    - [2、清空`repl_scriptcache_dict`字典](#2%E6%B8%85%E7%A9%BArepl_scriptcache_dict%E5%AD%97%E5%85%B8)
+    - [3、`EVALSHA`命令换成`EVAL`](#3evalsha%E5%91%BD%E4%BB%A4%E6%8D%A2%E6%88%90eval)
+    - [4、传播`EVALSHA`命令](#4%E4%BC%A0%E6%92%ADevalsha%E5%91%BD%E4%BB%A4)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 Redis从2.6版本开始引入对Lua脚本的支持，通过在服务器中嵌入Lua环境，Redis客户端可以使用Lua脚本，直接在服务器原子地执行多个Redis命令。
 
 `EVAL`命令可以直接对输入的脚本进行求值：

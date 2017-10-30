@@ -1,3 +1,21 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [堆大小](#%E5%A0%86%E5%A4%A7%E5%B0%8F)
+- [文件描述符](#%E6%96%87%E4%BB%B6%E6%8F%8F%E8%BF%B0%E7%AC%A6)
+- [内存锁定](#%E5%86%85%E5%AD%98%E9%94%81%E5%AE%9A)
+- [线程个数限制](#%E7%BA%BF%E7%A8%8B%E4%B8%AA%E6%95%B0%E9%99%90%E5%88%B6)
+- [虚拟内存最大size](#%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E6%9C%80%E5%A4%A7size)
+- [最大的映射条数](#%E6%9C%80%E5%A4%A7%E7%9A%84%E6%98%A0%E5%B0%84%E6%9D%A1%E6%95%B0)
+- [客户端JVM](#%E5%AE%A2%E6%88%B7%E7%AB%AFjvm)
+- [串行GC](#%E4%B8%B2%E8%A1%8Cgc)
+- [系统调用过滤](#%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E8%BF%87%E6%BB%A4)
+- [`OnError` 和 `OnOutOfMemoryError`](#onerror-%E5%92%8C-onoutofmemoryerror)
+- [G1GC](#g1gc)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 早期版本的Elasticsearch将配置错误打印在 WARNING 日志中，容易被忽视。后来，Elasticsearch引入了引导检查（Bootstrap Check）。
 
 引导检查将确保Elasticsearch和系统设置对Elasticsearch来说是安全的。如果在开发模式，检查失败会打印在 WARNING 日志中；生产模式中，检查失败会终止Elasticsearch启动进程。

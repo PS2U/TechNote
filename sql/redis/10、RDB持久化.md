@@ -1,3 +1,21 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [10.1 RDB文件的创建于载入](#101-rdb%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%9B%E5%BB%BA%E4%BA%8E%E8%BD%BD%E5%85%A5)
+- [10.2 自动间隔性保存](#102-%E8%87%AA%E5%8A%A8%E9%97%B4%E9%9A%94%E6%80%A7%E4%BF%9D%E5%AD%98)
+  - [检查保存条件是否满足](#%E6%A3%80%E6%9F%A5%E4%BF%9D%E5%AD%98%E6%9D%A1%E4%BB%B6%E6%98%AF%E5%90%A6%E6%BB%A1%E8%B6%B3)
+- [10.3 RDB文件结构](#103-rdb%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84)
+  - [REDIS](#redis)
+  - [db_version](#db_version)
+  - [databases](#databases)
+  - [EOF](#eof)
+  - [check_sum](#check_sum)
+- [10.4 分析RDB文件](#104-%E5%88%86%E6%9E%90rdb%E6%96%87%E4%BB%B6)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 RDB持久化可将内存中的数据库状态保存到磁盘上，避免数据丢失。持久化可以手动，也可以根据服务器配置选项定期执行。
 
 RDB持久化生成的RDB文件是一个压缩过的二进制文件，通过该文件可以还原生成RDB文件时的数据库状态。

@@ -1,3 +1,13 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [8.2 Traceroute程序的操作](#82-traceroute%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%93%8D%E4%BD%9C)
+- [8.5 IP源站选路选项](#85-ip%E6%BA%90%E7%AB%99%E9%80%89%E8%B7%AF%E9%80%89%E9%A1%B9)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 traceroute程序可以让我们看到IP数据报从一台主机传到另一台主机所经过的路由。traceroute程序还可以让我们使用IP源路由选项。
 
 # 8.2 Traceroute程序的操作

@@ -1,3 +1,16 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [面向对象的标准库](#%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%A0%87%E5%87%86%E5%BA%93)
+- [条件状态](#%E6%9D%A1%E4%BB%B6%E7%8A%B6%E6%80%81)
+- [输出缓冲区的管理](#%E8%BE%93%E5%87%BA%E7%BC%93%E5%86%B2%E5%8C%BA%E7%9A%84%E7%AE%A1%E7%90%86)
+- [文件的输入输出](#%E6%96%87%E4%BB%B6%E7%9A%84%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA)
+- [字符串流](#%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%B5%81)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # 面向对象的标准库
 
 三个独立的头文件定义：iostream读写控制窗口的类型，fstream读写已命名文件的类型，sstream读写存储在内存中的string。后两者从iostream派生而来。

@@ -1,3 +1,17 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [多做之过](#%E5%A4%9A%E5%81%9A%E4%B9%8B%E8%BF%87)
+  - [switch](#switch)
+  - [字符串连接](#%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BF%9E%E6%8E%A5)
+  - [缺省可见性](#%E7%BC%BA%E7%9C%81%E5%8F%AF%E8%A7%81%E6%80%A7)
+- [误做之过](#%E8%AF%AF%E5%81%9A%E4%B9%8B%E8%BF%87)
+- [少做之过](#%E5%B0%91%E5%81%9A%E4%B9%8B%E8%BF%87)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 `malloc(strlen(str))`几乎总是错的，`malloc(strlen(str)+1)`才是正确的。
 
 所有的缺陷可归为3类：多做，少做，误做。

@@ -1,3 +1,13 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Rlogin协议](#rlogin%E5%8D%8F%E8%AE%AE)
+- [Telnet协议](#telnet%E5%8D%8F%E8%AE%AE)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 Telnet客户和服务器的典型连接图：
 ![](img/chap26/img0.png)
 

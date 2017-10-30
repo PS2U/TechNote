@@ -1,3 +1,18 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [最大报文段长度](#%E6%9C%80%E5%A4%A7%E6%8A%A5%E6%96%87%E6%AE%B5%E9%95%BF%E5%BA%A6)
+- [TCP的半关闭](#tcp%E7%9A%84%E5%8D%8A%E5%85%B3%E9%97%AD)
+- [TCP的状态变迁图](#tcp%E7%9A%84%E7%8A%B6%E6%80%81%E5%8F%98%E8%BF%81%E5%9B%BE)
+- [复位报文段](#%E5%A4%8D%E4%BD%8D%E6%8A%A5%E6%96%87%E6%AE%B5)
+- [同时打开](#%E5%90%8C%E6%97%B6%E6%89%93%E5%BC%80)
+- [同时关闭](#%E5%90%8C%E6%97%B6%E5%85%B3%E9%97%AD)
+- [TCP选项](#tcp%E9%80%89%E9%A1%B9)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 建立一个连接需要三次握手，而终止一个连接要经过4次握手。
 
 为了建立一条TCP连接：

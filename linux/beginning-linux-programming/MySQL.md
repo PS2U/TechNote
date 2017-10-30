@@ -1,3 +1,21 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+  - [8.1.3 安装后的故障修复](#813-%E5%AE%89%E8%A3%85%E5%90%8E%E7%9A%84%E6%95%85%E9%9A%9C%E4%BF%AE%E5%A4%8D)
+- [8.2 MySQL管理](#82-mysql%E7%AE%A1%E7%90%86)
+  - [8.2.1 命令](#821-%E5%91%BD%E4%BB%A4)
+  - [8.2.2 创建用户并赋予权限](#822-%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7%E5%B9%B6%E8%B5%8B%E4%BA%88%E6%9D%83%E9%99%90)
+  - [8.2.3 密码](#823-%E5%AF%86%E7%A0%81)
+  - [8.2.4 创建数据库](#824-%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93)
+  - [8.2.5 数据结构](#825-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84)
+  - [8.2.6 创建表](#826-%E5%88%9B%E5%BB%BA%E8%A1%A8)
+- [8.3 使用C语言访问MySQL](#83-%E4%BD%BF%E7%94%A8c%E8%AF%AD%E8%A8%80%E8%AE%BF%E9%97%AEmysql)
+  - [8.3.1 连接例程](#831-%E8%BF%9E%E6%8E%A5%E4%BE%8B%E7%A8%8B)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 MySQL配置文件通常在/etc/my.cnf
 
 有些发行版Linux放在/etc/mysql/my.cnf

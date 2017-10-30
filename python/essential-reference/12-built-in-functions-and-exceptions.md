@@ -1,3 +1,17 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [12.1 Built-in Functions and Types](#121-built-in-functions-and-types)
+- [12.2 Built-In Exceptions](#122-built-in-exceptions)
+  - [Exception Base Classes](#exception-base-classes)
+  - [Exception Instances](#exception-instances)
+  - [Predefined Exception Classes](#predefined-exception-classes)
+- [12.3 Built-In Warnings](#123-built-in-warnings)
+- [12.4 future_builtins](#124-future_builtins)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # 12.1 Built-in Functions and Types
 
 Although you don’t need to perform any extra imports to access these functions, they are contained in a module `__builtin__` in Python 2 and in a module `builtins` in Python 3.

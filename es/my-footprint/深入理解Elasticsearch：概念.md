@@ -1,3 +1,18 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [近实时 （Near Realtime，NRT）](#%E8%BF%91%E5%AE%9E%E6%97%B6-near-realtimenrt)
+- [集群（Cluster)](#%E9%9B%86%E7%BE%A4cluster)
+- [节点（Node）](#%E8%8A%82%E7%82%B9node)
+  - [协调节点](#%E5%8D%8F%E8%B0%83%E8%8A%82%E7%82%B9)
+- [索引（Index）](#%E7%B4%A2%E5%BC%95index)
+- [类型（Type）](#%E7%B1%BB%E5%9E%8Btype)
+- [文档（Document）](#%E6%96%87%E6%A1%A3document)
+- [分片和备份（Shards & Replicas）](#%E5%88%86%E7%89%87%E5%92%8C%E5%A4%87%E4%BB%BDshards--replicas)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 Elasticsearch是一个高扩展的全文搜索和分析引擎，它可以近实时地存储、搜索、分析海量的数据。在深入Elasticsearch之前，必须了解一下它的核心概念。
 
 # 近实时 （Near Realtime，NRT）

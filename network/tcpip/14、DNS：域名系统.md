@@ -1,3 +1,17 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [DNS基础](#dns%E5%9F%BA%E7%A1%80)
+- [DNS的报文格式](#dns%E7%9A%84%E6%8A%A5%E6%96%87%E6%A0%BC%E5%BC%8F)
+- [指针查询](#%E6%8C%87%E9%92%88%E6%9F%A5%E8%AF%A2)
+- [高速缓存](#%E9%AB%98%E9%80%9F%E7%BC%93%E5%AD%98)
+- [用UDP还是用 TCP](#%E7%94%A8udp%E8%BF%98%E6%98%AF%E7%94%A8%C2%A0tcp)
+- [小结](#%E5%B0%8F%E7%BB%93)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 DNS是一种用于TCP/IP应用程序的分布式数据库，它提供主机名字和IP地址之间的转换及有关电子邮件的选路信息。
 
 # DNS基础

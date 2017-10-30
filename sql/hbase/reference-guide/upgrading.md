@@ -1,3 +1,16 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [HBase 版本号和兼容性](#hbase-%E7%89%88%E6%9C%AC%E5%8F%B7%E5%92%8C%E5%85%BC%E5%AE%B9%E6%80%A7)
+  - [11.1 1.0 之后的笨笨](#111-10-%E4%B9%8B%E5%90%8E%E7%9A%84%E7%AC%A8%E7%AC%A8)
+    - [HBase API Surface](#hbase-api-surface)
+  - [11.2 1.0 之前的版本](#112-10-%E4%B9%8B%E5%89%8D%E7%9A%84%E7%89%88%E6%9C%AC)
+  - [11.3 滚动升级](#113-%E6%BB%9A%E5%8A%A8%E5%8D%87%E7%BA%A7)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 升级的时候不能跳过主版本号，如果你想从0.90.x 升级到 0.94.x，必须先升级到 0.92.x，再升级到 0.94.x。
 
 # HBase 版本号和兼容性

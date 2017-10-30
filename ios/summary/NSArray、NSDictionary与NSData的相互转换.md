@@ -1,3 +1,14 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [NSDictionary -> NSData](#nsdictionary---nsdata)
+- [NSData -> NSDictionary](#nsdata---nsdictionary)
+- [NSArray -> NSData](#nsarray---nsdata)
+- [NSData -> NSArray](#nsdata---nsarray)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # NSDictionary -> NSData
 
 ```objective-c

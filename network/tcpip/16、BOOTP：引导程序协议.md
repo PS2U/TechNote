@@ -1,3 +1,12 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [BOOTP 的分组格式](#bootp%C2%A0%E7%9A%84%E5%88%86%E7%BB%84%E6%A0%BC%E5%BC%8F)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 BOOTP使用UDP，且通常需与TFTP协同工作。
 
 # BOOTP 的分组格式

@@ -1,3 +1,18 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [1.1 Unix的历史](#11-unix%E7%9A%84%E5%8E%86%E5%8F%B2)
+- [1.2 追寻Linus足迹：Linux简介](#12-%E8%BF%BD%E5%AF%BBlinus%E8%B6%B3%E8%BF%B9linux%E7%AE%80%E4%BB%8B)
+- [1.3 操作系统和内核简介](#13-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%92%8C%E5%86%85%E6%A0%B8%E7%AE%80%E4%BB%8B)
+- [1.4 Linux内核与传统Unix内核的比较](#14-linux%E5%86%85%E6%A0%B8%E4%B8%8E%E4%BC%A0%E7%BB%9Funix%E5%86%85%E6%A0%B8%E7%9A%84%E6%AF%94%E8%BE%83)
+  - [单内核和微内核设计之比较](#%E5%8D%95%E5%86%85%E6%A0%B8%E5%92%8C%E5%BE%AE%E5%86%85%E6%A0%B8%E8%AE%BE%E8%AE%A1%E4%B9%8B%E6%AF%94%E8%BE%83)
+- [1.5 Linux内核版本](#15-linux%E5%86%85%E6%A0%B8%E7%89%88%E6%9C%AC)
+- [1.6 Linux内核开发者社区](#16-linux%E5%86%85%E6%A0%B8%E5%BC%80%E5%8F%91%E8%80%85%E7%A4%BE%E5%8C%BA)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 若要了解Linux，必先认识UNIX。
 
 # 1.1 Unix的历史

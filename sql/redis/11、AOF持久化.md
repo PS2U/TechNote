@@ -1,3 +1,17 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [11.1 AOF持久化的实现](#111-aof%E6%8C%81%E4%B9%85%E5%8C%96%E7%9A%84%E5%AE%9E%E7%8E%B0)
+  - [命令追加](#%E5%91%BD%E4%BB%A4%E8%BF%BD%E5%8A%A0)
+  - [AOF文件的写入与同步](#aof%E6%96%87%E4%BB%B6%E7%9A%84%E5%86%99%E5%85%A5%E4%B8%8E%E5%90%8C%E6%AD%A5)
+- [11.2 AOF文件的载入与数据还原](#112-aof%E6%96%87%E4%BB%B6%E7%9A%84%E8%BD%BD%E5%85%A5%E4%B8%8E%E6%95%B0%E6%8D%AE%E8%BF%98%E5%8E%9F)
+- [11.3 AOF重写](#113-aof%E9%87%8D%E5%86%99)
+  - [实现](#%E5%AE%9E%E7%8E%B0)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 AOF（Append Only File）持久化，与RDB持久化通过保存数据库中的键值对来记录数据库状态不同，AOF保存Redis所执行的写命令来记录数据库状态。被写入AOF文件的命令都是以Redis的命令请求协议格式保存的，纯文本格式，打开即可查看。
 
 # 11.1 AOF持久化的实现

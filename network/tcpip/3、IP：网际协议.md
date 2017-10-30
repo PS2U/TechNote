@@ -1,3 +1,16 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [3.2 IP首部](#32-ip%E9%A6%96%E9%83%A8)
+- [3.3 IP路由选择](#33-ip%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9)
+- [3.4 子网寻址](#34-%E5%AD%90%E7%BD%91%E5%AF%BB%E5%9D%80)
+- [3.5 子网掩码](#35-%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81)
+- [3.6 特殊情况的 IP地址](#36-%E7%89%B9%E6%AE%8A%E6%83%85%E5%86%B5%E7%9A%84%C2%A0ip%E5%9C%B0%E5%9D%80)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 IP提供的是不可靠、无连接的数据报传送服务：
 
 1. 不可靠的意思是它不能保证IP数据报能成功地到达目的地。IP仅提供最好的传输服务。如果发生某种错误时，如某个路由器暂时用完了缓冲区，IP有一个简单的错误处理算法：丢弃该数据报，然后发送ICMP消息报给信源端。任何要求的可靠性必须由上层来提供（如TCP）。

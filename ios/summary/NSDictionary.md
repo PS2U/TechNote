@@ -1,3 +1,14 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [键值的限制](#%E9%94%AE%E5%80%BC%E7%9A%84%E9%99%90%E5%88%B6)
+- [初始化](#%E5%88%9D%E5%A7%8B%E5%8C%96)
+- [获取键值对](#%E8%8E%B7%E5%8F%96%E9%94%AE%E5%80%BC%E5%AF%B9)
+- [遍历](#%E9%81%8D%E5%8E%86)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 `NSDictionary`是Objective-C中的字典，用于保存键值对。详细的用法可以参加[官方文档](https://developer.apple.com/reference/foundation/nsdictionary)，本文仅记录本人在使用过程中的碰到一些坑。
 
 `NSDictionary`存储的是不可变对象，一经初始化就不能修改键值对，只能求助于`NSMutableDictionary`。

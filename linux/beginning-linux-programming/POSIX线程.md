@@ -1,3 +1,18 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [12.1 什么是线程](#121-%E4%BB%80%E4%B9%88%E6%98%AF%E7%BA%BF%E7%A8%8B)
+- [12.2 线程的优点和缺点](#122-%E7%BA%BF%E7%A8%8B%E7%9A%84%E4%BC%98%E7%82%B9%E5%92%8C%E7%BC%BA%E7%82%B9)
+- [12.3 第一个线程程序](#123-%E7%AC%AC%E4%B8%80%E4%B8%AA%E7%BA%BF%E7%A8%8B%E7%A8%8B%E5%BA%8F)
+- [12.5 同步](#125-%E5%90%8C%E6%AD%A5)
+  - [信号量](#%E4%BF%A1%E5%8F%B7%E9%87%8F)
+  - [互斥量](#%E4%BA%92%E6%96%A5%E9%87%8F)
+- [12.6 线程的属性](#126-%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%B1%9E%E6%80%A7)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # 12.1 什么是线程 
 线程是进程内部的一个控制序列。所有的进程至少有一个执行线程。
 

@@ -1,3 +1,12 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [C++的诞生](#c%E7%9A%84%E8%AF%9E%E7%94%9F)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # C++的诞生
 
 从带类的C到C++-----Cfront，C++的初始实现-----虚函数和面向对象的程序设计-----运算符重载和引用-----常量-----存储管理-----类型检查-----C++与C的关系-----动态初始化-----声明的语法-----C++的描述和评价

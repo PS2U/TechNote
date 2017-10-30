@@ -1,3 +1,18 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [2.4 管道和重定向](#24-%E7%AE%A1%E9%81%93%E5%92%8C%E9%87%8D%E5%AE%9A%E5%90%91)
+- [2.6 shell的语法](#26-shell%E7%9A%84%E8%AF%AD%E6%B3%95)
+  - [2.6.1 变量](#261-%E5%8F%98%E9%87%8F)
+  - [2.6.2 条件](#262-%E6%9D%A1%E4%BB%B6)
+  - [2.6.3 控制结构](#263-%E6%8E%A7%E5%88%B6%E7%BB%93%E6%9E%84)
+  - [2.6.4 函数](#264-%E5%87%BD%E6%95%B0)
+  - [2.6.5 命令](#265-%E5%91%BD%E4%BB%A4)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # 2.4 管道和重定向
 
 ` kill -11234 > xx.txt 2>&1 `

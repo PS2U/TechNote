@@ -1,3 +1,36 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [3.1 概述](#31-%E6%A6%82%E8%BF%B0)
+- [3.2 CRUD 操作](#32-crud-%E6%93%8D%E4%BD%9C)
+  - [3.2.1 `Put` 方法](#321-put-%E6%96%B9%E6%B3%95)
+    - [1. 单行`put`](#1-%E5%8D%95%E8%A1%8Cput)
+    - [2. `KeyValue`](#2-keyvalue)
+    - [3. 客户端的写缓冲](#3-%E5%AE%A2%E6%88%B7%E7%AB%AF%E7%9A%84%E5%86%99%E7%BC%93%E5%86%B2)
+    - [4. `Put`列表](#4-put%E5%88%97%E8%A1%A8)
+    - [5. 原子性操作 compare-and-set](#5-%E5%8E%9F%E5%AD%90%E6%80%A7%E6%93%8D%E4%BD%9C-compare-and-set)
+  - [3.2.2 `get`方法](#322-get%E6%96%B9%E6%B3%95)
+    - [单行 `get`](#%E5%8D%95%E8%A1%8C-get)
+    - [`Result`类](#result%E7%B1%BB)
+    - [`Get`列表](#get%E5%88%97%E8%A1%A8)
+    - [获取数据的相关方法](#%E8%8E%B7%E5%8F%96%E6%95%B0%E6%8D%AE%E7%9A%84%E7%9B%B8%E5%85%B3%E6%96%B9%E6%B3%95)
+  - [3.2.3 删除方法](#323-%E5%88%A0%E9%99%A4%E6%96%B9%E6%B3%95)
+    - [单行删除](#%E5%8D%95%E8%A1%8C%E5%88%A0%E9%99%A4)
+    - [`Delete`的列表](#delete%E7%9A%84%E5%88%97%E8%A1%A8)
+    - [原子性操作compare-and-delete](#%E5%8E%9F%E5%AD%90%E6%80%A7%E6%93%8D%E4%BD%9Ccompare-and-delete)
+- [3.3 批量处理操作](#33-%E6%89%B9%E9%87%8F%E5%A4%84%E7%90%86%E6%93%8D%E4%BD%9C)
+- [3.4 行锁](#34-%E8%A1%8C%E9%94%81)
+- [3.5 扫描](#35-%E6%89%AB%E6%8F%8F)
+  - [`ResultScanner` 类](#resultscanner-%E7%B1%BB)
+    - [缓存与批量处理](#%E7%BC%93%E5%AD%98%E4%B8%8E%E6%89%B9%E9%87%8F%E5%A4%84%E7%90%86)
+- [3.6 各种特性](#36-%E5%90%84%E7%A7%8D%E7%89%B9%E6%80%A7)
+  - [`HTable`的实用方法](#htable%E7%9A%84%E5%AE%9E%E7%94%A8%E6%96%B9%E6%B3%95)
+  - [`Bytes`类](#bytes%E7%B1%BB)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 HBase 是 Java 编写的，所以原生的 API 也是 Java 开发的。
 
 # 3.1 概述

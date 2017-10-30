@@ -1,3 +1,14 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [32. 创建 Schema](#32-%E5%88%9B%E5%BB%BA-schema)
+  - [32.1 更新 Schema](#321-%E6%9B%B4%E6%96%B0-schema)
+- [33. Schema 的经验法则](#33-schema-%E7%9A%84%E7%BB%8F%E9%AA%8C%E6%B3%95%E5%88%99)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 关于非关系型数据库的优劣，参考博文：[No Relation: The Mixed Blessings of Non-Relational Databases](http://ianvarley.com/UT/MR/Varley_MastersReport_Full_2009-08-07.pdf)。
 
 [Designing Your Schema](https://cloud.google.com/bigtable/docs/schema-design) 这篇文章对 HBase 也有很好的指导意义。

@@ -1,3 +1,28 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [1.1 运行Python](#11-%E8%BF%90%E8%A1%8Cpython)
+- [1.2 变量和算术表达式](#12-%E5%8F%98%E9%87%8F%E5%92%8C%E7%AE%97%E6%9C%AF%E8%A1%A8%E8%BE%BE%E5%BC%8F)
+- [1.3 条件语句](#13-%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5)
+- [1.4 文件输入输出](#14-%E6%96%87%E4%BB%B6%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA)
+- [1.5 字符串](#15-%E5%AD%97%E7%AC%A6%E4%B8%B2)
+- [1.6 列表](#16-%E5%88%97%E8%A1%A8)
+- [1.7 元组](#17-%E5%85%83%E7%BB%84)
+- [1.8 集合](#18-%E9%9B%86%E5%90%88)
+- [1.9 字典](#19-%E5%AD%97%E5%85%B8)
+- [1.10 迭代与循环](#110-%E8%BF%AD%E4%BB%A3%E4%B8%8E%E5%BE%AA%E7%8E%AF)
+- [1.11 函数](#111-%E5%87%BD%E6%95%B0)
+- [1.12 生成器](#112-%E7%94%9F%E6%88%90%E5%99%A8)
+- [1.13 协程](#113-%E5%8D%8F%E7%A8%8B)
+- [1.14 对象与类](#114-%E5%AF%B9%E8%B1%A1%E4%B8%8E%E7%B1%BB)
+- [1.15 异常](#115-%E5%BC%82%E5%B8%B8)
+- [1.16 模块](#116-%E6%A8%A1%E5%9D%97)
+- [1.17 获得帮助](#117-%E8%8E%B7%E5%BE%97%E5%B8%AE%E5%8A%A9)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # 1.1 运行Python
 
 Python程序是由解释器来执行的。通常在shell中输入`python`即可启动解释器：

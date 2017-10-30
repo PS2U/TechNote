@@ -1,3 +1,14 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [声明](#%E5%A3%B0%E6%98%8E)
+- [优先级](#%E4%BC%98%E5%85%88%E7%BA%A7)
+- [typedef](#typedef)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # 声明
 
 C语言中，对象的声明形式与它的使用形式尽可能相似。

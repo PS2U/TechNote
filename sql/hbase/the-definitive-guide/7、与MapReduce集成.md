@@ -1,3 +1,21 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [7.1 框架](#71-%E6%A1%86%E6%9E%B6)
+  - [7.1.2 类](#712-%E7%B1%BB)
+    - [`InputFormat`](#inputformat)
+    - [`Mapper`](#mapper)
+    - [`Reducer`](#reducer)
+    - [`OutputFormat`](#outputformat)
+  - [7.1.3 支撑类](#713-%E6%94%AF%E6%92%91%E7%B1%BB)
+  - [7.1.4 MapReduce 的执行地点](#714-mapreduce-%E7%9A%84%E6%89%A7%E8%A1%8C%E5%9C%B0%E7%82%B9)
+  - [7.1.5 表拆分](#715-%E8%A1%A8%E6%8B%86%E5%88%86)
+- [7.2 在 HBase 之上的 MapReduce](#72-%E5%9C%A8-hbase-%E4%B9%8B%E4%B8%8A%E7%9A%84-mapreduce)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # 7.1 框架
 
 下图简明地展示了 MapReduce 处理数据的过程。首先它会可靠地将输入的数据拆分成大小合理的块，然后服务器每次处理一个块。

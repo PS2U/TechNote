@@ -1,3 +1,22 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [4.1 程序参数](#41-%E7%A8%8B%E5%BA%8F%E5%8F%82%E6%95%B0)
+  - [getopt函数](#getopt%E5%87%BD%E6%95%B0)
+  - [ ](#)
+  - [getopt_long函数](#getopt_long%E5%87%BD%E6%95%B0)
+- [4.2 环境变量](#42-%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F)
+- [4.3 时间和日期](#43-%E6%97%B6%E9%97%B4%E5%92%8C%E6%97%A5%E6%9C%9F)
+- [4.4 临时文件](#44-%E4%B8%B4%E6%97%B6%E6%96%87%E4%BB%B6)
+- [4.5 用户信息](#45-%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF)
+- [4.6 主机信息](#46-%E4%B8%BB%E6%9C%BA%E4%BF%A1%E6%81%AF)
+- [4.7 日志](#47-%E6%97%A5%E5%BF%97)
+- [4.8 资源和限制](#48-%E8%B5%84%E6%BA%90%E5%92%8C%E9%99%90%E5%88%B6)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # 4.1 程序参数
 
 ## getopt函数

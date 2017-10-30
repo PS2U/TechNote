@@ -1,3 +1,17 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [9.2 选路的原理](#92-%E9%80%89%E8%B7%AF%E7%9A%84%E5%8E%9F%E7%90%86)
+- [9.3 ICMP主机与网络不可达差错](#93-icmp%E4%B8%BB%E6%9C%BA%E4%B8%8E%E7%BD%91%E7%BB%9C%E4%B8%8D%E5%8F%AF%E8%BE%BE%E5%B7%AE%E9%94%99)
+- [9.4 转发或不转发](#94-%E8%BD%AC%E5%8F%91%E6%88%96%E4%B8%8D%E8%BD%AC%E5%8F%91)
+- [9.5 ICMP重定向差错](#95-icmp%E9%87%8D%E5%AE%9A%E5%90%91%E5%B7%AE%E9%94%99)
+- [9.6 ICMP路由器发现报文](#96-icmp%E8%B7%AF%E7%94%B1%E5%99%A8%E5%8F%91%E7%8E%B0%E6%8A%A5%E6%96%87)
+  - [主机操作](#%E4%B8%BB%E6%9C%BA%E6%93%8D%E4%BD%9C)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ![](img/chap9/img0.png)
 
 # 9.2 选路的原理

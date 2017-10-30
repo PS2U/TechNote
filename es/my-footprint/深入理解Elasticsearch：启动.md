@@ -1,3 +1,13 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Command、SettingsCommand、ElasticSearch](#commandsettingscommandelasticsearch)
+- [Bootstrap](#bootstrap)
+- [Node](#node)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 Elasticsearch的安装步骤在此不再详述，请见[官方文档](https://www.elastic.co/guide/en/elasticsearch/reference/current/_installation.html)。
 
 安装成功之后，打开文件`$ES_HOME/bin/elasticsearch`：

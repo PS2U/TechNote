@@ -1,3 +1,16 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [滑动窗口](#%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3)
+- [窗口大小](#%E7%AA%97%E5%8F%A3%E5%A4%A7%E5%B0%8F)
+- [PUSH标志](#push%E6%A0%87%E5%BF%97)
+- [慢启动](#%E6%85%A2%E5%90%AF%E5%8A%A8)
+- [紧急方式](#%E7%B4%A7%E6%80%A5%E6%96%B9%E5%BC%8F)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 TCP所使用的被称为滑动窗口协议的另一种形式的流量控制方法。该协议允许发送方在停止并等待确认前可以连续发送多个分组。由于发送方不必每发一个分组就停下来等待确认，因此该协议可以加速数据的传输。
 
 # 滑动窗口

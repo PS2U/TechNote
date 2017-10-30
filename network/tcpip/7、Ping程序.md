@@ -1,3 +1,14 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [7.2 Ping程序](#72-ping%E7%A8%8B%E5%BA%8F)
+- [7.3 IP记录路由选项](#73-ip%E8%AE%B0%E5%BD%95%E8%B7%AF%E7%94%B1%E9%80%89%E9%A1%B9)
+- [7.4 IP时间戳选项](#74-ip%E6%97%B6%E9%97%B4%E6%88%B3%E9%80%89%E9%A1%B9)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ping程序，目的是为了测试另一台主机是否可达。该程序发送一份ICMP回显请求报文给主机，并等待返回ICMP回显应答，不用经过传输层TCP/UDP。
 
 一般来说，如果不能Ping到某台主机，那就不能telnet活ftp到它。但是一台主机的可泰兴不只取决于IP层是否可达，还取决于使用何种协议和端口号。Ping的结果可能显示某台主机不可达，但可以用Telnet远程登录该主机的25号端口。

@@ -1,3 +1,15 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [6.2 ICMP报文的类型](#62-icmp%E6%8A%A5%E6%96%87%E7%9A%84%E7%B1%BB%E5%9E%8B)
+- [6.3 ICMP地址掩码请求与应答](#63-icmp%E5%9C%B0%E5%9D%80%E6%8E%A9%E7%A0%81%E8%AF%B7%E6%B1%82%E4%B8%8E%E5%BA%94%E7%AD%94)
+- [6.4 ICMP时间戳请求与应答](#64-icmp%E6%97%B6%E9%97%B4%E6%88%B3%E8%AF%B7%E6%B1%82%E4%B8%8E%E5%BA%94%E7%AD%94)
+- [6.5 ICMP端口不可达差错](#65-icmp%E7%AB%AF%E5%8F%A3%E4%B8%8D%E5%8F%AF%E8%BE%BE%E5%B7%AE%E9%94%99)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ICMP经常被认为是IP层的一个组成部分。它传递差错报文以及其他需要注意的信息。ICMP报文通常被IP层或更高层协议调用。
 
 ICMP报文是在IP数据报内部被传输的。

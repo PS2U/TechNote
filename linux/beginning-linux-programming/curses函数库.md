@@ -1,3 +1,19 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [6.2 curses术语](#62-curses%E6%9C%AF%E8%AF%AD)
+- [6.3 屏幕](#63-%E5%B1%8F%E5%B9%95)
+- [6.4 键盘](#64-%E9%94%AE%E7%9B%98)
+- [6.5 窗口](#65-%E7%AA%97%E5%8F%A3)
+- [6.6 子窗口](#66-%E5%AD%90%E7%AA%97%E5%8F%A3)
+- [6.7 keypad模式](#67-keypad%E6%A8%A1%E5%BC%8F)
+- [6.8 彩色显示](#68-%E5%BD%A9%E8%89%B2%E6%98%BE%E7%A4%BA)
+- [6.9 pad](#69-pad)
+- [导航](#%E5%AF%BC%E8%88%AA)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 查看自己的curses配置情况
 > ls -l /usr/include/*curses.h  
 
