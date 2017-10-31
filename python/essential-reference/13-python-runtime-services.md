@@ -240,3 +240,53 @@ The sys module contains variables and functions that pertain to the operation of
 
 ## Functions
 
+1. `_clear_type_cache()`
+2. `_current_frames()`
+3. `displayhook([value])`, `excepthook(type, value, traceback)`
+4. `exc_clear()`, `exc_info()`
+5. `exit([n])`
+6. `getdefaultencoding()`, `getsystemencoding()`
+7. `_getgrame([depth])`
+8. `getprofile()`
+9. `getcursionlimit()`, `getrefcount()`, `getsizeof(object, [default])`
+10. `gettrace()`
+
+
+# 13.8 `traceback`
+
+The `traceback` module is used to gather and print stack traces of a program after an exception has occurred. The main use of this module is in code that needs to report errors in a non-standard way.
+
+1. `print_tb(traceback, [, limit [, file]])`, `extract_tb(traceback [, limit])`, `format_tb(traceback [, limit])`
+2. `print_exc([limit [, file]])`, ...
+3. `print_stack([frame [, limit [, file]]])`, ...
+
+
+# 13.9 `types` 
+
+The `types` module defines names for the built-in types that correspond to functions, modules, generators, stack frames, and other program elements.
+
+- `FunctionType(code, globals [, name [, defarags [, closure]]])` Creates a new function object.
+- `CodeType(argcount, nlocals, stacksize, flags, codestring, constants, names, varnames, filename, name, firstlineno, lnotab [, freevars [, cellvars]])` Creates a new code object.
+- `MethodType(function, instance, class)` Creates a new bound instance method.
+- `ModuleType(name [, doc])` Creates a new module object.
+
+
+# 13.10 `warnings`
+
+The `warnings` module provides functions to issue and filter warning messages.
+
+Like exceptions, warnings are organized into a class hierarchy that describes general categories of warnings.
+
+- Warning
+- UserWarning
+- DeprecationWarning
+- SyntaxWarning
+- RuntimeWarning
+- FutureWarning
+
+Warnings are issued using the `warn()` function.
+
+```python
+warnings.warn("feature X is deprecated.")
+```
+
