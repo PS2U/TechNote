@@ -44,3 +44,5 @@
 [12. Build-In Functions and Exceptions](12-built-in-functions-and-exceptions.md)
 
 [13. Python Runtime Services](13-python-runtime-services.md)
+
+[14. Mathematics](14-mathematics.md)

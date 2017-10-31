@@ -14,6 +14,8 @@
 - [13.8 `traceback`](#138-traceback)
 - [13.9 `types`](#139-types)
 - [13.10 `warnings`](#1310-warnings)
+- [13.11 `weakref`](#1311-weakref)
+- [Navigation](#navigation)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -293,3 +295,30 @@ Warnings are issued using the `warn()` function.
 warnings.warn("feature X is deprecated.")
 ```
 
+If desired, `warnings` can be filtered. The filtering process can be used to alter the output behavior of warning messages, to ignore warnings, or to turn warnings into exceptions. The `filterwarnings()` function is used to add a filter for a specific type of warning.
+
+
+# 13.11 `weakref`
+
+The `weakref` module is used to provide support for weak references. A weak reference  provides a way of referring to an object without increasing its reference count. This can be useful in certain kinds of applications that must manage objects in unusual ways
+
+A weak reference is created using the `weakref.ref()` function as follows:
+
+```python
+class A: pass
+a = A()
+ar = weakref.ref(a)
+print ar
+```
+Once a weak reference is created, the original object can be obtained from the weak reference by simply calling it as a function with no arguments. If the underlying object still exists, it will be returned. Otherwise, `None` is returned to indicate that the original object no longer exists.
+
+Only class instances, functions, methods, sets, frozen sets, files, generators, type objects, and certain object types defined in library modules (for example, sockets, arrays, and regular expression patterns) support weak references. Built-in functions and most built-in types such as lists, dictionaries, strings, and numbers cannot be used.
+
+
+# Navigation
+
+[Table of Contents](README.md)
+
+Prev: [12. Build-In Functions and Exceptions](12-built-in-functions-and-exceptions.md)
+
+Next: [14. Mathematics](14-mathematics.md)
