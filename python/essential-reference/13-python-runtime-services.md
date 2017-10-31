@@ -11,6 +11,9 @@
 - [13.7 `sys`](#137-sys)
   - [Variables](#variables)
   - [Functions](#functions)
+- [13.8 `traceback`](#138-traceback)
+- [13.9 `types`](#139-types)
+- [13.10 `warnings`](#1310-warnings)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
