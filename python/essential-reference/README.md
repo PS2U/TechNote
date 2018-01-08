@@ -46,3 +46,7 @@
 [13. Python Runtime Services](13-python-runtime-services.md)
 
 [14. Mathematics](14-mathematics.md)
+
+[15. Data Strutures, Algorithms, and Code Simplification](15-data-structure-algorithms.md)
+
+[16. String and Text Handling](16-string-text-handling.md)
