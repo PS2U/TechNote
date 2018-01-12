@@ -68,5 +68,21 @@ The `MatchObject` instances returned by `search()` and `match()` contain informa
 
 # 16.3 `string`
 
+The `string` module contains a number of useful constants and functions for manipulating strings. It also contains classes for implementing new string formatters.
+
+The `str.format()` method of strings is used to perform advanced string formatting operations.
+
+The string module defines a class `Formatter` that can be used to implement your own customized formatting operation.
+
+- `f.parse(format_string)` A function that creates an iterator for parsing the contents of the format string `format_string`.
+- `f.format(format_string, *args, **kwargs)` Formats the string `format_string`.
+
+The string module defines a new string type, `Template`, that simplifies certain string substitutions. 
+- `t.substitute(m [, **kwargs])` This method takes a mapping object, `m` (for example, a dictionary), or a list of keyword arguments and performs a keyword substitution on the string `t`.
+
+
+# 16.4 `struct`
+
+
 
 
