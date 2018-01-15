@@ -1,0 +1,10 @@
+# 18.1 `bz2`
+# 18.2 `filecmp`
+# 18.3 `fnmatch`
+# 18.4 `glob`
+# 18.5 `gzip`
+# 18.6 `shutil`
+# 18.7 `tarfile`
+# 18.8 `tempfile`
+# 18.9 `zipfile`
+# 18.10 `zlib`
