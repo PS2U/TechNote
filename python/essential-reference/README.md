@@ -50,3 +50,7 @@
 [15. Data Strutures, Algorithms, and Code Simplification](15-data-structure-algorithms.md)
 
 [16. String and Text Handling](16-string-text-handling.md)
+
+[17. Python Database Access](17-python-database-access.md)
+
+[18. File and Directory Handling](18-file-directory-handling.md)

@@ -1,3 +1,23 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [16.1 `codec`](#161-codec)
+  - [Low-level `codec` interface](#low-level-codec-interface)
+  - [I/O Related Functions](#io-related-functions)
+- [16.2 `re`](#162-re)
+  - [Functions](#functions)
+  - [Regular Expression Objects](#regular-expression-objects)
+  - [Match Objects](#match-objects)
+- [16.3 `string`](#163-string)
+- [16.4 `struct`](#164-struct)
+  - [Packing and Unpacking Functions](#packing-and-unpacking-functions)
+  - [`Struct` Objects](#struct-objects)
+- [`unicodedata`](#unicodedata)
+- [Navigation](#navigation)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # 16.1 `codec`
 
 The `codecs` module is used to handle different character encodings used with Unicode text I/O.
@@ -83,6 +103,36 @@ The string module defines a new string type, `Template`, that simplifies certain
 
 # 16.4 `struct`
 
+The `struct` module is used to convert data between Python and binary data structures (represented as Python byte strings).
 
+## Packing and Unpacking Functions
+
+- `pack(fmt, v1, v2, ...)` Packs the values `v1`, `v2`, and so on into a byte string according to the format string in `fmt`.
+- `unpack(fmt, string)`` Unpacks the contents of a byte `string` according to the format string in `fmt`.
+
+## `Struct` Objects
+
+The `struct` module defines a class `Struct` that provides an alternative interface for packing and unpacking. Using this class is more efficient because the format string is only interpreted once.
+
+```python
+# Packs values into a byte string
+s.pack(v1, v2, ...)
+
+# Unpacks values from a bytes string
+s.unpack(bytes)
+```
+
+# `unicodedata`
+
+The `unicodedata` module provides access to the Unicode character database, which contains character properties for all Unicode characters.
+
+
+# Navigation
+
+[Table of Contents](README.md)
+
+Prev: [15. Data Strutures, Algorithms, and Code Simplification](15-data-structure-algorithms.md)
+
+Next: [17. Python Database Access](17-python-database-access.md)
 
 
