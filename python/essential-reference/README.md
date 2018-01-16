@@ -54,3 +54,5 @@
 [17. Python Database Access](17-python-database-access.md)
 
 [18. File and Directory Handling](18-file-directory-handling.md)
+
+[19. Operating System Services](19-operating-system-services.md)
