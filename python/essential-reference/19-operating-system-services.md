@@ -4,14 +4,14 @@
 
 - [19.1 `Commands`](#191-commands)
 - [19.2 `ConfigParser`, `configparser`](#192-configparser-configparser)
-- [19.3 `datetime](#193-datetime)
+- [19.3 `datetime`](#193-datetime)
   - [`date` Objects](#date-objects)
   - [`time` Objects](#time-objects)
   - [`datetime` objects](#datetime-objects)
   - [`timedelta` Objects](#timedelta-objects)
   - [`tzinfo` Objects](#tzinfo-objects)
 - [19.4 `errno`](#194-errno)
-- [19.5 `fcntl](#195-fcntl)
+- [19.5 `fcntl`](#195-fcntl)
 - [19.6 `io`](#196-io)
   - [Base I/O Interface](#base-io-interface)
   - [RAW I/O](#raw-io)
@@ -59,7 +59,7 @@ The `ConfigParser` module (called `configparser` in Python 3) is used to read `.
 - `c.write(file)`   Writes all of the currently held configuration data to `file`.
 
 
-# 19.3 `datetime
+# 19.3 `datetime`
 
 The `datetime` module provides a variety of classes for representing and manipulating dates and times.
 
@@ -118,7 +118,7 @@ Individual time zones are created by inheriting from tzinfo and implementing the
 The `errno` module defines symbolic names for the integer error codes returned by various operating system calls, especially those found in the `os` and `socket` modules. These codes are typically found in the errno attribute of an `OSError` or `IOError` exception. The `os.strerror()` function can be used to translate an error code into a string error message.
 
 
-# 19.5 `fcntl
+# 19.5 `fcntl`
 
 The `fcntl` module performs file and I/O control on UNIX file descriptors. File descriptors can be obtained using the `fileno()` method of a file or socket object.
 
