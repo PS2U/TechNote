@@ -174,6 +174,111 @@ The `io` module defines the following abstract base classes that can be used for
 
 
 # 19.7 `logging`
+
+The `logging` module provides a flexible facility for applications to log events, errors, warnings, and debugging information.
+
+## Log Levels
+
+Each message consists of some text along with an associated level that indicates its severity.
+
+These different levels are the basis for various functions and methods throughout the logging module.
+
+## Basic Configuration
+
+Before using any other functions in the `logging` module, you should first perform some basic configuration of a special object known as the root logger. The root logger is responsible for managing the default behavior of log messages including the logging level, output destination, message format, and other basic details.
+
+`basicConfig([**kwargs])`   Performs basic configuration of the root logger.
+
+## `Logger` Objects
+
+To create a new Logger object, you use the following function: 
+  
+`getLogger([logname])`   Returns a Logger instance associated with the name logname.
+
+Internally, `getLogger()` keeps a cache of the `Logger` instances along with their associated names. If another part of the program requests a logger with the same name, the previously created instance is returned.
+
+There are a few additional methods for issuing log messages on a `Logger` instance `log`.
+
+- `log.exception(fmt [, *args ])`   Issues a message at the `ERROR` level but adds exception information from the current exception being handled.
+- `log.log(level, fmt [, *args [, exc_info [, extra]]])`   Issues a logging message at the level specified by `level`.
+- `log.findCaller()`   Returns a tuple `(filename, lineno, funcname)` corresponding to the caller’s source filename, line number, and function name.
+
+### Filtering Log Messages
+
+Each `Logger` object `log` has an internal level and filtering mechanism that determines which log messages get handled. 
+
+`log.addFilter(filt)` Adds a filter object, `filt`, to the logger.
+
+`Filter(logname)`   Creates a filter that only allows log messages from `logname` or its children to pass through.
+
+Custom filters can be created by subclassing `Filter` and implementing the method `filter(record`) that receives as input a record containing information about a logging message. As output, `True` or `False` is returned depending on whether or not the message should be handled.
+
+### Message Propagation and Hierarchical Loggers
+
+In advanced logging applications, `Logger` objects can be organized into a hierarchy. This is done by giving a logger object a name such as 'app.net.client'. Here, there are actually three different Logger objects called 'app', 'app.net', and 'app.net.client'. When a message is issued on any of the loggers and it successfully passes that logger’s filter, it propagates to and is handled by all of the parents. 
+
+The following attributes and methods of a Logger object log control this propagation.   
+
+`log.propagate`   A Boolean flag that indicates whether or not messages propagate to the parent logger.
+
+### Message Handling
+
+Normally, messages are handled by the root logger. However, any `Logger` object can have special handlers added to it that receive and process log messages. This is done using these methods of a `Logger` instance `log`. 
+
+`log.addHandler(handler)`   Adds a `Handler` object to the logger.
+
+## Hander Objects
+
+The `logging` module provides a collection of pre-built handlers that can process log messages in various in ways. These handlers are added to Logger objects using their `addHandler()` method.
+
+- `handlers.DatagramHandler(host,port)`   Sends log messages to a UDP server located on the given `host` and `port`.
+- `handlers.HTTPHandler(host, url [, method])`   Uploads log messages to an HTTP server using HTTP GET or POST methods.
+- `handlers.MemoryHandler(capacity [, flushLevel [, target]])`   This handler is used to collect log messages in memory and to flush them to another handler, `target`, periodically.
+- `handlers.SocketHandler(host, port)`   Sends log messages to a remote host using a TCP socket connection.
+- `FileHandler(filename [, mode [, encoding [, delay]]])`   Writes log messages to the file `filename`.
+
+### Handler Configuration
+
+Each `Handler` object `h` can be configured with its own level and filtering. The following methods are used to do this:   
+
+- `h.setLevel(level)` Sets the threshold of messages to be handled.
+- `h.flush()`   Flushes all logging output.   
+- `h.close()`   Closes the handler.
+- `h.addFilter(filt)`   Adds a Filter object, `filt`, to the handler. See the `addFilter()` method of Logger objects for more information.
+
+## Message Formatting
+
+`Formatter([fmt [, datefmt]])`   Creates a new Formatter object.
+
+To take effect, `Formatter` objects must be attached to handler objects. This is done using the `h.setFormatter()` method of a Handler instance `h`.
+
+### Adding Extra Context to Messages
+
+In certain applications, it is useful to add additional context information to log messages. This extra information can be provided in one of two ways. First, all of the basic logging operations (e.g., `log.critical()`, `log.warning()`, etc.) have a keyword parameter `extra` that is used to supply a dictionary of additional fields for use in message format strings. These fields are merged in with the context data previously described for `Formatter` objects.
+
+`LogAdapter(log [, extra])`   Creates a wrapper around a Logger object log.
+
+
+## Miscellaneous Utility Functions
+
+The following functions in logging control a few other aspects of logging: 
+  
+- `disable(level)`   Globally disables all logging messages below the level specified in `level`.
+- `shutdown()`   Shuts down all logging objects, flushing output if necessary.
+
+## Logging Configuration
+
+Setting an application to use the `logging` module typically involves the following basic steps:   
+
+1. Use `getLogger(`) to create various Logger objects. Set parameters such as the level, as appropriate. 
+2. Create `Handler` objects by instantiating one of the various types of handlers (`FileHandler`, `StreamHandler`, `SocketHandler`, and so on) and set an appropriate level. 
+3. Create message `Formatter` objects and attach them to the `Handler` objects using the `setFormatter()` method. 
+4. Attach the `Handler` objects to the `Logger` objects using the `addHandler()` method.
+
+`fileConfig(filename [, defaults [, disable_existing_loggers]])`   Reads the logging configuration from the configuration file filename.
+
+
+
 # 19.8 `mmap`
 # 19.9 `msvcrt`
 # 19.10 `optparse`
