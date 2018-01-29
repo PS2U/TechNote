@@ -13,6 +13,16 @@
   - [Connections](#connections)
   - [Miscellaneous Utility Functions](#miscellaneous-utility-functions)
 - [20.4 `threading`](#204-threading)
+  - [`Timer` Objects](#timer-objects)
+  - [`Lock` Objects](#lock-objects)
+  - [Semaphore and Bounded Semaphore](#semaphore-and-bounded-semaphore)
+  - [Events](#events)
+  - [Condition Variables](#condition-variables)
+  - [Thread Termination and Suspension](#thread-termination-and-suspension)
+  - [Utility Functions](#utility-functions)
+- [20.5 `queue`, `Queue`](#205-queue-queue)
+- [20.6 Coroutines and Microthreading](#206-coroutines-and-microthreading)
+- [Navigation](#navigation)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -144,6 +154,137 @@ An instance `s` of Listener supports the following methods and attributes:  
 
 - `cpu_count()`   Returns the number of CPUs on the system if it can be determined.
 - `freeze_support()`   A function that should be included as the first statement of the main program in an application that will be “frozen” using various packaging tools such as `py2exe`.
+- `get_logger()`   Returns the logging object associated with the multiprocessing module, creating it if it doesn’t already exist.
 
 
 # 20.4 `threading`
+
+The `threading` module provides a Thread class and a variety of synchronization primitives for writing multithreaded programs.
+
+The Thread class is used to represent a separate thread of control. A new thread can be created as follows:   
+
+`Thread(group=None, target=None, name=None, args=(), kwargs={})`   This creates a new `Thread` instance.
+
+A Thread instance `t` supports the following methods and attributes:   
+
+- `t.start()`   Starts the thread by invoking the `run()` method in a separate thread of control.
+- `t.run()`   This method is called when the thread starts.
+- `t.join([timeout])` Waits until the thread terminates or a timeout occurs.
+- `t.daemon`   The thread’s Boolean daemonic flag.
+
+## `Timer` Objects
+
+A `Timer` object is used to execute a function at some later time.   
+
+`Timer(interval, func [, args [, kwargs]])`   Creates a timer object that runs the function `func` after `interval` seconds have elapsed.
+
+A Timer object, `t`, has the following methods:   
+
+- `t.start()`   Starts the timer.
+- `t.cancel()`   Cancels the timer if the function has not executed yet.
+
+## `Lock` Objects
+
+A *primitive lock* (or mutual exclusion lock) is a synchronization primitive that’s in either a “locked” or “unlocked” state. Two methods, `acquire()` and `release()`, are used to change the state of the lock.
+
+A new `Lock` instance is created using the following constructor:   
+
+`Lock()`   Creates a new Lock object that’s initially unlocked.   
+
+A `Lock` instance, `lock`, supports the following methods:   
+
+- `lock.acquire([blocking ])`   Acquires the lock, blocking until the lock is released if necessary.
+- `lock.release()`   Releases a lock.
+
+`RLock` A reentrant lock is a synchronization primitive that’s similar to a Lock object, but it can be acquired multiple times by the same thread. This allows the thread owning the lock to perform nested `acquire()` and `release()` operations. In this case, only the outermost `release()` operation resets the lock to its unlocked state.
+
+A new RLock object is created using the following constructor:   
+
+`RLock()`   Creates a new reentrant lock object.
+
+- `rlock.acquire([blocking ])`   Acquires the lock, blocking until the lock is released if necessary.
+- `rlock.release()`   Releases a lock by decrementing its recursion level.
+
+## Semaphore and Bounded Semaphore
+
+A *semaphore* is a synchronization primitive based on a counter that’s decremented by each `acquire()` call and incremented by each `release()` call.
+
+`Semaphore([value])`   Creates a new semaphore.
+
+A `Semaphore` instance, `s`, supports the following methods:   
+
+- `s.acquire([blocking])`   Acquires the semaphore.
+- `s.release()`   Releases a semaphore by incrementing the internal counter by 1.
+
+`BoundedSemaphore([value])`   Creates a new semaphore.
+
+A `BoundedSemaphore` works exactly like a Semaphore except the number of `release()` operations cannot exceed the number of `acquire()` operations.
+
+## Events
+
+*Events* are used to communicate between threads.
+
+An `Event` instance manages an internal flag that can be set to true with the `set()` method and reset to false with the `clear()` method. The `wait()` method blocks until the flag is true.
+
+`Event()`   Creates a new `Event` instance with the internal flag set to false.
+
+- `e.set()`   Sets the internal flag to true.
+- `e.clear()`   Resets the internal flag to false.   
+- `e.wait([timeout])`   Blocks until the internal flag is true
+
+## Condition Variables
+
+A *condition variable* is a synchronization primitive, built on top of another lock that’s used when a thread is interested in a particular change of state or event occurring.
+
+`Condition([lock])`   Creates a new condition variable.
+
+A condition variable, `cv`, supports the following methods:   
+
+- `cv.acquire(*args)`   Acquires the underlying lock.
+- `cv.release()`   Releases the underlying lock.
+- `cv.wait([timeout])`   Waits until notified or until a timeout occurs
+- `cv.notify([n])`   Wakes up one or more threads waiting on this condition variable.
+
+## Thread Termination and Suspension
+
+Threads do not have any methods for forceful termination or suspension. This omission is by design and due to the intrinsic complexity of writing threaded programs. For example, if a thread has acquired a lock, forcefully terminating or suspending it before it is able to release the lock may cause the entire application to deadlock.
+
+## Utility Functions
+
+- `current_thread()`   Returns the `Thread` object corresponding to the caller’s thread of control.   
+- `enumerate()`   Returns a list of all currently active `Thread` objects.
+
+
+# 20.5 `queue`, `Queue`
+
+The `queue` module (named `Queue` in Python 2) implements various multiproducer, multiconsumer queues that can be used to safely exchange information between multiple threads of execution.
+
+`Queue([maxsize])`   Creates a FIFO (first-in first-out) queue
+
+`LifoQueue([maxsize])`   Creates a LIFO (last-in, first-out) queue (also known as a stack).
+
+`PriorityQueue([maxsize])`   Creates a priority queue in which items are ordered from lowest to highest priority.
+
+An instance `q` of any of the queue classes has the following methods:   
+
+- `q.qsize()`   Returns the approximate size of the queue.
+- `q.put(item [, block [, timeout]])`   Puts item into the queue.
+- `q.get([block [, timeout]])`   Removes and returns an item from the queue.
+- `q.join()`   Blocks until all items on the queue have been removed and processed.
+
+
+# 20.6 Coroutines and Microthreading
+
+A common use of this technique is in programs that need to manage a large collection of open files or sockets. For example, a network server that wants to simultaneously manage 1,000 client connections.
+
+The underlying concept that drives this programming technique is the fact that the yield statement in a generator or coroutine function suspends the execution of the function until it is later resumed with a `next()` or `send()` operation. This makes it possible to cooperatively multitask between a set of generator functions using a scheduler loop.
+
+
+# Navigation
+
+[Table of Contents](README.md)
+
+Prev: [19. Operating System Services](19-operating-system-services.md)
+
+Next: [21. Network Programming and Sockets](21-network-programming-sockets.md)
+
