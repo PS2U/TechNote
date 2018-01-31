@@ -6,6 +6,12 @@ Both network protocols are handled through a programming abstraction known as a 
 
 The machine receiving the connection (the server) must bind its socket object to a known port number.
 
+TCP connection protocol:
+![](img/chap21/tcp-connection.png)
+
+UDP connection protocol:
+![](img/chap21/udp-connection.png)
+
 
 # 20.2 `asynchat` 
 
