@@ -1,3 +1,13 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [21.1 Network Programming Basics](#211-network-programming-basics)
+- [20.2 `asynchat`](#202-asynchat)
+- [20.3 `asyncore`](#203-asyncore)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # 21.1 Network Programming Basics
 
 The TCP protocol is a reliable connection-oriented protocol used to establish a two-way communications stream between machines. UDP is a lower-level packet-based protocol (connectionless) in which machines send and receive discrete packets of information without formally establishing a connection. Unlike TCP, UDP communication is unreliable and thus inherently more complicated to manage in applications that require reliable communications

@@ -84,3 +84,5 @@
 
 [《Spark技术内幕》](spark/spark-internals/README.md)
 
+[《High Performance Spark》](spark/high-performance-spark/README.md)
+
