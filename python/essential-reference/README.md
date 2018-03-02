@@ -62,3 +62,7 @@
 [21. Network Programming and Sockets](21-network-programming-sockets.md)
 
 [22. Internet Application Programming](22-internet-application-programming.md)
+
+[23. Web Programming](23-web-programming.md)
+
+[24. Internet Data Halding and Encoding](24-internet-data-handling-encoding.md)

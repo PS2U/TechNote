@@ -1,3 +1,26 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [22.1 `ftplib`](#221-ftplib)
+- [22.2 `http`](#222-http)
+  - [`http.client`](#httpclient)
+  - [`http.server`](#httpserver)
+  - [`http.cookies`](#httpcookies)
+  - [`http.cookiejar`](#httpcookiejar)
+- [22.3 `smtplib`](#223-smtplib)
+- [22.4 `urllib`](#224-urllib)
+  - [`urlib.request`](#urlibrequest)
+  - [`urllib.parse`](#urllibparse)
+  - [`urllib.error`](#urlliberror)
+  - [`urllib.robotparser`](#urllibrobotparser)
+- [22.5 `xmlrpc`](#225-xmlrpc)
+  - [`xmlrpc.client`](#xmlrpcclient)
+  - [`xmlrpc.server`](#xmlrpcserver)
+- [Navigation](#navigation)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # 22.1 `ftplib`
 
 The `ftplib` module implements the client side of the FTP protocol. It’s rarely necessary to use this module directly because the `urllib` package provides a higher-level interface. However, this module may still be useful if you want to have more control over the low-level details of an FTP connection.
@@ -94,5 +117,108 @@ The `http.cookiejar` module provides client-side support for storing and managin
 `CookieJar()` An object that manages HTTP cookie values, storing cookies received as a result of HTTP requests, and adding cookies to outgoing HTTP requests.
 
 # 22.3 `smtplib`
+
+The `smtplib` module provides a low-level SMTP client interface that can be used to send mail using the SMTP protocol described in RFC 821 and RFC 1869.
+
+`SMTP([host [, port]])` Creates an object representing a connection to an SMTP server.
+
+An instance s of SMTP has the following methods:   
+
+- `s.connect([host [, port]])` Connects to the SMTP server on `host`.
+- `s.login(user, password)` Logs into the server if authentication is required.
+- `s.sendmail(fromaddr, toaddrs, message)`   Sends a mail message to the server.
+
+
 # 22.4 `urllib`
+
+The `urllib` package provides a high-level interface for writing clients that need to interact with HTTP servers, FTP servers, and local files.
+
+In Python 2, the `urllib` functionality is spread across several different library modules including `urllib`, `urllib2`, `urlparse`, and `robotparser`. In Python 3, all of this functionality has been consolidated and reorganized under the `urllib` package.
+
+## `urlib.request`
+
+The `urllib.request` module provides functions and classes to open and fetch data from URLs. In Python 2, this functionality is found in a module `urllib2`.
+
+`urlopen(url [, data [, timeout]])`   Opens the URL url and returns a file-like object that can be used to read the returned data.
+
+`Request(url [, data [, headers [, origin_req_host [, unverifiable]]]])` Creates a new Request instance.
+
+An instance `r` of Request has the following methods:   
+
+- `r.add_data(data)`Adds data to a request.
+- `r.add_header(key, val)` Adds header information to the request.
+- `r.get_host()` Returns the host to which the request will be sent.
+
+## `urllib.parse`
+
+The `urllib.parse` module is used to manipulate URL strings such as "http://www.python.org".
+
+`urlparse(urlstring [, default_scheme [, allow_fragments]])` Parses the URL in urlstring and returns a `ParseResult` instance.
+
+A `ParseResult` instance can be turned back into a URL string using `r.geturl()`.   
+
+`urlunparse(parts)` Constructs a URL string from a tuple-representation of a URL as returned by `urlparse()`.
+
+`urlsplit(url [, default_scheme [, allow_fragments]])` The same as `urlparse()` except that the parameters portion of a URL is left unmodified in the path
+
+The following functions are used to encode and decode data that make up URLs.   
+- `quote(string [, safe [, encoding [, errors]]])`   Replaces special characters in string with escape sequences suitable for including in a URL.
+- `unquote(string [, encoding [, errors]])`   Replaces escape sequences of the form '%xx' with their single-character equivalent.
+
+## `urllib.error`
+
+The `urllib.error` module defines exceptions used by the `urllib` package.
+
+`HTTPError`   Raised to indicate problems with the HTTP protocol.
+
+`URLError`   Error raised by handlers when a problem is detected.
+
+## `urllib.robotparser`
+
+The `urllib.robotparser` module (`robotparser` in Python 2) is used to fetch and parse the contents of 'robots.txt' files used to instruct web crawlers.
+
+
 # 22.5 `xmlrpc`
+
+The `xmlrpc` package contains modules for implement XML-RPC servers and clients. XML-RPC is a remote procedure call mechanism that uses XML for data encoding and HTTP as a transport mechanism.
+
+## `xmlrpc.client`
+
+The `xmlrpc.client` module is used to write XML-RPC clients. In Python 2, this module is called `xmlrpclib`. To operate as a client, you create an instance of ServerProxy:
+
+`ServerProxy(uri, [, transport [, encoding [, verbose [, allow_once [, use_datetime]]]])`
+
+If the remote XML-RPC server supports introspection, the following methods may be available:   
+
+`s.system.listMethods()`   Returns a list of strings listing all the methods provided by the XML-RPC server.
+
+
+The following utility functions are available in the `xmlrpclib` module:
+
+- `dumps(params [, methodname [, methodresponse [, encoding [, allow_none]]]])` Converts `params` into an XML-RPC request or response, where params is either a tuple of arguments or an instance of the `Fault` exception. `methodname` is the name of the method as a string.
+- `loads(data) `  Converts `data` containing an XML-RPC request or response into a tuple `(params, methodname)` where params is a tuple of parameters and `methodname` is a string containing the method name.
+
+## `xmlrpc.server`
+
+The `xmlrpc.server` module contains classes for implementing different variants of XML-RPC servers. In Python 2, this functionality is found in two separate modules: `SimpleXMLRPCServer` and `DocXMLRPCServer`.
+
+`SimpleXMLRPCServer(addr [, requestHandler [, logRequests]])`   Creates an XML-RPC server listening on the socket address addr (for example, ('localhost',8080)).
+
+An instance, `s`, of `SimpleXMLRPCServer` or `DocXMLRPCServer` has the following methods:   
+
+- `s.register_function(func [, name])`   Registers a new function, `func`, with the XML-RPC server.
+
+An instance of `DocXMLRPCServer` additionally provides these methods:   
+
+- `s.set_server_title(server_title)`   Sets the title of the server in HTML documentation. The string is placed in the HTML `<title>` tag.   
+- `s.set_server_name(server_name)`   Sets the name of the server in HTML documentation. The string appears at the top of the page in an `<h1>` tag.   
+- `s.set_server_documentation(server_documentation)`   Adds a descriptive paragraph to the generated HTML output. This string is added right after the server name, but before a description of the XML-RPC functions.
+
+
+# Navigation
+
+[Table of Contents](README.md)
+
+Prev: [21. Network Programming and Sockets](21-network-programming-sockets.md)
+
+Next: [23. Web Programming](23-web-programming.md)
