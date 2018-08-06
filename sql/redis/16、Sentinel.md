@@ -39,11 +39,11 @@ Sentinel（哨兵）是Redis的高可用性解决方案，由一个或多个Sent
 
 当一个Sentinel启动时，会执行以下几步：
 
-1、初始化服务器
-2、将普通Redis服务器使用的代码替换成Sentinel专用代码
-3、初始化Sentinel状态
-4、根据配置文件，初始化监视的master列表
-5、创建与master的网络连接
+1. 初始化服务器
+2. 将普通Redis服务器使用的代码替换成Sentinel专用代码
+3. 初始化Sentinel状态
+4. 根据配置文件，初始化监视的master列表
+5. 创建与master的网络连接
 
 ## 初始化服务器
 
