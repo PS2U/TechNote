@@ -19,6 +19,8 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
+![](img/ch1.png)
+
 A data-intensive application is typically built from standard building blocks that provide commonly needed functionality. For example, many applications need to:
 
 - Store data so that they, or another application, can find it again later (databases)
@@ -74,7 +76,8 @@ The bugs that cause these kinds of software faults often lie dormant for a long 
 There is no quick solution to the problem of systematic faults in software. Lots of small things can help: 
 
 - carefully thinking about assumptions and interactions in the system; 
-- thorough testing; process isolation; 
+- thorough testing; 
+- process isolation; 
 - allowing processes to crash and restart; 
 - measuring, monitoring, and analyzing system behavior in production.
 
@@ -108,7 +111,12 @@ Scalability means considering questions like "If the system grows in a particula
 
 First, we need to succinctly describe the current load on the system; only then can we discuss growth questions (what happens if our load doubles?). 
 
-Load can be described with a few numbers which we call load parameters. The best choice of parameters depends on the architecture of your system: it may be requests per second to a web server, the ratio of reads to writes in a database, the number of simultaneously active users in a chat room, the hit rate on a cache, or something else.
+Load can be described with a few numbers which we call load parameters. The best choice of parameters depends on the architecture of your system: it may be 
+
+- requests per second to a web server, 
+- the ratio of reads to writes in a database, 
+- the number of simultaneously active users in a chat room, 
+- the hit rate on a cache, or something else.
 
 ## Describing Performance
 
@@ -118,7 +126,7 @@ Once you have described the load on your system, you can investigate what happen
 - When you increase a load parameter, how much do you need to increase the
 resources if you want to keep performance unchanged?
 
-In a batch processing system such as Hadoop, we usually care about throughput—the number of records we can process per second, or the total time it takes to run a job on a dataset of a certain size.iii In online systems, what’s usually more important is the service’s response time—that is, the time between a client sending a request and receiving a response.
+In a batch processing system such as Hadoop, we usually care about **throughput** — the number of records we can process per second, or the total time it takes to run a job on a dataset of a certain size. In online systems, what’s usually more important is the service’s **response time** — that is, the time between a client sending a request and receiving a response.
 
 > Latency and response time are not the same. The response time is what the client sees: besides the actual time to process the request (the service time), it includes network delays and queueing delays. Latency is the duration that a request is waiting to be handled—during which it is latent, awaiting
 service.
@@ -155,9 +163,9 @@ An architecture that scales well for a particular application is built around *a
 
 # Maintainability
 
-It is well known that the majority of the cost of software is not in its initial development, but in 
+It is well known that the majority of the cost of software is not in its initial development, but in its
 
-- its ongoing maintenance—fixing bugs, 
+- ongoing maintenance—fixing bugs, 
 - keeping its systems operational,
 - investigating failures, 
 - adapting it to new platforms, 
