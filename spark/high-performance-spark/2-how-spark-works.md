@@ -47,7 +47,7 @@ Spark evaluates an action by working backward to define the series of steps it h
 
 Lazy evaluation allows Spark to combine operations that don’t require communication with the driver (called transformations with one-to-one dependencies) to avoid doing multiple passes through the data.
 
-**Lazy evaluation and fault torerance**
+**Lazy evaluation and fault tolerance**
 
 Spark’s unique method of fault tolerance is achieved because each partition of the data contains the dependency information needed to recalculate the partition.
 

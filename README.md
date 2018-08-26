@@ -13,6 +13,7 @@
   - [Vim](#vim)
   - [Elasticsearch](#elasticsearch)
   - [Spark](#spark)
+  - [System Design](#system-design)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -62,7 +63,7 @@
 
 [《Redis设计与实现》](sql/redis/README.md)
 
-[《Apache HBase ™ Reference Guide》](sql/hbase/reference-guide/README.md)
+[Apache HBase ™ Reference Guide](sql/hbase/reference-guide/README.md)
 
 [《HBase权威指南》](sql/hbase/the-definitive-guide/README.md)
 
@@ -84,5 +85,9 @@
 
 [《Spark技术内幕》](spark/spark-internals/README.md)
 
-[《High Performance Spark》](spark/high-performance-spark/README.md)
+[High Performance Spark](spark/high-performance-spark/README.md)
+
+## System Design
+
+[Design Data Intensive Applications](system-design/designing-data-intensive-applications/README.md)
 
