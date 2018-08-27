@@ -27,6 +27,8 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
+![](img/ch2.png)
+
 Most applications are built by layering one data model on top of another. For each layer, the key question is: how is it represented in terms of the next-lower layer?
 
 In a complex application there may be more intermediary levels, such as APIs built upon APIs, but the basic idea is still the same: each layer hides the complexity of the layers below it by providing a clean data model. These abstractions allow different groups of people — for example, the engineers at the database vendor and the application developers using their database — to work together effectively.
