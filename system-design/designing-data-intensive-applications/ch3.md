@@ -2,6 +2,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
+- [Data Structures That Power Your Database](#data-structures-that-power-your-database)
   - [Hash Indexes](#hash-indexes)
   - [SSTables and LSM-Trees](#sstables-and-lsm-trees)
     - [Constructing and maintaining SSTables](#constructing-and-maintaining-sstables)
@@ -33,7 +34,7 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 
-H Data Structures That Power Your Database
+# Data Structures That Power Your Database
 
 In order to efficiently find the value for a particular key in the database, we need a different data structure: an *index*. In this chapter we will look at a range of indexing structures and see how they compare; the general idea behind them is to keep some additional metadata on the side, which acts as a signpost and helps you to locate the data you want. 
 
