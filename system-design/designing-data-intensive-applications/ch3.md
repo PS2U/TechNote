@@ -34,6 +34,8 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 
+![](img/ch3-mind-map.png)
+
 # Data Structures That Power Your Database
 
 In order to efficiently find the value for a particular key in the database, we need a different data structure: an *index*. In this chapter we will look at a range of indexing structures and see how they compare; the general idea behind them is to keep some additional metadata on the side, which acts as a signpost and helps you to locate the data you want. 
@@ -101,8 +103,8 @@ We can now make our storage engine work as follows:
 
 - When a write comes in, add it to an in-memory balanced tree data structure. This in-memory tree is sometimes called a memtable.
 - When the memtable gets bigger than some threshold—typically a few megabytes, write it out to disk as an SSTable file. This can be done efficiently because the tree already maintains the key-value pairs sorted by key. The new SSTable file becomes the most recent segment of the database. While the SSTable is being written out to disk, writes can continue to a new memtable instance.
-  • In order to serve a read request, first try to find the key in the memtable, then in the most recent on-disk segment, then in the next-older segment, etc.
-  • From time to time, run a merging and compaction process in the background to combine segment files and to discard overwritten or deleted values.
+- In order to serve a read request, first try to find the key in the memtable, then in the most recent on-disk segment, then in the next-older segment, etc.
+- From time to time, run a merging and compaction process in the background to combine segment files and to discard overwritten or deleted values.
 
 We can keep a separate log on disk to which every write is immediately appended for the database may crashes. Every time the memtable is written out to an SSTable, the corresponding log can be discarded.
 
@@ -155,7 +157,7 @@ In order to make the database resilient to crashes, it is common for B-tree impl
 
 - Instead of overwriting pages and maintaining a WAL for crash recovery, some databases use a copy-on-write scheme. A modified page is written to a different location, and a new version of the parent pages in the tree is created, pointing at the new location.
 - We can save space in pages by not storing the entire key, but abbreviating it.
-- Many Btree implementations try to lay out the tree so that *leaf pages appear in sequential order* on disk. However, it’s difficult to maintain that order as the tree grows.
+- Many B-tree implementations try to lay out the tree so that *leaf pages appear in sequential order* on disk. However, it’s difficult to maintain that order as the tree grows.
 - Additional pointers have been added to the tree. For example, each leaf page may have *references to its sibling pages* to the left and right, which allows scanning keys in order without jumping back to parent pages.
 
 ## Comparing B-Trees and LSM-Trees
@@ -170,7 +172,7 @@ Log-structured indexes also rewrite data multiple times due to repeated compacti
 
 In write-heavy applications, the performance bottleneck might be the rate at which the database can write to disk.
 
-Moreover, LSM-trees are typically able to sustain higher write throughput than Btrees, partly because they sometimes have lower write amplification (although this depends on the storage engine configuration and workload), and partly because they sequentially write compact SSTable files rather than having to overwrite several pages in the tree.
+Moreover, LSM-trees are typically able to sustain higher write throughput than B-trees, partly because they sometimes have lower write amplification (although this depends on the storage engine configuration and workload), and partly because they sequentially write compact SSTable files rather than having to overwrite several pages in the tree.
 
 LSM-trees can be compressed better, and thus often produce smaller files on disk than B-trees. B-tree storage engines leave some disk space unused due to fragmentation.
 
@@ -305,4 +307,4 @@ One way of creating such a cache is a materialized view. In a relational data mo
 
 Prev: [2. Data Models and Query Languages](ch2.md)
 
-Next: [3. Storage and Retrieval](ch3.md) 
+Next: [4. Encoding and Evolution](ch4.md)

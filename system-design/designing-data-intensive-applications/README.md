@@ -17,3 +17,5 @@ Reading notes for [Designing Data Intensive Applications](https://book.douban.co
 [2. Data Models and Query Languages](ch2.md)
 
 [3. Storage and Retrieval](ch3.md)
+
+[4. Encoding and Evolution](ch4.md)
