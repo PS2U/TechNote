@@ -46,11 +46,11 @@ Key-value stores are quite similar to the dictionary type that you can find in m
 
 How do we avoid eventually running out of disk space? A good solution is to *break the log into segments of a certain size* by closing a segment file when it reaches a certain size, and making subsequent writes to a new segment file. We can then perform compaction on these segments.
 
-![](img/ch2-compaction.jpg)
+![](img/ch3-compaction.jpg)
 
 Moreover, since compaction often makes segments much smaller (assuming that a key is overwritten several times on average within one segment), we can also *merge* several segments together at the same time as performing the compaction.
 
-![](img/ch2-compaction-merge.jpg)
+![](img/ch3-compaction-merge.jpg)
 
 Each segment now has its own in-memory hash table, mapping keys to file offsets. In order to find the value for a key, we first check the most recent segment’s hash map; if the key is not present we check the second-most-recent segment, and so on.
 
