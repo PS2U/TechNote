@@ -208,4 +208,4 @@ Datalog’s data model is similar to the triple-store model, generalized a bit. 
 
 Prev: [1. Reliable, Scalable, and Maintainable Applications](ch1.md)
 
-Next: 
+Next: [3. Storage and Retrieval](ch3.md) 
