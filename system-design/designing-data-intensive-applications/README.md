@@ -3,6 +3,10 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Part I: Foundations of Data Systems](#part-i-foundations-of-data-systems)
+- [Part II. Distributed Data](#part-ii-distributed-data)
+  - [Scaling to Higher Load](#scaling-to-higher-load)
+  - [Shared-Nothing Architectures](#shared-nothing-architectures)
+  - [Replication Versus Partitioning](#replication-versus-partitioning)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
