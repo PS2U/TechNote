@@ -31,6 +31,8 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
+![](img/ch4-mind-map.png)
+
 In most cases, a change to an application's features also requires a change to data that it stores: perhaps a new field or record type needs to be captured, or perhaps existing data needs to be presented in a new way.
 
 Relational databases generally assume that all data in the database conforms
