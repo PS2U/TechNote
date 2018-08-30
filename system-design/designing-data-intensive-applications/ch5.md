@@ -44,6 +44,8 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
+![](img/ch5-mind-map.png)
+
 Replication means keeping a copy of the same data on multiple machines that are
 connected via a network. There are several reasons why you might want to replicate data:
 
