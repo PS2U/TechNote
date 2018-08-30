@@ -1,3 +1,36 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Formats for Encoding Data](#formats-for-encoding-data)
+  - [Language-Specific Formats](#language-specific-formats)
+  - [JSON, XML, and Binary Variants](#json-xml-and-binary-variants)
+    - [Binary encoding](#binary-encoding)
+  - [Thrift and Protocol Buffers](#thrift-and-protocol-buffers)
+    - [Field tags and schema evolution](#field-tags-and-schema-evolution)
+    - [Datatypes and schema evolution](#datatypes-and-schema-evolution)
+  - [Avro](#avro)
+    - [The writer's schema and the reader's schema](#the-writers-schema-and-the-readers-schema)
+    - [Schema evolution rules](#schema-evolution-rules)
+    - [But what is the writer's schema?](#but-what-is-the-writers-schema)
+    - [Dynamically generated schemas](#dynamically-generated-schemas)
+    - [Code generation and dynamically typed languages](#code-generation-and-dynamically-typed-languages)
+  - [The Merits of Schemas](#the-merits-of-schemas)
+- [Models of Dataflow](#models-of-dataflow)
+  - [Dataflow Through Databases](#dataflow-through-databases)
+    - [Different values written at different times](#different-values-written-at-different-times)
+    - [Archival storage](#archival-storage)
+  - [Dataflow Through Services: REST and RPC](#dataflow-through-services-rest-and-rpc)
+    - [The problems with remote procedure calls (RPCs)](#the-problems-with-remote-procedure-calls-rpcs)
+    - [Current directions for RPC](#current-directions-for-rpc)
+    - [Data encoding and evolution for RPC](#data-encoding-and-evolution-for-rpc)
+  - [Message-Passing Dataflow](#message-passing-dataflow)
+    - [Message brokers](#message-brokers)
+    - [Distributed actor frameworks](#distributed-actor-frameworks)
+- [Navigation](#navigation)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 In most cases, a change to an application's features also requires a change to data that it stores: perhaps a new field or record type needs to be captured, or perhaps existing data needs to be presented in a new way.
 
 Relational databases generally assume that all data in the database conforms
