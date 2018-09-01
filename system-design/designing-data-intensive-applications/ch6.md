@@ -2,6 +2,23 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
+- [Partition and Replication](#partition-and-replication)
+- [Partitioning of Key-Value Data](#partitioning-of-key-value-data)
+  - [Partitioning by Key Range](#partitioning-by-key-range)
+  - [Partitioning by Hash of Key](#partitioning-by-hash-of-key)
+  - [Skewed Workloads and Relieving Hot Spots](#skewed-workloads-and-relieving-hot-spots)
+- [Partitioning and Secondary Indexes](#partitioning-and-secondary-indexes)
+  - [Partitioning Secondary Indexes by Document](#partitioning-secondary-indexes-by-document)
+  - [Partitioning Secondary Indexes by Term](#partitioning-secondary-indexes-by-term)
+- [Rebalancing Partitions](#rebalancing-partitions)
+  - [Strategies for Rebalancing](#strategies-for-rebalancing)
+    - [How not to do it: hash mod N](#how-not-to-do-it-hash-mod-n)
+    - [Fixed number of partitions](#fixed-number-of-partitions)
+    - [Dynamic partitioning](#dynamic-partitioning)
+    - [Partitioning proportionally to nodes](#partitioning-proportionally-to-nodes)
+  - [Operations: Automatic or Manual Rebalancing](#operations-automatic-or-manual-rebalancing)
+- [Request Routing](#request-routing)
+  - [Parallel Query Execution](#parallel-query-execution)
 - [Navigation](#navigation)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
