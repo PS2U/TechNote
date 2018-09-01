@@ -61,3 +61,4 @@ There are two common ways data is distributed across multiple nodes:
 
 [6. Partitioning](ch6.md)
 
+[7. Transactions](ch7.md)
