@@ -19,6 +19,36 @@
     - [Implementing read committed](#implementing-read-committed)
   - [Snapshot Isolation and Repeatable Read](#snapshot-isolation-and-repeatable-read)
     - [Implementing snapshot isolation](#implementing-snapshot-isolation)
+    - [Visibility rules for observing a consistent snapshot](#visibility-rules-for-observing-a-consistent-snapshot)
+    - [Indexes and snapshot isolation](#indexes-and-snapshot-isolation)
+  - [Preventing Lost Updates](#preventing-lost-updates)
+    - [Atomic write operations](#atomic-write-operations)
+    - [Explicit locking](#explicit-locking)
+    - [Automatically detecting lost updates](#automatically-detecting-lost-updates)
+    - [Compare-and-set](#compare-and-set)
+    - [Conflict resolution and replication](#conflict-resolution-and-replication)
+  - [Write Skew and Phantoms](#write-skew-and-phantoms)
+    - [Characterizing write skew](#characterizing-write-skew)
+    - [Phantoms causing write skew](#phantoms-causing-write-skew)
+    - [Materializing conflicts](#materializing-conflicts)
+- [Serializability](#serializability)
+  - [Actual Serial Execution](#actual-serial-execution)
+    - [Encapsulating transactions in stored procedures](#encapsulating-transactions-in-stored-procedures)
+    - [Pros and cons of stored procedures](#pros-and-cons-of-stored-procedures)
+    - [Partitioning](#partitioning)
+    - [Summary of serial execution](#summary-of-serial-execution)
+  - [Two-Phase Locking (2PL)](#two-phase-locking-2pl)
+    - [Implementation of two-phase locking](#implementation-of-two-phase-locking)
+    - [Performance of two-phase locking](#performance-of-two-phase-locking)
+    - [Predicate locks](#predicate-locks)
+    - [Index-range locks](#index-range-locks)
+  - [Serializable Snapshot Isolation (SSI)](#serializable-snapshot-isolation-ssi)
+    - [Pessimistic versus optimistic concurrency control](#pessimistic-versus-optimistic-concurrency-control)
+    - [Decisions based on an outdated premise](#decisions-based-on-an-outdated-premise)
+    - [Detecting stale MVCC reads](#detecting-stale-mvcc-reads)
+    - [Detecting writes that affect prior reads](#detecting-writes-that-affect-prior-reads)
+    - [Performance of serializable snapshot isolation](#performance-of-serializable-snapshot-isolation)
+- [Navigation](#navigation)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -432,3 +462,10 @@ Compared to serial execution, serializable snapshot isolation is not limited to 
 The rate of aborts significantly affects the overall performance of SSI, so SSI requires that read-write transactions be fairly short.
 
 
+# Navigation
+
+[Table of Contents](README.md)
+
+Prev: [6. Partitioning](ch6.md)
+
+Next: [8. The Trouble with Distributed Systems](ch8.md)

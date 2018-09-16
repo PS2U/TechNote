@@ -62,3 +62,7 @@ There are two common ways data is distributed across multiple nodes:
 [6. Partitioning](ch6.md)
 
 [7. Transactions](ch7.md)
+
+[8. The Trouble with Distributed Systems](ch8.md)
+
+
