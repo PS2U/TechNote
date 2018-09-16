@@ -100,7 +100,7 @@ Isolation in the sense of ACID means that concurrently executing transactions ar
 
 The classic database textbooks formalize isolation as serializability, which means that each transaction can pretend that it is the only transaction running on the entire database. The database ensures that when the transactions have committed, the result is the same as if they had run serially (one after another), even though in reality they may have run concurrently.
 
-![](/img/ch7-race-condition-of-two-clients.jpg)
+![](img/ch7-race-condition-of-two-clients.jpg)
 
 However, in practice, serializable isolation is rarely used, because it carries a performance penalty.
 
@@ -161,7 +161,7 @@ The most basic level of transaction isolation is read committed. It makes two gu
 
 Any writes by a transaction only become visible to others when that transaction commits.
 
-![](/img/ch-no-dirty-reads.jpg)
+![](img/ch-no-dirty-reads.jpg)
 
 There are a few reasons why it's useful to prevent dirty reads:
 
@@ -182,7 +182,7 @@ However, the approach of requiring read locks does not work well in practice, be
 
 ## Snapshot Isolation and Repeatable Read
 
-![](/img/ch7-alice-read-skew.jpg)
+![](img/ch7-alice-read-skew.jpg)
 
 Read skew is considered acceptable under read committed isolation: the account balances that Alice saw were indeed committed at the time when she read them.
 
@@ -203,7 +203,7 @@ The database must potentially keep several different committed versions of an ob
 
 Storage engines that support snapshot isolation typically use MVCC for their read committed isolation level as well. A typical approach is that read committed uses a separate snapshot for each query, while snapshot isolation uses the same snapshot for an entire transaction.
 
-![](/img/ch7-snapshot-isolation-multi-version.jpg)
+![](img/ch7-snapshot-isolation-multi-version.jpg)
 
 Each row in a table has a `created_by` field, containing the ID of the transaction that inserted this row into the table. Moreover, each row has a `deleted_by` field, which is initially empty. If a transaction deletes a row, the row isn’t actually deleted from the database, but it is marked for deletion by setting the `deleted_by` field to the ID of the transaction that requested the deletion. At some later time, when it is certain that no transaction can any longer access the deleted data, a garbage collection process in the database removes any rows marked for deletion and frees their space.
 
@@ -273,7 +273,7 @@ lost updates. Unfortunately, LWW is the default in many replicated databases.
 
 ## Write Skew and Phantoms
 
-![](/img/ch7-write-skew-causing-bug.jpg)
+![](img/ch7-write-skew-causing-bug.jpg)
 
 ### Characterizing write skew
 
@@ -330,7 +330,7 @@ In this interactive style of transaction, a lot of time is spent in network comm
 
 For this reason, systems with single-threaded serial transaction processing don’t allow interactive multi-statement transactions. Instead, the application must submit the entire transaction code to the database ahead of time, as a stored procedure.
 
-![](/img/ch7-interactive-transaction-stored-procedure.jpg)
+![](img/ch7-interactive-transaction-stored-procedure.jpg)
 
 ### Pros and cons of stored procedures
 
@@ -443,13 +443,13 @@ How does the database know if a query result might have changed? There are two c
 
 ### Detecting stale MVCC reads
 
-![](/img/ch7-detect-read-outdated-mvcc.jpg)
+![](img/ch7-detect-read-outdated-mvcc.jpg)
 
 When the transaction wants to commit, the database checks whether any of the ignored writes have now been committed. If so, the transaction must be aborted.
 
 ### Detecting writes that affect prior reads
 
-![](/img/ch7-detect-transaction-modify-reads.jpg)
+![](img/ch7-detect-transaction-modify-reads.jpg)
 
 When a transaction writes to the database, it must look in the indexes for any other transactions that have recently read the affected data. This process is similar to acquiring a write lock on the affected key range, but rather than blocking until the readers have committed, the lock acts as a tripwire: it simply *notifies the transactions that the data they read may no longer be up to date*.
 
