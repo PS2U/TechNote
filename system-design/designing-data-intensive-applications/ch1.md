@@ -52,8 +52,8 @@ Over time, many different people will work on the system (engineering and operat
 
 # Reliability
 
-Reliability means, roughly, “continuing to work correctly, even when things go
-wrong.” The things that can go wrong are called faults, and systems that anticipate faults and can cope with them are called fault-tolerant or resilient.
+Reliability means, roughly, "continuing to work correctly, even when things go
+wrong". The things that can go wrong are called faults, and systems that anticipate faults and can cope with them are called fault-tolerant or resilient.
 
 Note that *a fault is not the same as a failure*. A fault is usually defined as one component of the system deviating from its spec, whereas a failure is when the system as a whole stops providing the required service to the user.
 
@@ -67,7 +67,7 @@ Our first response is usually to add redundancy to the individual hardware compo
 
 Recently, there is a move toward systems that can tolerate the loss of entire machines, by using software fault-tolerance techniques in preference or in addition to hardware redundancy.
 
-We usually think of hardware faults as being random and independent from each other: one machine’s disk failing does not imply that another machine’s disk is going to fail.
+We usually think of hardware faults as being random and independent from each other: one machine's disk failing does not imply that another machine's disk is going to fail.
 
 ## Software Errors
 
@@ -88,8 +88,8 @@ Even when they have the best intentions, humans are known to be unreliable.
 How do we make our systems reliable, in spite of unreliable humans?
 
 - Design systems in a way that minimizes opportunities for error. For example,
-well-designed abstractions, APIs, and admin interfaces make it easy to do “the
-right thing” and discourage “the wrong thing.” 
+well-designed abstractions, APIs, and admin interfaces make it easy to do "the
+right thing” and discourage “the wrong thing". 
 - Decouple the places where people make the most mistakes from the places where
 they can cause failures. In particular, provide fully featured non-production
 sandbox environments where people can explore and experiment safely, using
@@ -103,7 +103,7 @@ rates.
 
 # Scalability
 
-Scalability is the term we use to describe a system’s ability to cope with increased load. Note, however, that it is not a one-dimensional label that we can attach to a system: it is meaningless to say "X is scalable" or "Y doesn’t scale."
+Scalability is the term we use to describe a system's ability to cope with increased load. Note, however, that it is not a one-dimensional label that we can attach to a system: it is meaningless to say "X is scalable" or "Y doesn't scale."
 
 Scalability means considering questions like "If the system grows in a particular way, what are our options for coping with the growth?" and "How can we add computing resources to handle the additional load?"
 
@@ -126,20 +126,20 @@ Once you have described the load on your system, you can investigate what happen
 - When you increase a load parameter, how much do you need to increase the
 resources if you want to keep performance unchanged?
 
-In a batch processing system such as Hadoop, we usually care about **throughput** — the number of records we can process per second, or the total time it takes to run a job on a dataset of a certain size. In online systems, what’s usually more important is the service’s **response time** — that is, the time between a client sending a request and receiving a response.
+In a batch processing system such as Hadoop, we usually care about **throughput** — the number of records we can process per second, or the total time it takes to run a job on a dataset of a certain size. In online systems, what's usually more important is the service's **response time** — that is, the time between a client sending a request and receiving a response.
 
 > Latency and response time are not the same. The response time is what the client sees: besides the actual time to process the request (the service time), it includes network delays and queueing delays. Latency is the duration that a request is waiting to be handled—during which it is latent, awaiting
 service.
 
 In practice, in a system handling a variety of requests, the response time can vary a lot. We therefore need to think of response time not as a single number, but as a distribution of values that you can measure.
 
-It’s common to see the average response time of a service reported. However, the mean is not a very good metric if you want to know your "typical" response time, because it doesn’t tell you how many users actually experienced
+It's common to see the average response time of a service reported. However, the mean is not a very good metric if you want to know your "typical" response time, because it doesn't tell you how many users actually experienced
 that delay.
 
 Usually it is better to use percentiles. If you take your list of response times and sort it from fastest to slowest, then the median is the halfway point. In order to figure out how bad your outliers are, you can look at higher percentiles: the 95th, 99th, and 99.9th percentiles are common.
 
 High percentiles of response times, also known as tail latencies, are important
-because they directly affect users’ experience of the service.
+because they directly affect users' experience of the service.
 
 > The naive implementation is to keep a list of response times for all requests within the time window and to sort that list every minute. If that is too inefficient for you, there are algorithms that can calculate a good approximation of percentiles at minimal CPU and memory cost, such as forward decay, t-digest, or HdrHistogram.
 
@@ -158,7 +158,7 @@ The problem may be
 - the access patterns, 
 - or (usually) some mixture of all of these plus many more issues.
 
-An architecture that scales well for a particular application is built around *assumptions of which operations will be common and which will be rare—the load parameters*. If those assumptions turn out to be wrong, the engineering effort for scaling is at best wasted, and at worst counterproductive. In an early-stage startup or an unproven product it’s usually more important to be able to iterate quickly on product features than it is to scale to some hypothetical future load.
+An architecture that scales well for a particular application is built around *assumptions of which operations will be common and which will be rare—the load parameters*. If those assumptions turn out to be wrong, the engineering effort for scaling is at best wasted, and at worst counterproductive. In an early-stage startup or an unproven product it's usually more important to be able to iterate quickly on product features than it is to scale to some hypothetical future load.
 
 
 # Maintainability

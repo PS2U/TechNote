@@ -65,4 +65,4 @@ There are two common ways data is distributed across multiple nodes:
 
 [8. The Trouble with Distributed Systems](ch8.md)
 
-
+[9. Consistency and Consensus](ch9.md)

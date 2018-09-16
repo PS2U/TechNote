@@ -45,7 +45,7 @@ assumptions about how it is going to be used.
 
 The best-known data model today is probably that of SQL, based on the relational model: **data is organized into relations (called tables in SQL), where each relation is an unordered collection of tuples (rows in SQL)**.
 
-The roots of relational databases lie in business data processing, which was performed on mainframe computers in the 1960s and ’70s. The use cases appear mundane from today’s perspective: 
+The roots of relational databases lie in business data processing, which was performed on mainframe computers in the 1960s and '70s. The use cases appear mundane from today's perspective: 
 
 - typically **transaction processing** (entering sales or banking transactions, airline reservations, stock-keeping in warehouses) and 
 - **batch processing** (customer invoicing, payroll, reporting).
@@ -66,7 +66,7 @@ database products
 
 Most application development today is done in object-oriented programming languages, which leads to a common criticism of the SQL data model: an awkward translation layer is required between the objects in the application code and the database model of tables, rows, and columns. The disconnect between the models is sometimes called an impedance mismatch.
 
-Object-relational mapping (ORM) frameworks like ActiveRecord and Hibernate reduce the amount of boilerplate code required for this translation layer, but they can’t completely hide the differences between the two models.
+Object-relational mapping (ORM) frameworks like ActiveRecord and Hibernate reduce the amount of boilerplate code required for this translation layer, but they can't completely hide the differences between the two models.
 
 The JSON representation has better *locality* than the *multi-table schema*. If you want to fetch a profile in the relational example, you need to either
 perform multiple queries (query each table by user_id) or perform a messy multiway join between the users table and its subordinate tables. In the JSON representation, all the relevant information is in one place, and one query is sufficient.
@@ -77,7 +77,7 @@ Whether you store an ID or a text string is a question of *duplication*. When yo
 
 Anything that is meaningful to humans may need to change sometime in the future—and if that information is duplicated, all the redundant copies need to be updated.
 
-In relational databases, it’s normal to refer to rows in other tables by ID, because joins are easy. In document databases, joins are not needed for one-to-many tree structures, and support for joins is often weak.
+In relational databases, it's normal to refer to rows in other tables by ID, because joins are easy. In document databases, joins are not needed for one-to-many tree structures, and support for joins is often weak.
 
 ## Are Document Databases Repeating History?
 
@@ -88,7 +88,7 @@ The CODASYL model was a generalization of the hierarchical model. In the tree st
 A query in CODASYL was performed by moving a cursor through the database by
 iterating over lists of records and following access paths. If a record had multiple parents (i.e., multiple incoming pointers from other records), the application code had to keep track of all the various relationships.
 
-With both the hierarchical and the network model, if you didn’t have a path to the data you wanted, you were in a difficult situation. You could change the access paths, but then you had to go through a lot of handwritten database query code and rewrite it to handle the new access paths. It was difficult to make changes to an application’s data model.
+With both the hierarchical and the network model, if you didn't have a path to the data you wanted, you were in a difficult situation. You could change the access paths, but then you had to go through a lot of handwritten database query code and rewrite it to handle the new access paths. It was difficult to make changes to an application's data model.
 
 ### The relational model
 
@@ -112,7 +112,7 @@ The relational technique of shredding — splitting a document-like structure in
 
 The poor support for joins in document databases may or may not be a problem, depending on the application.
 
-If your application does use many-to-many relationships, the document model becomes less appealing. It’s possible to reduce the need for joins by denormalizing.
+If your application does use many-to-many relationships, the document model becomes less appealing. It's possible to reduce the need for joins by denormalizing.
 
 ### Schema flexibility in the document model
 
@@ -127,7 +127,7 @@ Running the `UPDATE` statement on a large table is likely to be slow on any data
 
 ### Data locality for queries
 
-A document is usually stored as a single continuous string, encoded as JSON, XML, or a binary variant thereof (such as MongoDB’s BSON). If your application often needs to access the entire document (for example, to render it on a web page), there is a performance advantage to this storage locality.
+A document is usually stored as a single continuous string, encoded as JSON, XML, or a binary variant thereof (such as MongoDB's BSON). If your application often needs to access the entire document (for example, to render it on a web page), there is a performance advantage to this storage locality.
 
 It is generally recommended that you keep documents fairly small and avoid writes that increase the size of a document.
 
@@ -166,7 +166,7 @@ Cypher is a declarative query language for property graphs, created for the Neo4
 
 ## Graph Queries in SQL
 
-In a relational database, you usually know in advance which joins you need in your query. In a graph query, you may need to traverse a variable number of edges before you find the vertex you’re looking for — that is, the number of joins is not fixed in advance.
+In a relational database, you usually know in advance which joins you need in your query. In a graph query, you may need to traverse a variable number of edges before you find the vertex you're looking for — that is, the number of joins is not fixed in advance.
 
 Since SQL:1999, this idea of variable-length traversal paths in a query can be expressed using something called recursive common table expressions (the `WITH RECURSIVE` syntax).
 
@@ -182,11 +182,11 @@ The subject of a triple is equivalent to a vertex in a graph. The object is one 
 ### The SPARQL query language
 
 SPARQL is a query language for triple-stores using the RDF data model. It
-predates Cypher, and since Cypher’s pattern matching is borrowed from SPARQL, they look quite similar.
+predates Cypher, and since Cypher's pattern matching is borrowed from SPARQL, they look quite similar.
 
 ### Graph Databases Compared to the Network Model
 
-At first glance, CODASYL’s network model looks similar
+At first glance, CODASYL's network model looks similar
 to the graph model. They differ in several important ways:
 
 - In CODASYL, a database had a schema that specified which record type could be nested within which other record type. In a graph database, there is no such
@@ -199,7 +199,7 @@ restriction: any vertex can have an edge to any other vertex. This gives much gr
 
 Datalog is a much older language than SPARQL or Cypher. It is less well known among software engineers, but it is nevertheless important, because it provides the foundation that later query languages build upon.
 
-Datalog’s data model is similar to the triple-store model, generalized a bit. Instead of writing a triple as `(subject, predicate, object)`, we write it as `predicate(subject, object)`.
+Datalog's data model is similar to the triple-store model, generalized a bit. Instead of writing a triple as `(subject, predicate, object)`, we write it as `predicate(subject, object)`.
 
 
 # Navigation

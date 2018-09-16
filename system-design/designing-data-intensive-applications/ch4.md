@@ -38,7 +38,7 @@ In most cases, a change to an application's features also requires a change to d
 Relational databases generally assume that all data in the database conforms
 to one schema: although that schema can be changed (through schema migrations; i.e., `ALTER` statements), there is exactly one schema in force at any one point in time.
 
-By contrast, schema-on-read ("schemaless") databases don’t enforce a schema, so the database can contain a mixture of older and newer data formats written at different times.
+By contrast, schema-on-read ("schemaless") databases don't enforce a schema, so the database can contain a mixture of older and newer data formats written at different times.
 
 When a data format or schema changes, a corresponding change to application code often needs to happen. However, in a large application, code changes often cannot happen instantaneously.
 
@@ -69,16 +69,16 @@ These encoding libraries have a number of deep problems:
 the data in another language is very difficult. 
 - In order to restore data in the same object types, the decoding process needs to be able to instantiate arbitrary classes. This is frequently a source of security problems.
 - Versioning data is often an afterthought in these libraries.
-- Efficiency is also often an afterthought. For example, Java’s built-in serialization is notorious for its bad performance and bloated encoding.
+- Efficiency is also often an afterthought. For example, Java's built-in serialization is notorious for its bad performance and bloated encoding.
 
 ## JSON, XML, and Binary Variants
 
-XML is often criticized for being too verbose and unnecessarily complicated. JSON’s popularity is mainly due to its built-in support in web browsers.
+XML is often criticized for being too verbose and unnecessarily complicated. JSON's popularity is mainly due to its built-in support in web browsers.
 
 JSON, XML and CSV are textual formats, and human-readable. They also have some subtle problems:
 
 - There is a lot of ambiguity around the encoding of numbers. In XML and CSV, you cannot **distinguish between a number and a string** that happens to consist of digits.
-- JSON and XML have good support for Unicode character strings, but they don’t support **binary strings** (sequences of bytes without a character encoding).
+- JSON and XML have good support for Unicode character strings, but they don't support **binary strings** (sequences of bytes without a character encoding).
 - There is optional **schema support** for both XML and JSON. These schema languages are quite powerful, and thus quite complicated to learn and implement. CSV does not have any schema.
 
 ### Binary encoding
@@ -104,11 +104,11 @@ Each field was marked either required or optional, but this makes no difference 
 
 An encoded record is just the concatenation of its encoded fields. Each field is identified by its tag number (the numbers 1, 2, 3) and annotated with a datatype (e.g., string or integer). If a field value is not set, it is simply omitted from the encoded record.
 
-You can change the name of a field in the schema, since the encoded data never refers to field names, but you cannot change a field’s tag, since that would make all existing encoded data invalid.
+You can change the name of a field in the schema, since the encoded data never refers to field names, but you cannot change a field's tag, since that would make all existing encoded data invalid.
 
 **Forward Compatibility**
 
-You can add new fields to the schema, provided that you give each field a new tag number. If old code tries to read data written by new code, including a new field with a tag number it doesn’t recognize, it can simply ignore that field. The datatype annotation allows the parser to determine how many bytes it needs to skip. 
+You can add new fields to the schema, provided that you give each field a new tag number. If old code tries to read data written by new code, including a new field with a tag number it doesn't recognize, it can simply ignore that field. The datatype annotation allows the parser to determine how many bytes it needs to skip. 
 
 **Backward Compatibility**
 
@@ -130,24 +130,24 @@ To parse the binary data, you go through the fields in the order that they appea
 
 ### The writer's schema and the reader's schema
 
-The key idea with Avro is that the writer’s schema and the reader’s schema don’t have to be the same—they only need to be compatible. When data is decoded (read), the Avro library resolves the differences by looking at the writer’s schema and the reader’s schema side by side and translating the data from the writer’s schema into the reader’s schema.
+The key idea with Avro is that the writer's schema and the reader's schema don't have to be the same—they only need to be compatible. When data is decoded (read), the Avro library resolves the differences by looking at the writer's schema and the reader's schema side by side and translating the data from the writer's schema into the reader's schema.
 
-It’s no problem if the writer’s schema and the reader’s schema have their fields in a different order, because the schema resolution matches up the fields by field name.
+It's no problem if the writer's schema and the reader's schema have their fields in a different order, because the schema resolution matches up the fields by field name.
 
 ### Schema evolution rules
 
 To maintain compatibility, you may only add or remove a field that has a default value.
 
-If you were to add a field that has no default value, new readers wouldn’t be able to read data written by old writers, so you would break backward compatibility. If you were to remove a field that has no default value, old readers wouldn’t be able to read data written by new writers, so you would break forward compatibility.
+If you were to add a field that has no default value, new readers wouldn't be able to read data written by old writers, so you would break backward compatibility. If you were to remove a field that has no default value, old readers wouldn't be able to read data written by new writers, so you would break forward compatibility.
 
-Changing the datatype of a field is possible, provided that Avro can convert the type. Changing the name of a field is possible but a little tricky: the reader’s schema can contain aliases for field names, so it can match an old writer’s schema field names against the aliases. This means that changing a field name is backward compatible but not forward compatible.
+Changing the datatype of a field is possible, provided that Avro can convert the type. Changing the name of a field is possible but a little tricky: the reader's schema can contain aliases for field names, so it can match an old writer's schema field names against the aliases. This means that changing a field name is backward compatible but not forward compatible.
 
 ### But what is the writer's schema?
 
 How does the reader know the writer's schema with which a particular piece of data was encoded?
 
 - Large file with lots of records
-    The writer of that file can just include the writer’s schema once at the beginning of the file. Avro specifies a file format (object container files) to do this.
+    The writer of that file can just include the writer's schema once at the beginning of the file. Avro specifies a file format (object container files) to do this.
 - Database with individually written records
     The simplest solution is to include a version number at the beginning of every encoded record, and to keep a list of schema versions in your database.
 - Sending records over a network connection
@@ -155,7 +155,7 @@ How does the reader know the writer's schema with which a particular piece of da
 
 ### Dynamically generated schemas
 
-One advantage of Avro’s approach, compared to Protocol Buffers and Thrift, is that the schema doesn’t contain any tag numbers. The difference is that Avro is friendlier to dynamically generated schemas.
+One advantage of Avro's approach, compared to Protocol Buffers and Thrift, is that the schema doesn't contain any tag numbers. The difference is that Avro is friendlier to dynamically generated schemas.
 
 By contrast, if you were using Thrift or Protocol Buffers for this purpose, the field tags would likely have to be assigned by hand: every time the database schema changes, an administrator would have to manually update the mapping from database column names to field tags.
 
@@ -187,7 +187,7 @@ In an environment where the application is changing, it is likely that some proc
 
 When you deploy a new version of your application (of a server-side application, at least), you may entirely replace the old version with the new version within a few minutes. The same is not true of database contents: the five-year-old data will still be there, in the original encoding, unless you have explicitly rewritten it since then. This observation is sometimes summed up as data outlives code.
 
-Rewriting (migrating) data into a new schema is certainly possible, but it’s an expensive thing to do on a large dataset, so most databases avoid it if possible. Most relational databases allow simple schema changes, such as adding a new column with a null default value, without rewriting existing data.
+Rewriting (migrating) data into a new schema is certainly possible, but it's an expensive thing to do on a large dataset, so most databases avoid it if possible. Most relational databases allow simple schema changes, such as adding a new column with a null default value, without rewriting existing data.
 
 ### Archival storage
 
@@ -233,7 +233,7 @@ evolved, but there are some subtle pitfalls.
 for responses, and JSON or URI-encoded/form-encoded request parameters for
 requests. Adding *optional request parameters and adding new fields to response objects* are usually considered changes that maintain compatibility.
 
-For RESTful APIs, common approaches are to use *a version number in the URL or in the HTTP Accept header*. For services that use API keys to identify a particular client, another option is to *store a client’s requested API version on the server and to allow this version selection to be updated through a separate administrative interface*.
+For RESTful APIs, common approaches are to use *a version number in the URL or in the HTTP Accept header*. For services that use API keys to identify a particular client, another option is to *store a client's requested API version on the server and to allow this version selection to be updated through a separate administrative interface*.
 
 ## Message-Passing Dataflow
 
@@ -250,7 +250,7 @@ Using a message broker has several advantages compared to direct RPC:
 
 Message brokers are used as follows: one process sends a message to a named queue or topic, and the broker ensures that the message is delivered to one or more consumers of or subscribers to that queue or topic. There can be many producers and many consumers on the same topic.
 
-Message brokers typically don’t enforce any particular data model—a message is just a sequence of bytes with some metadata, so you can use any encoding format.
+Message brokers typically don't enforce any particular data model—a message is just a sequence of bytes with some metadata, so you can use any encoding format.
 
 ### Distributed actor frameworks
 

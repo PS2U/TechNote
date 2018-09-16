@@ -83,7 +83,7 @@ This mode of replication is a build-in feature of
 
 ![](img/ch5-leader-based-replication-synchronous.jpg)
 
-The advantage of synchronous replication is that the follower is guaranteed to have an up-to-date copy of the data that is consistent with the leader. If the leader suddenly fails, we can be sure that the data is still available on the follower. The disadvantage is that if the synchronous follower doesn’t respond,  The leader must block all writes and wait until the synchronous replica is available again.
+The advantage of synchronous replication is that the follower is guaranteed to have an up-to-date copy of the data that is consistent with the leader. If the leader suddenly fails, we can be sure that the data is still available on the follower. The disadvantage is that if the synchronous follower doesn't respond,  The leader must block all writes and wait until the synchronous replica is available again.
 
 In practice, if you enable synchronous replication on a database, it usually means that one of the followers is synchronous, and the others are asynchronous. If the synchronous follower becomes unavailable or slow, one of the asynchronous followers is made synchronous. This guarantees that you have an up-to-date copy of the data on at least two nodes. This configuration is sometimes also called *semi-synchronous*.
 
@@ -91,13 +91,13 @@ Often, leader-based replication is configured to be completely asynchronous. In 
 
 ## Setting Up New Followers
 
-How do you ensure that the new follower has an accurate copy of the leader’s data? Simply copying data files from one node to another is typically not sufficient: clients are constantly writing to the database, and the data is always in flux, so a standard file copy would see different parts of the database at different points in time.
+How do you ensure that the new follower has an accurate copy of the leader's data? Simply copying data files from one node to another is typically not sufficient: clients are constantly writing to the database, and the data is always in flux, so a standard file copy would see different parts of the database at different points in time.
 
 Fortunately, setting up a follower can usually be done without downtime. 
 
-1. Take a consistent *snapshot* of the leader’s database at some point in time—if possible, without taking a lock on the entire database. 
+1. Take a consistent *snapshot* of the leader's database at some point in time—if possible, without taking a lock on the entire database. 
 2. Copy the snapshot to the new follower node.
-3. The follower connects to the leader and requests all the data changes that have happened since the snapshot was taken. This requires that the snapshot is associated with an exact position in the leader’s replication log.
+3. The follower connects to the leader and requests all the data changes that have happened since the snapshot was taken. This requires that the snapshot is associated with an exact position in the leader's replication log.
 4. When the follower has processed the backlog of data changes since the snapshot, we say it has caught up. 
 
 ## Handling Node Outages
@@ -117,7 +117,7 @@ An automatic failover process usually consists of the following steps:
 1. Determining that the leader has failed. There is no
 foolproof way of detecting what has gone wrong, so most systems simply use a
 timeout: nodes frequently bounce messages back and forth between each other,
-and if a node doesn’t respond for some period of time—say, 30 seconds—it is
+and if a node doesn't respond for some period of time—say, 30 seconds—it is
 assumed to be dead. 
 2. Choosing a new leader. This could be done through an election process (where
 the leader is chosen by a majority of the remaining replicas), or a new leader
@@ -166,7 +166,7 @@ A logical log for a relational database is usually a sequence of records describ
 - For a deleted row, the log contains enough information to uniquely identify the row that was deleted. Typically this would be the primary key.
 - For an updated row, the log contains enough information to uniquely identify the updated row, and the new values of all columns (or at least the new values of all columns that changed).
 
-A transaction that modifies several rows generates several such log records, followed by a record indicating that the transaction was committed. MySQL’s binlog (when configured to use row-based replication) uses this approach.
+A transaction that modifies several rows generates several such log records, followed by a record indicating that the transaction was committed. MySQL's binlog (when configured to use row-based replication) uses this approach.
 
 ### Trigger-based replication
 
@@ -191,9 +191,9 @@ How can we implement read-after-write consistency with leader-based replication?
 
 ## Monotonic Reads
 
-Our second example of an anomaly that can occur when reading from asynchronous followers is that it’s possible for a user to see things moving backward in time.
+Our second example of an anomaly that can occur when reading from asynchronous followers is that it's possible for a user to see things moving backward in time.
 
-Monotonic reads is a guarantee that this kind of anomaly does not happen. It’s a lesser guarantee than strong consistency, but a stronger guarantee than eventual consistency.
+Monotonic reads is a guarantee that this kind of anomaly does not happen. It's a lesser guarantee than strong consistency, but a stronger guarantee than eventual consistency.
 
 When you read data, you may see an old value; monotonic reads only means that if one user makes several reads in sequence, they will not see time go backward.
 
@@ -214,12 +214,12 @@ One solution is to make sure that any writes that are causally related to each o
 There are ways in which an application can provide a stronger guarantee than the underlying database—for example, by performing certain kinds of reads on the leader. However, dealing with these issues in application code is complex
 and easy to get wrong.
 
-It would be better if application developers didn’t have to worry about subtle replication issues and could just trust their databases to "do the right thing". This is why transactions exist: they are a way for a database to provide stronger guarantees so that the application can be simpler.
+It would be better if application developers didn't have to worry about subtle replication issues and could just trust their databases to "do the right thing". This is why transactions exist: they are a way for a database to provide stronger guarantees so that the application can be simpler.
 
 
 # Multi-Leader Replication
 
-Leader-based replication has one major downside: there is only one leader, and all writes must go through it. If you can’t connect to the leader for any reason, you can’t write to the database.
+Leader-based replication has one major downside: there is only one leader, and all writes must go through it. If you can't connect to the leader for any reason, you can't write to the database.
 
 A natural extension of the leader-based replication model is to allow more than one node to accept writes. Replication still happens in the same way: each node that processes a write must forward that data change to all the other nodes. We call this a multi-leader configuration (also known as *master–master* or *active/active* replication)
 
@@ -231,7 +231,7 @@ It rarely makes sense to use a multi-leader setup within a single datacenter, be
 
 ![](img/ch5-multi-leader-multiple-datacenter.jpg)
 
-Let’s compare how the single-leader and multi-leader configurations fare in a multi-datacenter deployment:
+Let's compare how the single-leader and multi-leader configurations fare in a multi-datacenter deployment:
 
 - Performance
 - Tolerance of datacenter outages
@@ -266,7 +266,7 @@ The simplest strategy for dealing with conflicts is to avoid them: if the applic
 
 ### Converging toward a consistent state
 
-In a multi-leader configuration, there is no defined ordering of writes, so it’s not clear what the final value should be.
+In a multi-leader configuration, there is no defined ordering of writes, so it's not clear what the final value should be.
 
 Every replication scheme must ensure that the data is eventually the same in all replicas. Thus, the database must resolve the conflict in a converging way.
 
@@ -316,7 +316,7 @@ In a leaderless configuration, failover does not exist.
 
 ![](img/ch5-quorum-write-quorum-read.jpg)
 
-When a client reads from the database, it doesn’t just send its request to one replica: read requests are also sent to several nodes in parallel. The client may get different responses from different nodes; i.e., the up-to-date value from one node and a stale value from another. Version numbers are used to determine which value is newer.
+When a client reads from the database, it doesn't just send its request to one replica: read requests are also sent to several nodes in parallel. The client may get different responses from different nodes; i.e., the up-to-date value from one node and a stale value from another. Version numbers are used to determine which value is newer.
 
 ### Read repair and anti-entropy
 
@@ -328,7 +328,7 @@ Two mechanisms are often used in Dynamo-style datastores:
 
 ### Quorums for reading and writing
 
-More generally, if there are n replicas, every write must be confirmed by w nodes to be considered successful, and we must query at least r nodes for each read. (In our example, n = 3, w = 2, r = 2.) As long as w + r > n, we expect to get an up-to-date value when reading, because at least one of the r nodes we’re reading from must be up to date. Reads and writes that obey these r and w values are called quorum reads and writes.
+More generally, if there are n replicas, every write must be confirmed by w nodes to be considered successful, and we must query at least r nodes for each read. (In our example, n = 3, w = 2, r = 2.) As long as w + r > n, we expect to get an up-to-date value when reading, because at least one of the r nodes we're reading from must be up to date. Reads and writes that obey these r and w values are called quorum reads and writes.
 
 A workload with few writes and many reads may benefit from setting w = n and r = 1. This makes reads faster, but has the disadvantage that just one failed node causes all database writes to fail.
 
@@ -353,18 +353,18 @@ In systems with leaderless replication, there is no fixed order in which writes 
 
 ## Sloppy Quorums and Hinted Handoff
 
-In a large cluster (with significantly more than n nodes) it’s likely that the client can connect to some database nodes during the network interruption, just not to the nodes that it needs to assemble a quorum for a particular value. In that case, database designers face a trade-off:
+In a large cluster (with significantly more than n nodes) it's likely that the client can connect to some database nodes during the network interruption, just not to the nodes that it needs to assemble a quorum for a particular value. In that case, database designers face a trade-off:
 
 - Is it better to return errors to all requests for which we cannot reach a quorum of w or r nodes?
 - Or should we accept writes anyway, and write them to some nodes that are
-reachable but aren’t among the n nodes on which the value usually lives?
+reachable but aren't among the n nodes on which the value usually lives?
 
 The latter is known as a *sloppy quorum*: writes and reads still require w and r successful responses, but those may include nodes that are not among the designated n "home" nodes for a value.
 
 Sloppy quorums are particularly useful for increasing write availability: as long as any w nodes are available, the database can accept writes. However, this means that even
 when w + r > n, you cannot be sure to read the latest value for a key, because the latest value may have been temporarily written to some nodes outside of n.
 
-Thus, a sloppy quorum actually isn’t a quorum at all in the traditional sense. It’s only an assurance of durability, namely that the data is stored on w nodes somewhere. There is no guarantee that a read of r nodes will see it until the hinted handoff has completed.
+Thus, a sloppy quorum actually isn't a quorum at all in the traditional sense. It's only an assurance of durability, namely that the data is stored on w nodes somewhere. There is no guarantee that a read of r nodes will see it until the hinted handoff has completed.
 
 ### Multi-datacenter operation
 
@@ -379,13 +379,13 @@ Riak keeps all communication between clients and database nodes local to one dat
 
 One approach for achieving eventual convergence is to declare that each replica need only store the most "recent" value and allow "older" values to be overwritten and discarded. Then, as long as we have some way of unambiguously determining which write is more "recent", and every write is eventually copied to every replica, the replicas will eventually converge to the same value.
 
-Even though the writes don’t have a natural ordering, we can force an arbitrary order on them. For example, we can attach a timestamp to each write, pick the biggest timestamp as the most "recent", and discard any writes with an earlier timestamp. This conflict resolution algorithm is called last write wins (LWW).
+Even though the writes don't have a natural ordering, we can force an arbitrary order on them. For example, we can attach a timestamp to each write, pick the biggest timestamp as the most "recent", and discard any writes with an earlier timestamp. This conflict resolution algorithm is called last write wins (LWW).
 
 ### The "happens-before" relationship and concurrency
 
 An operation A happens before another operation B if B knows about A, or depends on A, or builds upon A in some way. Whether one operation happens before another operation is the key to defining what concurrency means. In fact, we can simply say that two operations are concurrent if neither happens before the other (i.e., neither knows about the other).
 
-For defining concurrency, exact time doesn’t matter: we simply call two operations concurrent if they are both unaware of each other, regardless of the physical time at which they occurred.
+For defining concurrency, exact time doesn't matter: we simply call two operations concurrent if they are both unaware of each other, regardless of the physical time at which they occurred.
 
 Note that the server can determine whether two operations are concurrent by looking at the version numbers.
 

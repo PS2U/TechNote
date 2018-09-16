@@ -31,7 +31,7 @@ The main reason for wanting to partition data is scalability. Different partitio
 
 Partitioning is usually combined with replication so that copies of each partition are stored on multiple nodes. This means that, even though each record belongs to exactly one partition, it may still be stored on several different nodes for fault tolerance.
 
-Each partition’s leader is assigned to one node, and its followers are assigned to other nodes. Each node may be the leader for some partitions and a follower for other partitions.
+Each partition's leader is assigned to one node, and its followers are assigned to other nodes. Each node may be the leader for some partitions and a follower for other partitions.
 
 ![](img/ch6-combine-replication-partition.jpg)
 
@@ -42,7 +42,7 @@ Our goal with partitioning is to spread the data and the query load evenly acros
 
 If the partitioning is unfair, so that some partitions have more data or queries than others, we call it *skewed*, making partitioning much less effective.
 
-The simplest approach for avoiding hot spots would be to assign records to nodes randomly. That would distribute the data quite evenly across the nodes, but it has a big disadvantage: when you’re trying to read a particular item, you have no way of knowing which node it is on, so you have to query all nodes in parallel.
+The simplest approach for avoiding hot spots would be to assign records to nodes randomly. That would distribute the data quite evenly across the nodes, but it has a big disadvantage: when you're trying to read a particular item, you have no way of knowing which node it is on, so you have to query all nodes in parallel.
 
 ## Partitioning by Key Range
 
@@ -66,20 +66,20 @@ By using the hash of the key for partitioning we lose the ability to do efficien
 
 ## Skewed Workloads and Relieving Hot Spots
 
-This kind of workload is perhaps unusual, but not unheard of: for example, on a social media site, a celebrity user with millions of followers may cause a storm of activity when they do something. This event can result in a large volume of writes to the same key (where the key is perhaps the user ID of the celebrity, or the ID of the action that people are commenting on). Hashing the key doesn’t help, as the hash of two identical IDs is still the same.
+This kind of workload is perhaps unusual, but not unheard of: for example, on a social media site, a celebrity user with millions of followers may cause a storm of activity when they do something. This event can result in a large volume of writes to the same key (where the key is perhaps the user ID of the celebrity, or the ID of the action that people are commenting on). Hashing the key doesn't help, as the hash of two identical IDs is still the same.
 
 
 # Partitioning and Secondary Indexes
 
 If records are only ever accessed via their primary key, we can determine the partition from that key and use it to route read and write requests to the partition responsible for that key.
  
-The situation becomes more complicated if secondary indexes are involved. A secondary index usually doesn’t identify a record uniquely but rather is a way of searching for occurrences of a particular
+The situation becomes more complicated if secondary indexes are involved. A secondary index usually doesn't identify a record uniquely but rather is a way of searching for occurrences of a particular
 value: find all actions by user 123, find all articles containing the word hogwash, find all cars whose color is red, and so on.
 
 Secondary indexes are the bread and butter of relational databases, and they are common in document databases too. Many key-value stores (such as HBase and Voldemort) have avoided secondary indexes because of their added implementation
 complexity.
 
-The problem with secondary indexes is that they don’t map neatly to partitions. There are two main approaches to partitioning a database with secondary indexes: 
+The problem with secondary indexes is that they don't map neatly to partitions. There are two main approaches to partitioning a database with secondary indexes: 
 
 - document-based partitioning 
 - and term-based partitioning.
@@ -98,7 +98,7 @@ This approach to querying a partitioned database is sometimes known as scatter/ 
 
 Rather than each partition having its own secondary index (a local index), we can construct a global index that covers data in all partitions. A global index must also be partitioned, but it can be partitioned differently from the primary key index.
 
-We call this kind of index term-partitioned, because the term we’re looking for determines the partition of the index. As before, we can partition the index by the term itself, or using a hash of the term.
+We call this kind of index term-partitioned, because the term we're looking for determines the partition of the index. As before, we can partition the index by the term itself, or using a hash of the term.
 
 The advantage of a global (term-partitioned) index over a document-partitioned index is that it can make reads more efficient. The downside of a global index is that writes are slower and more complicated, because a write to a single document may now affect multiple partitions of the index.
 
@@ -120,7 +120,7 @@ No matter which partitioning scheme is used, rebalancing is usually expected to 
 
 ### How not to do it: hash mod N
 
-When partitioning by the hash of a key, it’s best to divide the possible hashes into ranges and assign each range to a partition (e.g., assign key to partition 0 if 0 ≤ hash(key) < b0, to partition 1 if b0 ≤ hash(key) < b1, etc.).
+When partitioning by the hash of a key, it's best to divide the possible hashes into ranges and assign each range to a partition (e.g., assign key to partition 0 if 0 ≤ hash(key) < b0, to partition 1 if b0 ≤ hash(key) < b1, etc.).
 
 The problem with the mod N approach is that if the number of nodes N changes, most of the keys will need to be moved from one node to another.
 
@@ -135,7 +135,7 @@ In principle, you can even account for mismatched hardware in your cluster: by a
 A fixed number of partitions is operationally simpler, and so many fixed-partition databases choose not to implement partition
 splitting. Thus, the number of partitions configured at the outset is the maximum number of nodes you can have, so you need to choose it high enough to accommodate future growth. 
 
-If partitions are very large, rebalancing and recovery from node failures become expensive. But if partitions are too small, they incur too much overhead. The best performance is achieved when the size of partitions is “just right,” neither too big nor too small, which can be hard to achieve if the number of partitions is fixed but the dataset size varies.
+If partitions are very large, rebalancing and recovery from node failures become expensive. But if partitions are too small, they incur too much overhead. The best performance is achieved when the size of partitions is "just right", neither too big nor too small, which can be hard to achieve if the number of partitions is fixed but the dataset size varies.
 
 ### Dynamic partitioning
 
@@ -162,7 +162,7 @@ Such automation can be dangerous in combination with automatic failure detection
 
 # Request Routing
 
-If I want to read or write the key “foo”, which IP address and port number do I need to connect to? This is an instance of a more general problem called service discovery.
+If I want to read or write the key "foo", which IP address and port number do I need to connect to? This is an instance of a more general problem called service discovery.
 
 On a high level, there are a few different approaches to this problem:
 

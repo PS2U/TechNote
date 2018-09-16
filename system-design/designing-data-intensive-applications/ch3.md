@@ -54,16 +54,16 @@ Moreover, since compaction often makes segments much smaller (assuming that a ke
 
 ![](img/ch3-compaction-merge.jpg)
 
-Each segment now has its own in-memory hash table, mapping keys to file offsets. In order to find the value for a key, we first check the most recent segment’s hash map; if the key is not present we check the second-most-recent segment, and so on.
+Each segment now has its own in-memory hash table, mapping keys to file offsets. In order to find the value for a key, we first check the most recent segment's hash map; if the key is not present we check the second-most-recent segment, and so on.
 
 Lots of detail goes into making this simple idea work in practice. Briefly, some of the issues that are important in a real implementation are:
 
 - File format
-    CSV is not the best format for a log. It’s faster and simpler to use a binary format that first encodes the length of a string in bytes, followed by the raw string.
+    CSV is not the best format for a log. It's faster and simpler to use a binary format that first encodes the length of a string in bytes, followed by the raw string.
 - Deleting records
     If you want to delete a key and its associated value, you have to append a special deletion record to the data file (sometimes called a tombstone). When log segments are merged, the tombstone tells the merging process to discard any previous values for the deleted key.
 - Crash recovery
-    If the database is restarted, the in-memory hash maps are lost. In principle, you can restore each segment’s hash map by reading the entire segment file from beginning to end and noting the offset of the most recent value for every key as you go along. Bitcask speeds up recovery by storing a snapshot of each segment’s hash map on disk, which can be loaded into memory more quickly.
+    If the database is restarted, the in-memory hash maps are lost. In principle, you can restore each segment's hash map by reading the entire segment file from beginning to end and noting the offset of the most recent value for every key as you go along. Bitcask speeds up recovery by storing a snapshot of each segment's hash map on disk, which can be loaded into memory more quickly.
 - Partially written records
     The database may crash at any time, including halfway through appending a record to the log. Bitcask files include checksums, allowing such corrupted parts of the log to be detected and ignored.
 - Concurrency control
@@ -90,8 +90,8 @@ already ensures that). SSTables have several big advantages over log segments wi
 
 ![](img/ch3-merge-sstable-segements.jpg)
 
-2. In order to find a particular key in the file, you no longer need to keep an index of all the keys in memory. For an example: say you’re looking for
-  the key handiwork, but you don’t know the exact offset of that key in the segment file. However, you do know the offsets for the keys handbag and handsome, and because of the sorting you know that handiwork must appear between those two.
+2. In order to find a particular key in the file, you no longer need to keep an index of all the keys in memory. For an example: say you're looking for
+  the key handiwork, but you don't know the exact offset of that key in the segment file. However, you do know the offsets for the keys handbag and handsome, and because of the sorting you know that handiwork must appear between those two.
 
 ![](img/ch3-sstable-with-index.jpg)
 
@@ -143,7 +143,7 @@ If you want to update the value for an existing key in a B-tree, you search for 
 
 If you want to add a new key, you need to find the page whose range encompasses the new key and add it to that page.
 
-If there isn’t enough free space in the page to accommodate the new key, it is split into two half-full pages, and the parent page is updated to account for the new subdivision of key ranges.
+If there isn't enough free space in the page to accommodate the new key, it is split into two half-full pages, and the parent page is updated to account for the new subdivision of key ranges.
 
 ![](img/ch3-growing-btree-split-page.jpg)
 
@@ -157,7 +157,7 @@ In order to make the database resilient to crashes, it is common for B-tree impl
 
 - Instead of overwriting pages and maintaining a WAL for crash recovery, some databases use a copy-on-write scheme. A modified page is written to a different location, and a new version of the parent pages in the tree is created, pointing at the new location.
 - We can save space in pages by not storing the entire key, but abbreviating it.
-- Many B-tree implementations try to lay out the tree so that *leaf pages appear in sequential order* on disk. However, it’s difficult to maintain that order as the tree grows.
+- Many B-tree implementations try to lay out the tree so that *leaf pages appear in sequential order* on disk. However, it's difficult to maintain that order as the tree grows.
 - Additional pointers have been added to the tree. For example, each leaf page may have *references to its sibling pages* to the left and right, which allows scanning keys in order without jumping back to parent pages.
 
 ## Comparing B-Trees and LSM-Trees
@@ -168,7 +168,7 @@ LSM-trees are typically faster for writes, whereas B-trees are thought to be fas
 
 A B-tree index must write every piece of data at least twice: once to the write-ahead log, and once to the tree page itself (and perhaps again as pages are split). There is also overhead from having to write an entire page at a time, even if only a few bytes in that page changed.
 
-Log-structured indexes also rewrite data multiple times due to repeated compaction and merging of SSTables. This effect—one write to the database resulting in multiple writes to the disk over the course of the database’s lifetime—is known as write amplification. It is of particular concern on SSDs, which can only overwrite blocks a limited number of times before wearing out.
+Log-structured indexes also rewrite data multiple times due to repeated compaction and merging of SSTables. This effect—one write to the database resulting in multiple writes to the disk over the course of the database's lifetime—is known as write amplification. It is of particular concern on SSDs, which can only overwrite blocks a limited number of times before wearing out.
 
 In write-heavy applications, the performance bottleneck might be the rate at which the database can write to disk.
 
@@ -180,7 +180,7 @@ LSM-trees can be compressed better, and thus often produce smaller files on disk
 
 A downside of log-structured storage is that the compaction process can sometimes interfere with the performance of ongoing reads and writes. B-trees can be more predictable.
 
-Another issue with compaction arises at high write throughput: the disk’s finite *write bandwidth needs to be shared between the initial write* (logging and flushing a memtable to disk) and the compaction threads running in the background.
+Another issue with compaction arises at high write throughput: the disk's finite *write bandwidth needs to be shared between the initial write* (logging and flushing a memtable to disk) and the compaction threads running in the background.
 
 An advantage of B-trees is that *each key exists in exactly one place in the index*, whereas a log-structured storage engine may have multiple copies of the same key in different segments. This aspect makes B-trees attractive in databases that want to offer strong transactional semantics.
 
@@ -195,7 +195,7 @@ The key in an index is the thing that queries search for, but the value can be o
 The extra hop from the index to the heap file is too much of a performance penalty for reads, so it can be desirable to store the indexed row directly
 within an index. This is known as a clustered index.
 
-A compromise between a clustered index (storing all row data within the index) and a nonclustered index (storing only references to the data within the index) is known as a covering index or index with included columns, which stores some of a table’s columns within the index.
+A compromise between a clustered index (storing all row data within the index) and a nonclustered index (storing only references to the data within the index) is known as a covering index or index with included columns, which stores some of a table's columns within the index.
 
 ### Multi-column indexes
 
@@ -209,7 +209,7 @@ Lucene uses a SSTable-like structure for its term dictionary. This structure req
 
 ### Keeping everything in memory
 
-When an in-memory database is restarted, it needs to reload its state, either from disk or over the network from a replica (unless special hardware is used). Despite writing to disk, it’s still an in-memory database, because the disk is merely used as an append-only log for durability, and reads are served entirely from memory. Writing to disk also has operational advantages: files on disk can easily be backed up, inspected, and analyzed by external utilities.
+When an in-memory database is restarted, it needs to reload its state, either from disk or over the network from a replica (unless special hardware is used). Despite writing to disk, it's still an in-memory database, because the disk is merely used as an append-only log for durability, and reads are served entirely from memory. Writing to disk also has operational advantages: files on disk can easily be backed up, inspected, and analyzed by external utilities.
 
 Besides performance, another interesting area for in-memory databases is providing *data models* that are difficult to implement with disk-based indexes.
 
@@ -232,7 +232,7 @@ SQL turned out to be quite flexible in this regard: it works well for OLTP-type 
 
 These OLTP systems are usually expected to be highly available and to process transactions with low latency, since they are often critical to the operation of the business.
 
-A data warehouse, by contrast, is a separate database that analysts can query to their hearts’ content, without affecting OLTP operations.
+A data warehouse, by contrast, is a separate database that analysts can query to their hearts' content, without affecting OLTP operations.
 
 ![](img/ch3-outline-etl-into-data-warehouse.jpg)
 
@@ -248,7 +248,7 @@ Many data warehouses are used in a fairly formulaic style, known as a star schem
 
 ![](img/ch3-start-schema-in-data-warehouse.jpg)
 
-The name “star schema” comes from the fact that when the table relationships are visualized, the fact table is in the middle, surrounded by its dimension tables; the connections to these tables are like the rays of a star.
+The name "star schema" comes from the fact that when the table relationships are visualized, the fact table is in the middle, surrounded by its dimension tables; the connections to these tables are like the rays of a star.
 
 A variation of this template is known as the snowflake schema, where dimensions are further broken down into subdimensions.
 
@@ -257,7 +257,7 @@ A variation of this template is known as the snowflake schema, where dimensions 
 
 In most OLTP databases, storage is laid out in a row-oriented fashion: all the values from one row of a table are stored next to each other.
 
-The idea behind column-oriented storage is simple: don’t store all the values from one row together, but store all the values from each column together instead. If each column is stored in a separate file, a query only needs to read and parse those columns that are used in that query, which can save a lot of work.
+The idea behind column-oriented storage is simple: don't store all the values from one row together, but store all the values from each column together instead. If each column is stored in a separate file, a query only needs to read and parse those columns that are used in that query, which can save a lot of work.
 
 ![](img/ch3-storing-relational-data-by-column.jpg)
 
@@ -273,7 +273,7 @@ Column-oriented storage layouts are also good for making efficient use of CPU cy
 
 ## Sort Order in Column Storage
 
-In a column store, it doesn’t necessarily matter in which order the rows are stored. However, we can choose to impose an order, like we did with SSTables previously, and use that as an indexing mechanism.
+In a column store, it doesn't necessarily matter in which order the rows are stored. However, we can choose to impose an order, like we did with SSTables previously, and use that as an indexing mechanism.
 
 We can only reconstruct a row because we know that the kth item in one column belongs to the same row as the kth item in another column.
 
@@ -281,16 +281,16 @@ Another advantage of sorted order is that it can help with compression of column
 
 ### Several different sort orders
 
-Having multiple sort orders in a column-oriented store is a bit similar to having multiple secondary indexes in a row-oriented store. But the big difference is that the row-oriented store keeps every row in one place (in the heap file or a clustered index), and secondary indexes just contain pointers to the matching rows. In a column store, there normally aren’t any pointers to data elsewhere, *only columns containing values*.
+Having multiple sort orders in a column-oriented store is a bit similar to having multiple secondary indexes in a row-oriented store. But the big difference is that the row-oriented store keeps every row in one place (in the heap file or a clustered index), and secondary indexes just contain pointers to the matching rows. In a column store, there normally aren't any pointers to data elsewhere, *only columns containing values*.
 
 ## Writing to Column-Oriented Storage
 
 An update-in-place approach, like B-trees use, is not possible with compressed columns. If you wanted to insert a row in the middle of a sorted table, you would most likely have to rewrite all the column files. As rows are identified by their position within a column, the insertion has to update all columns consistently.
 
-Fortunately, we have already seen a good solution: LSM-trees. All writes first go to an in-memory store, where they are added to a sorted structure and prepared for writing to disk. It doesn’t matter whether the in-memory store is row-oriented or column-oriented. When enough writes have accumulated, they are
+Fortunately, we have already seen a good solution: LSM-trees. All writes first go to an in-memory store, where they are added to a sorted structure and prepared for writing to disk. It doesn't matter whether the in-memory store is row-oriented or column-oriented. When enough writes have accumulated, they are
 merged with the column files on disk and written to new files in bulk. 
 
-Queries need to examine both the column data on disk and the recent writes in memory, and combine the two. However, the query optimizer hides this distinction from the user. From an analyst’s point of view, data that has been modified with inserts, updates, or deletes is immediately reflected in subsequent queries.
+Queries need to examine both the column data on disk and the recent writes in memory, and combine the two. However, the query optimizer hides this distinction from the user. From an analyst's point of view, data that has been modified with inserts, updates, or deletes is immediately reflected in subsequent queries.
 
 ## Aggregation: Data Cubes and Materialized Views
 
