@@ -52,6 +52,8 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
+![](img/ch7-mind-map.png)
+
 In the harsh reality of data systems, many things can go wrong:
 
 - The database software or hardware may fail at any time (including in the middle of a write operation).
@@ -178,7 +180,7 @@ Most commonly, databases prevent dirty writes by using row-level locks: when a t
 
 How do we prevent dirty reads? One option would be to use the same lock, and to require any transaction that wants to read an object to briefly acquire the lock and then release it again immediately after reading.
 
-However, the approach of requiring read locks does not work well in practice, because one long-running write transaction can force many read-only transactionGs to wait until the long-running transaction has completed.
+However, the approach of requiring read locks does not work well in practice, because one long-running write transaction can force many read-only transactions to wait until the long-running transaction has completed.
 
 ## Snapshot Isolation and Repeatable Read
 
@@ -396,7 +398,7 @@ Traditional relational databases don't limit the duration of a transaction, beca
 
 ### Predicate locks
 
-We need a predicate lock [3]. It works similarly to the shared/exclusive lock described earlier, but rather than belonging to a particular object (e.g., one row in a table), it belongs to all objects that match some search condition.
+We need a predicate lock. It works similarly to the shared/exclusive lock described earlier, but rather than belonging to a particular object (e.g., one row in a table), it belongs to all objects that match some search condition.
 
 A predicate lock restricts access as follows:
 
@@ -428,7 +430,7 @@ By contrast, serializable snapshot isolation is an optimistic concurrency contro
 
 When a transaction wants to commit, the database checks whether anything bad happened; if so, the transaction action is aborted and has to be retried. Only transactions that executed serializably are allowed to commit.
 
-SSI is based on snapshot isolation—that is, all reads within a transaction are made from a consistent snapshot of the database. This is the main difference compared to earlier optimistic concurrency control techniques. On top of snapshot isolation, SSI adds an algorithm for* detecting serialization conflicts* among writes and determining which transactions to abort.
+SSI is based on snapshot isolation—that is, all reads within a transaction are made from a consistent snapshot of the database. This is the main difference compared to earlier optimistic concurrency control techniques. On top of snapshot isolation, SSI adds an algorithm for *detecting serialization conflicts* among writes and determining which transactions to abort.
 
 ### Decisions based on an outdated premise
 
