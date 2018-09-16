@@ -35,6 +35,8 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
+![](img/ch9-mind-map.png)
+
 # Faults and Partial Failures
 
 This is a deliberate choice in the design of computers: if an internal fault occurs, we prefer a computer to crash completely rather than returning a wrong result, because wrong results are difficult and confusing to deal with.
@@ -272,12 +274,9 @@ The three most common system models for nodes are:
 
 We may require the algorithm to have the following properties:
 
-- Uniqueness
-    No two requests for a fencing token return the same value.
-- Monotonic sequence
-    If request x returned token tx, and request y returned token ty, and x completed before y began, then tx < ty.
-- Availability
-    A node that requests a fencing token and does not crash eventually receives a response.
+- Uniqueness. No two requests for a fencing token return the same value.
+- Monotonic sequence. If request x returned token tx, and request y returned token ty, and x completed before y began, then tx < ty.
+- Availability. A node that requests a fencing token and does not crash eventually receives a response.
 
 ### Safety and liveness
 
