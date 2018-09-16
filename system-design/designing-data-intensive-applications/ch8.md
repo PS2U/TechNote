@@ -35,7 +35,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-![](img/ch9-mind-map.png)
+![](img/ch8-mind-map.png)
 
 # Faults and Partial Failures
 
