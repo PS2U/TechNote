@@ -7,6 +7,7 @@
   - [Scaling to Higher Load](#scaling-to-higher-load)
   - [Shared-Nothing Architectures](#shared-nothing-architectures)
   - [Replication Versus Partitioning](#replication-versus-partitioning)
+  - [Derived Data](#derived-data)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -66,3 +67,7 @@ There are two common ways data is distributed across multiple nodes:
 [8. The Trouble with Distributed Systems](ch8.md)
 
 [9. Consistency and Consensus](ch9.md)
+
+## Derived Data
+
+[10. Batch Processing](ch10.md)
