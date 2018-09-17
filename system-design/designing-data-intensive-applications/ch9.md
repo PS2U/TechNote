@@ -51,6 +51,8 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
+![](img/ch9-mind-map.png)
+
 The best way of building fault-tolerant systems is to find some general-purpose abstractions with useful guarantees, implement them once, and then let applications rely on those guarantees.
 
 One of the most important abstractions for distributed systems is consensus: that is, getting all of the nodes to agree on something.
