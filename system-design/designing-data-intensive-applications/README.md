@@ -70,4 +70,13 @@ There are two common ways data is distributed across multiple nodes:
 
 ## Derived Data
 
+On a high level, systems that store and process data can be grouped into two broad categories:
+
+- **Systems of record**. A system of record, also known as source of truth, holds the authoritative version of your data. 
+- **Derived data systems**. Data in a derived system is the result of taking some existing data from another system and transforming or processing it in some way.
+
+Derived data is redundant, in the sense that it duplicates existing information. However, it is often essential for getting good performance on read queries.
+
 [10. Batch Processing](ch10.md)
+
+[11. Stream Processing](ch11.md)
