@@ -80,3 +80,5 @@ Derived data is redundant, in the sense that it duplicates existing information.
 [10. Batch Processing](ch10.md)
 
 [11. Stream Processing](ch11.md)
+
+[12. The Future of Data Systems](ch12.md)
