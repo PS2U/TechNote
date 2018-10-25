@@ -23,7 +23,7 @@
 
 [程序员的自我修养](perspective/self-load/README.md)
 
-[性能之巅](perspective/system-performance/README.md)
+[性能之巅](perspective/systems-performance/README.md)
 
 ## C++
 
