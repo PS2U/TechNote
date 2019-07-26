@@ -1,13 +1,8 @@
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
-
 - [第3章 目标文件里有什么？](#%E7%AC%AC3%E7%AB%A0%C2%A0%E7%9B%AE%E6%A0%87%E6%96%87%E4%BB%B6%E9%87%8C%E6%9C%89%E4%BB%80%E4%B9%88)
   - [ELF文件结构](#elf%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84)
   - [链接的接口 — 符号](#%E9%93%BE%E6%8E%A5%E7%9A%84%E6%8E%A5%E5%8F%A3--%E7%AC%A6%E5%8F%B7)
 - [导航](#%E5%AF%BC%E8%88%AA)
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 # 第3章 目标文件里有什么？
 
@@ -98,6 +93,6 @@ GCC的基本C++名称修饰方法：所有的符号都以"_Z"开头，对于嵌�
 
 [目录](README.md)
 
-上一章：[2. 编译和链接](2. 编译和链接.md)
+上一章：[2. 编译和链接](ch2.md)
 
-下一章：[4. 静态链接](4. 静态链接.md)
+下一章：[4. 静态链接](ch4.md)

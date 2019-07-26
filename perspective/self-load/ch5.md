@@ -1,14 +1,9 @@
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
-
-- [第5章 Windows PE/COFF](#%E7%AC%AC5%E7%AB%A0%C2%A0windows%C2%A0pecoff)
+- [第5章 Windows PE/COFF](#%e7%ac%ac5%e7%ab%a0-windows-pecoff)
   - [COFF](#coff)
-  - [链接指示信息](#%E9%93%BE%E6%8E%A5%E6%8C%87%E7%A4%BA%E4%BF%A1%E6%81%AF)
+  - [链接指示信息](#%e9%93%be%e6%8e%a5%e6%8c%87%e7%a4%ba%e4%bf%a1%e6%81%af)
   - [PE](#pe)
-- [导航](#%E5%AF%BC%E8%88%AA)
+- [导航](#%e5%af%bc%e8%88%aa)
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 # 第5章 Windows PE/COFF
 
@@ -60,6 +55,8 @@ COFF的符号表结构与ELF格式也基本一致，其中一个不同的地方�
 
 [目录](README.md)
 
-上一章：[5. Windows PE/COFF](5. Windows PE/COFF.md)
 
-下一章：
+上一章：[4. 静态链接](ch4.md)
+
+下一章：[6. 可执行文件的装载与进程](ch6.md)
+

@@ -1,7 +1,3 @@
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
-
 - [第4章 静态链接](#%E7%AC%AC4%E7%AB%A0%C2%A0%E9%9D%99%E6%80%81%E9%93%BE%E6%8E%A5)
   - [空间与地址分配](#%E7%A9%BA%E9%97%B4%E4%B8%8E%E5%9C%B0%E5%9D%80%E5%88%86%E9%85%8D)
   - [符号解析与重定位](#%E7%AC%A6%E5%8F%B7%E8%A7%A3%E6%9E%90%E4%B8%8E%E9%87%8D%E5%AE%9A%E4%BD%8D)
@@ -11,7 +7,6 @@
   - [链接过程控制](#%E9%93%BE%E6%8E%A5%E8%BF%87%E7%A8%8B%E6%8E%A7%E5%88%B6)
 - [导航](#%E5%AF%BC%E8%88%AA)
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 # 第4章 静态链接
 
@@ -123,6 +118,6 @@ BFD库是一个GNU项目，希望通过一种统一的接口来处理不同的�
 
 [目录](README.md)
 
-上一章：[3. 目标文件里有什么](3. 目标文件里有什么.md)
+上一章：[3. 目标文件里有什么](ch3.md)
 
-下一章：[5. Windows PE/COFF](5. Windows PE/COFF.md)
+下一章：[5. Windows PE/COFF](ch5.md)

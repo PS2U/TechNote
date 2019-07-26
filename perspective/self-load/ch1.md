@@ -1,7 +1,3 @@
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
-
 - [第1章 温故而知新](#%E7%AC%AC1%E7%AB%A0%C2%A0%E6%B8%A9%E6%95%85%E8%80%8C%E7%9F%A5%E6%96%B0)
   - [软件体系结构](#%E8%BD%AF%E4%BB%B6%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84)
   - [操作系统](#%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F)
@@ -10,7 +6,6 @@
     - [同步与锁](#%E5%90%8C%E6%AD%A5%E4%B8%8E%E9%94%81)
 - [导航](#%E5%AF%BC%E8%88%AA)
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 # 第1章 温故而知新
 
@@ -134,4 +129,4 @@ volatile关键字可以阻止过度优化，它基本可以做到两件事情：
 
 [目录](README.md)
 
-下一章：[2. 编译和链接](2. 编译和链接.md)
+下一章：[2. 编译和链接](ch2.md)

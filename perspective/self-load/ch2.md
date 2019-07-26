@@ -1,7 +1,3 @@
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
-
 - [第2章 编译和链接](#%E7%AC%AC2%E7%AB%A0%C2%A0%E7%BC%96%E8%AF%91%E5%92%8C%E9%93%BE%E6%8E%A5)
   - [被隐藏了的过程](#%E8%A2%AB%E9%9A%90%E8%97%8F%E4%BA%86%E7%9A%84%E8%BF%87%E7%A8%8B)
 - [编译器做了什么？](#%E7%BC%96%E8%AF%91%E5%99%A8%E5%81%9A%E4%BA%86%E4%BB%80%E4%B9%88)
@@ -9,7 +5,6 @@
   - [链接器](#%E9%93%BE%E6%8E%A5%E5%99%A8)
 - [导航](#%E5%AF%BC%E8%88%AA)
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 # 第2章 编译和链接
 
@@ -67,6 +62,6 @@ C++模块通信的两种方式：
 
 [目录](README.md)
 
-上一章：[1. 温故而知新](1. 温故而知新.md)
+上一章：[1. 温故而知新](ch1.md)
 
-下一章：[3. 目标文件里有什么](3. 目标文件里有什么.md)
+下一章：[3. 目标文件里有什么](ch3.md)

@@ -1,7 +1,3 @@
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
-
 - [第6章 可执行文件的装载与进程](#%E7%AC%AC6%E7%AB%A0%C2%A0%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6%E7%9A%84%E8%A3%85%E8%BD%BD%E4%B8%8E%E8%BF%9B%E7%A8%8B)
   - [进程虚拟地址空间](#%E8%BF%9B%E7%A8%8B%E8%99%9A%E6%8B%9F%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4)
   - [装载的方式](#%E8%A3%85%E8%BD%BD%E7%9A%84%E6%96%B9%E5%BC%8F)
@@ -11,7 +7,6 @@
   - [Windows PE的装载](#windows%C2%A0pe%E7%9A%84%E8%A3%85%E8%BD%BD)
 - [导航](#%E5%AF%BC%E8%88%AA)
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 # 第6章 可执行文件的装载与进程
 
@@ -175,6 +170,4 @@ PE文件中引入了相对虚拟地址RVA的概念，这其实就相当于ELF中
 
 [目录](README.md)
 
-上一章：[4. 静态链接](4. 静态链接.md)
-
-下一章：[6. 可执行文件的装载与进程](6. 可执行文件的装载与进程.md)
+上一章：[5. Windows PE/COFF](ch5.md)
