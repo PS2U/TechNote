@@ -1,7 +1,3 @@
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
-
 - [Partition and Replication](#partition-and-replication)
 - [Partitioning of Key-Value Data](#partitioning-of-key-value-data)
   - [Partitioning by Key Range](#partitioning-by-key-range)
